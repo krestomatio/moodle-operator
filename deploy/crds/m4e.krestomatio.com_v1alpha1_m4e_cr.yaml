@@ -1,0 +1,7 @@
+apiVersion: m4e.krestomatio.com/v1alpha1
+kind: M4e
+metadata:
+  name: example-m4e
+spec:
+  # Add fields here
+  size: 3

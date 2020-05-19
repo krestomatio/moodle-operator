@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: m4e.krestomatio.com
+  kind: M4e
+  playbook: playbook.yml
