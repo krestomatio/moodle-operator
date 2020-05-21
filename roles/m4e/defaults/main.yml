@@ -1,2 +1,23 @@
 ---
 # defaults file for m4e
+state: present
+
+# apache2
+apache2_size: 1
+apache2_image: quay.io/krestomatio/moodle_httpd
+apache2_state: "{{ state }}"
+apache2_deploy_template: apache2.yaml.j2
+
+# php-fpm
+php_fpm_size: 1
+php_fpm_image: quay.io/krestomatio/moodle_php-fpm
+php_fpm_state: "{{ state }}"
+php_fpm_deploy_template: php_fpm.yaml.j2
+
+resources:
+  - name: php-fpm
+    state: "{{ php_fpm_state }}"
+    template: "{{ php_fpm_deploy_template }}"
+  - name: apache2
+    state: "{{ apache2_state }}"
+    template: "{{ apache2_deploy_template }}"

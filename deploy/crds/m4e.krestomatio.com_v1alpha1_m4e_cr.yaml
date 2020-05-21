@@ -4,4 +4,5 @@ metadata:
   name: example-m4e
 spec:
   # Add fields here
-  size: 3
+  apache2_size: 1
+  php_fpm_size: 1

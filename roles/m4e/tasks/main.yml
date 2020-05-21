@@ -1,2 +1,11 @@
 ---
 # tasks file for m4e
+- name: "Resource definitions for {{ item.name }} in state: {{ item.state }},
+    namespace: {{ namespace }}"
+  vars:
+    name: "{{ item.name }}"
+  k8s:
+    state: "{{ item.state }}"
+    definition: "{{ lookup('template', item.template) | from_yaml_all | list }}"
+    namespace: "{{ namespace }}"
+  loop: "{{ resources }}"

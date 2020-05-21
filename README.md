@@ -36,3 +36,21 @@ oc delete -f deploy/role.yaml
 oc delete -f deploy/service_account.yaml
 oc delete -f deploy/crds/m4e.krestomatio.com_m4es_crd.yaml
 oc delete project m4e-project
+
+# molecule
+
+## create and converge
+molecule converge -s test-local
+
+## login
+molecule login -s test-local -h kind-test-local
+
+## pods
+kubectl -n osdk-test get pods
+
+## logs
+pod=$(kubectl -n osdk-test get pods --no-headers=true -o custom-columns=NAME:.metadata.name | grep operator)
+kubectl -n osdk-test logs --tail 1 --follow $pod
+
+## destroy
+molecule converge --all
