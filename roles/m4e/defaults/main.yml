@@ -14,7 +14,16 @@ php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
 php_fpm_deploy_template: php_fpm.yaml.j2
 
+# postgres
+postgres_size: 1
+postgres_image: quay.io/krestomatio/postgres
+postgres_state: "{{ state }}"
+postgres_deploy_template: postgres.yaml.j2
+
 resources:
+  - name: postgres
+    state: "{{ postgres_state }}"
+    template: "{{ postgres_deploy_template }}"
   - name: php-fpm
     state: "{{ php_fpm_state }}"
     template: "{{ php_fpm_deploy_template }}"
