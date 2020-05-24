@@ -1,0 +1,18 @@
+# {{ name }} ConfigMap.
+---
+kind: ConfigMap
+apiVersion: v1
+{% include 'metadata.j2' ignore missing %}
+data:
+{% if config_environment != false %}
+  environment:
+    {{ config_environment | indent( width=2) }}
+{% endif %}
+{% if config_conf != false %}
+  conf:
+    {{ config_conf | indent( width=2) }}
+{% endif %}
+{% if config_entrypoint != false %}
+  entrypoint:
+    {{ config_entrypoint | indent( width=2) }}
+{% endif %}

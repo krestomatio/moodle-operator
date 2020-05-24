@@ -1,11 +1,23 @@
 ---
 # tasks file for m4e
-- name: "Resource definitions for {{ item.name }} in state: {{ item.state }},
-    namespace: {{ namespace }}"
+- name: "Iterate over components for their resource definitions"
   vars:
-    name: "{{ item.name }}"
-  k8s:
-    state: "{{ item.state }}"
-    definition: "{{ lookup('template', item.template) | from_yaml_all | list }}"
-    namespace: "{{ namespace }}"
-  loop: "{{ resources }}"
+    name: "{{ item[1].name }}"
+    k8s_state: "{{ item[1].state }}"
+    kind: "{{ item[0].name }}"
+    template: "{{ item[0].template }}"
+    component: "{{ item[1].component | default(false) }}"
+    version: "{{ item[1].version | default(false) }}"
+    config_environment: "{{ item[1].config_environment | default(false) }}"
+    config_conf: "{{ item[1].config_conf | default(false) }}"
+    config_entrypoint: "{{ item[1].config_entrypoint | default(false) }}"
+    secret_type: "{{ item[1].secret_type | default(false) }}"
+    secret_data: "{{ item[1].secret_data | default(false) }}"
+    secret_string_data: "{{ item[1].secret_string_data | default(false) }}"
+    deploy_spec: "{{ item[1].deploy_spec | default(false) }}"
+    service_spec: "{{ item[1].service_spec | default(false) }}"
+  include_tasks: k8s.yml
+  with_nested:
+    - "{{ objects }}"
+    - "{{ components }}"
+  when: item[0].name in item[1].objects

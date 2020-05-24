@@ -1,32 +1,138 @@
 ---
 # defaults file for m4e
 state: present
+deploy_template: deploy.yaml.j2
+config_template: config.yaml.j2
+secret_template: secret.yaml.j2
+service_template: service.yaml.j2
+database_name: moodle
+database_user: user
+database_password: "{{ lookup('password', '/dev/null length=8 chars=ascii_letters,digits,hexdigits,punctuation') }}"
 
 # apache2
 apache2_size: 1
 apache2_image: quay.io/krestomatio/moodle_httpd
 apache2_state: "{{ state }}"
-apache2_deploy_template: apache2.yaml.j2
+apache2_deploy_spec: |
+  replicas: {{ apache2_size }}
+  selector:
+    matchLabels:
+      app: '{{ meta.name }}-apache2'
+  template:
+    metadata:
+      labels:
+        app: '{{ meta.name }}-apache2'
+    spec:
+      containers:
+      - image: '{{ apache2_image }}'
+        name: '{{ meta.name }}-apache2'
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: html
+        - mountPath: /var/moodledata
+          name: moodledata
+      volumes:
+      - name: html
+        emptyDir: {}
+      - name: moodledata
+        emptyDir: {}
 
 # php-fpm
 php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
-php_fpm_deploy_template: php_fpm.yaml.j2
+php_fpm_deploy_spec: |
+  replicas: {{ php_fpm_size }}
+  selector:
+    matchLabels:
+      app: '{{ meta.name }}-php-fpm'
+  template:
+    metadata:
+      labels:
+        app: '{{ meta.name }}-php-fpm'
+    spec:
+      containers:
+      - image: '{{ php_fpm_image }}'
+        name: '{{ meta.name }}-php-fpm'
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: html
+        - mountPath: /var/moodledata
+          name: moodledata
+      volumes:
+      - name: html
+        emptyDir: {}
+      - name: moodledata
+        emptyDir: {}
 
 # postgres
 postgres_size: 1
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
-postgres_deploy_template: postgres.yaml.j2
+postgres_secret_data: |
+  database_password: '{{ database_password | b64encode }}'
+postgres_deploy_spec: |
+  replicas: {{ postgres_size }}
+  selector:
+    matchLabels:
+      app: '{{ meta.name }}-postgres'
+  template:
+    metadata:
+      labels:
+        app: '{{ meta.name }}-postgres'
+    spec:
+      containers:
+      - image: '{{ postgres_image }}'
+        name: '{{ meta.name }}-postgres'
+        env:
+          - name: POSTGRESQL_DATABASE
+            value: '{{ database_name }}'
+          - name: POSTGRESQL_USER
+            value: '{{ database_user }}'
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: '{{ meta.name }}-postgres'
+                key: database_password
+        volumeMounts:
+        - mountPath: /var/lib/pgsql/data
+          name: postgres-data
+      volumes:
+      - name: postgres-data
+        emptyDir: {}
 
-resources:
+objects:
+  - name: config
+    template: "{{ config_template }}"
+  - name: secret
+    template: "{{ secret_template }}"
+  - name: service
+    template: "{{ service_template }}"
+  - name: deploy
+    template: "{{ deploy_template }}"
+
+components:
   - name: postgres
     state: "{{ postgres_state }}"
-    template: "{{ postgres_deploy_template }}"
+    component: database
+    objects:
+      - secret
+      - deploy
+    secret_data: "{{ postgres_secret_data }}"
+    deploy_spec: "{{ postgres_deploy_spec }}"
   - name: php-fpm
     state: "{{ php_fpm_state }}"
-    template: "{{ php_fpm_deploy_template }}"
+    component: backend
+    objects:
+      - deploy
+    deploy_spec: "{{ php_fpm_deploy_spec }}"
   - name: apache2
     state: "{{ apache2_state }}"
-    template: "{{ apache2_deploy_template }}"
+    component: frontend
+    objects:
+      - deploy
+    deploy_spec: "{{ apache2_deploy_spec }}"
