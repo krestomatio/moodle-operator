@@ -12,6 +12,14 @@ database_password: secret
 apache2_size: 1
 apache2_image: quay.io/krestomatio/moodle_httpd
 apache2_state: "{{ state }}"
+apache2_service_spec: |
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    name: http
+  selector:
+    app: '{{ meta.name }}-apache2'
 apache2_deploy_spec: |
   replicas: {{ apache2_size }}
   selector:
@@ -29,7 +37,7 @@ apache2_deploy_spec: |
           - name: PHP_FPM_host
             value: '{{ meta.name }}-php-fpm'
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         volumeMounts:
         - mountPath: /var/www/html
           name: html
@@ -134,7 +142,9 @@ components:
     deploy_spec: "{{ php_fpm_deploy_spec }}"
   - name: apache2
     state: "{{ apache2_state }}"
-    component: frontend
+    component: backend
     objects:
+      - service
       - deploy
     deploy_spec: "{{ apache2_deploy_spec }}"
+    service_spec: "{{ apache2_service_spec }}"
