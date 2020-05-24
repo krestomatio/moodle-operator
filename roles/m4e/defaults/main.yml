@@ -7,8 +7,7 @@ secret_template: secret.yaml.j2
 service_template: service.yaml.j2
 database_name: moodle
 database_user: user
-database_password: "{{ lookup('password', '/dev/null length=8 chars=ascii_letters,digits,hexdigits,punctuation') }}"
-
+database_password: secret
 # apache2
 apache2_size: 1
 apache2_image: quay.io/krestomatio/moodle_httpd
@@ -26,6 +25,9 @@ apache2_deploy_spec: |
       containers:
       - image: '{{ apache2_image }}'
         name: '{{ meta.name }}-apache2'
+        env:
+          - name: PHP_FPM_host
+            value: '{{ meta.name }}-php-fpm'
         ports:
         - containerPort: 80
         volumeMounts:
