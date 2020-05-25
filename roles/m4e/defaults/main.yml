@@ -19,7 +19,6 @@ apache2_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
-  router.openshift.io/cookie_name: 'MoodleSession'
 apache2_route_spec: |
   to:
     kind: Service
