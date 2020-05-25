@@ -3,6 +3,10 @@
 kind: Route
 apiVersion: v1
 {% include 'metadata.j2' ignore missing %}
+{% if route_annotations != false %}
+  annotations:
+    {{ route_annotations | indent( width=4) }}
+{%- endif -%}
 {% if route_spec != false %}
 spec:
   {{ route_spec | indent( width=2) }}

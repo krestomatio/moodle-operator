@@ -14,6 +14,11 @@ database_password: secret
 apache2_size: 1
 apache2_image: quay.io/krestomatio/moodle_httpd
 apache2_state: "{{ state }}"
+apache2_route_annotations: |
+  haproxy.router.openshift.io/rate-limit-connections: 'true'
+  haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
+  haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
+  haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
 apache2_route_spec: |
   to:
     kind: Service
@@ -179,6 +184,7 @@ components:
   - name: apache2
     state: "{{ apache2_state }}"
     component: frontend
+    route_annotations: "{{ apache2_route_annotations }}"
     objects:
       - deploy
       - service
