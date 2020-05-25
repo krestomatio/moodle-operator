@@ -53,6 +53,12 @@ apache2_deploy_spec: |
 php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
+php_fpm_service_spec: |
+  ports:
+  - port: 9000
+    protocol: TCP
+  selector:
+    app: '{{ meta.name }}-php-fpm'
 php_fpm_deploy_spec: |
   replicas: {{ php_fpm_size }}
   selector:
@@ -66,6 +72,9 @@ php_fpm_deploy_spec: |
       containers:
       - image: '{{ php_fpm_image }}'
         name: '{{ meta.name }}-php-fpm'
+        env:
+          - name: PHP_FPM_listen_allowed_clients
+            value: any
         ports:
         - containerPort: 9000
         volumeMounts:
@@ -138,8 +147,10 @@ components:
     state: "{{ php_fpm_state }}"
     component: backend
     objects:
+      - service
       - deploy
     deploy_spec: "{{ php_fpm_deploy_spec }}"
+    service_spec: "{{ php_fpm_service_spec }}"
   - name: apache2
     state: "{{ apache2_state }}"
     component: backend
