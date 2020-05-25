@@ -57,13 +57,9 @@ apache2_deploy_spec: |
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /var/www/html
-          name: html
         - mountPath: /var/moodledata
           name: moodledata
       volumes:
-      - name: html
-        emptyDir: {}
       - name: moodledata
         emptyDir: {}
 
@@ -96,13 +92,9 @@ php_fpm_deploy_spec: |
         ports:
         - containerPort: 9000
         volumeMounts:
-        - mountPath: /var/www/html
-          name: html
         - mountPath: /var/moodledata
           name: moodledata
       volumes:
-      - name: html
-        emptyDir: {}
       - name: moodledata
         emptyDir: {}
 
