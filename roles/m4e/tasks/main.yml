@@ -16,6 +16,8 @@
     secret_string_data: "{{ item[1].secret_string_data | default(false) }}"
     deploy_spec: "{{ item[1].deploy_spec | default(false) }}"
     service_spec: "{{ item[1].service_spec | default(false) }}"
+    route_spec: "{{ item[1].route_spec | default(false) }}"
+    ingress_spec: "{{ item[1].ingress_spec | default(false) }}"
   include_tasks: k8s.yml
   with_nested:
     - "{{ objects }}"

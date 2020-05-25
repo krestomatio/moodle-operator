@@ -1,0 +1,9 @@
+# {{ name }} ingress
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+{% include 'metadata.j2' ignore missing %}
+{% if ingress_spec != false %}
+spec:
+  {{ ingress_spec | indent( width=2) }}
+{% endif %}

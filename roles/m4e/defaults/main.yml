@@ -5,6 +5,8 @@ deploy_template: deploy.yaml.j2
 config_template: config.yaml.j2
 secret_template: secret.yaml.j2
 service_template: service.yaml.j2
+route_template: route.yaml.j2
+ingress_template: ingress.yaml.j2
 database_name: moodle
 database_user: user
 database_password: secret
@@ -12,6 +14,17 @@ database_password: secret
 apache2_size: 1
 apache2_image: quay.io/krestomatio/moodle_httpd
 apache2_state: "{{ state }}"
+apache2_route_spec: |
+  to:
+    kind: Service
+    name: '{{ meta.name }}-apache2'
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
 apache2_service_spec: |
   ports:
   - port: 8080
@@ -94,6 +107,12 @@ postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
 postgres_secret_data: |
   database_password: '{{ database_password | b64encode }}'
+postgres_service_spec: |
+  ports:
+     - port: 5432
+  clusterIP: None
+  selector:
+    app: '{{ meta.name }}-postgres'
 postgres_deploy_spec: |
   replicas: {{ postgres_size }}
   selector:
@@ -133,6 +152,10 @@ objects:
     template: "{{ service_template }}"
   - name: deploy
     template: "{{ deploy_template }}"
+  - name: route
+    template: "{{ route_template }}"
+  - name: ingress
+    template: "{{ ingress_template }}"
 
 components:
   - name: postgres
@@ -141,21 +164,25 @@ components:
     objects:
       - secret
       - deploy
+      - service
     secret_data: "{{ postgres_secret_data }}"
     deploy_spec: "{{ postgres_deploy_spec }}"
+    service_spec: "{{ postgres_service_spec }}"
   - name: php-fpm
     state: "{{ php_fpm_state }}"
     component: backend
     objects:
-      - service
       - deploy
+      - service
     deploy_spec: "{{ php_fpm_deploy_spec }}"
     service_spec: "{{ php_fpm_service_spec }}"
   - name: apache2
     state: "{{ apache2_state }}"
-    component: backend
+    component: frontend
     objects:
-      - service
       - deploy
+      - service
+      - route
     deploy_spec: "{{ apache2_deploy_spec }}"
     service_spec: "{{ apache2_service_spec }}"
+    route_spec: "{{ apache2_route_spec }}"
