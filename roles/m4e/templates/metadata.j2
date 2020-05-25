@@ -1,8 +1,8 @@
 metadata:
-  name: '{{ meta.name }}-{{ name }}'
+  name: '{{ metadata_name | default(meta.name + '-' + name) }}'
   namespace: '{{ meta.namespace }}'
   labels:
-    app: '{{ meta.name }}-{{ name }}'
+    app: '{{ metadata_app | default(metadata_name) | default(meta.name + '-' + name) }}'
     app.kubernetes.io/name: '{{ name }}'
     app.kubernetes.io/instance: '{{ meta.name }}'
     app.kubernetes.io/part-of: moodle
@@ -13,3 +13,7 @@ metadata:
 {% if version != false %}
     app.kubernetes.io/version: '{{ version }}'
 {% endif %}
+{% if annotations != false %}
+  annotations:
+    {{ annotations | indent( width=4) }}
+{%- endif -%}

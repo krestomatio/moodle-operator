@@ -19,6 +19,7 @@ apache2_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
+  router.openshift.io/cookie_name: 'MoodleSession'
 apache2_route_spec: |
   to:
     kind: Service
@@ -26,11 +27,12 @@ apache2_route_spec: |
     weight: 100
   port:
     targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
+  # tls:
+  #   termination: edge
+  #   insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
 apache2_service_spec: |
+  sessionAffinity: ClientIP
   ports:
   - port: 8080
     protocol: TCP
@@ -68,6 +70,7 @@ php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
 php_fpm_service_spec: |
+  sessionAffinity: ClientIP
   ports:
   - port: 9000
     protocol: TCP
@@ -183,4 +186,5 @@ components:
       - route
     deploy_spec: "{{ apache2_deploy_spec }}"
     service_spec: "{{ apache2_service_spec }}"
+    route_name: "{{ meta.name }}"
     route_spec: "{{ apache2_route_spec }}"
