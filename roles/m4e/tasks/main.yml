@@ -21,6 +21,9 @@
     route_annotations: "{{ item[1].route_annotations | default(false) }}"
     route_spec: "{{ item[1].route_spec | default(false) }}"
     ingress_spec: "{{ item[1].ingress_spec | default(false) }}"
+    pvc_name: "{{ item[1].pvc_name | default(false) }}"
+    pvc_annotations: "{{ item[1].pvc_annotations | default(false) }}"
+    pvc_spec: "{{ item[1].pvc_spec | default(false) }}"
   include_tasks: k8s.yml
   with_nested:
     - "{{ objects }}"
