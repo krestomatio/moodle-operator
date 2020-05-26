@@ -102,16 +102,24 @@ php_fpm_deploy_spec: |
 
 # postgres
 postgres_size: 1
+postgres_requests_cpu: 200m
+postgres_requests_memory: 256Mi
+postgres_limits_cpu: 1
+postgres_limits_memory: 1Gi
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
 postgres_secret_data: |
   database_password: '{{ database_password | b64encode }}'
 postgres_service_spec: |
-  ports:
-     - port: 5432
-  clusterIP: None
   selector:
-    app: '{{ meta.name }}-postgres'
+    name: '{{ meta.name }}-postgres'
+  type: ClusterIP
+  ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  sessionAffinity: None
 postgres_deploy_spec: |
   replicas: {{ postgres_size }}
   selector:
@@ -135,6 +143,35 @@ postgres_deploy_spec: |
               secretKeyRef:
                 name: '{{ meta.name }}-postgres'
                 key: database_password
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+            - --live
+          failureThreshold: 3
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          requests:
+            cpu: '{{ postgres_requests_cpu }}'
+            memory: '{{ postgres_requests_memory }}'
+          limits:
+            cpu: '{{ postgres_limits_cpu }}'
+            memory: '{{ postgres_limits_memory }}'
         volumeMounts:
         - mountPath: /var/lib/pgsql/data
           name: postgres-data
@@ -142,6 +179,7 @@ postgres_deploy_spec: |
       - name: postgres-data
         emptyDir: {}
 
+# order intended
 objects:
   - name: config
     template: "{{ config_template }}"
@@ -156,6 +194,7 @@ objects:
   - name: ingress
     template: "{{ ingress_template }}"
 
+# order intended
 components:
   - name: postgres
     state: "{{ postgres_state }}"
