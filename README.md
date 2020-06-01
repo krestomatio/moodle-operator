@@ -9,12 +9,12 @@ cd new m4e-operator
 git add .
 git commit -m "Initial"
 
+# replace image placeholder
+sed -i "s@REPLACE_IMAGE@quay.io/krestomatio/m4e-operator@g" deploy/operator.yaml
+
 # build image
 operator-sdk build quay.io/krestomatio/m4e-operator:v0.0.1
 docker push quay.io/krestomatio/m4e-operator:v0.0.1
-
-# replace image placeholder
-sed -i "s@REPLACE_IMAGE@quay.io/krestomatio/m4e-operator@g" deploy/operator.yaml
 
 # create new project
 oc new-project m4e-project
@@ -42,6 +42,9 @@ oc delete project m4e-project
 ## create and converge
 molecule converge -s test-local
 
+## verify - create objects
+molecule verify -s test-local
+
 ## login
 molecule login -s test-local -h kind-test-local
 
@@ -54,3 +57,22 @@ kubectl -n osdk-test logs --tail 1 --follow $pod
 
 ## destroy
 molecule converge --all
+
+# moodle
+## cli installation
+php admin/cli/install.php --lang="en"  \
+    --wwwroot="http://example-m4e-osdk-test.apps-crc.testing" \
+    --dataroot="/var/moodledata" \
+    --dbtype="pgsql" \
+    --dbhost="example-m4e-postgres" \
+    --dbname="moodle" \
+    --dbuser="user" \
+    --dbpass="secret" \
+    --fullname="Test moodle_php" \
+    --shortname="Test" \
+    --summary="Summary" \
+    --adminuser="admin" \
+    --adminpass="secret" \
+    --adminemail="test@test.com" \
+    --agree-license \
+    --non-interactive
