@@ -16,6 +16,15 @@ sed -i "s@REPLACE_IMAGE@quay.io/krestomatio/m4e-operator@g" deploy/operator.yaml
 operator-sdk build quay.io/krestomatio/m4e-operator:v0.0.1
 docker push quay.io/krestomatio/m4e-operator:v0.0.1
 
+# crc registry
+oc extract secret/router-ca --keys=tls.crt -n openshift-ingress-operator --confirm
+sudo mv tls.crt /etc/docker/certs.d/default-route-openshift-image-registry.apps-crc.testing/
+docker login -u kubeadmin -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
+
+oc new-project osdk-test
+operator-sdk build default-route-openshift-image-registry.apps-crc.testing/osdk-test/m4e-operator
+docker push default-route-openshift-image-registry.apps-crc.testing/osdk-test/m4e-operator
+
 # create new project
 oc new-project m4e-project
 oc create -f deploy/crds/m4e.krestomatio.com_m4es_crd.yaml
@@ -55,8 +64,13 @@ kubectl -n osdk-test get pods
 pod=$(kubectl -n osdk-test get pods --no-headers=true -o custom-columns=NAME:.metadata.name | grep operator)
 kubectl -n osdk-test logs --tail 1 --follow $pod
 
+## cluster
+export OPERATOR_IMAGE=image-registry.openshift-image-registry.svc:5000/osdk-test/m4e-operator
+export CR_FILE=m4e.krestomatio.com_v1alpha1_m4e_cr_testing.yaml
+molecule converge -s cluster
+
 ## destroy
-molecule converge --all
+molecule destroy --all
 
 # moodle
 ## cli installation
