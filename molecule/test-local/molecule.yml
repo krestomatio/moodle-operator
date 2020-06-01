@@ -37,6 +37,7 @@ provisioner:
         ansible_python_interpreter: '{{ ansible_playbook_python }}'
         template_dir: ${MOLECULE_PROJECT_DIRECTORY}/molecule/templates
         deploy_dir: ${MOLECULE_PROJECT_DIRECTORY}/deploy
+        cr_file: ${CR_FILE:-"m4e.krestomatio.com_v1alpha1_m4e_cr.yaml"}
   env:
     K8S_AUTH_KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig
     KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig

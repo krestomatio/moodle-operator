@@ -11,19 +11,19 @@ ingress_template: ingress.yaml.j2
 database_name: moodle
 database_user: user
 database_password: secret
-# apache2
-apache2_size: 1
-apache2_image: quay.io/krestomatio/moodle_httpd
-apache2_state: "{{ state }}"
-apache2_route_annotations: |
+# httpd
+httpd_size: 1
+httpd_image: quay.io/krestomatio/moodle_httpd
+httpd_state: "{{ state }}"
+httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
-apache2_route_spec: |
+httpd_route_spec: |
   to:
     kind: Service
-    name: '{{ meta.name }}-apache2'
+    name: '{{ meta.name }}-httpd'
     weight: 100
   port:
     targetPort: http
@@ -31,7 +31,7 @@ apache2_route_spec: |
   #   termination: edge
   #   insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
-apache2_service_spec: |
+httpd_service_spec: |
   sessionAffinity: ClientIP
   ports:
   - port: 8080
@@ -39,20 +39,20 @@ apache2_service_spec: |
     targetPort: 8080
     name: http
   selector:
-    app: '{{ meta.name }}-apache2'
-apache2_deploy_spec: |
-  replicas: {{ apache2_size }}
+    app: '{{ meta.name }}-httpd'
+httpd_deploy_spec: |
+  replicas: {{ httpd_size }}
   selector:
     matchLabels:
-      app: '{{ meta.name }}-apache2'
+      app: '{{ meta.name }}-httpd'
   template:
     metadata:
       labels:
-        app: '{{ meta.name }}-apache2'
+        app: '{{ meta.name }}-httpd'
     spec:
       containers:
-      - image: '{{ apache2_image }}'
-        name: '{{ meta.name }}-apache2'
+      - image: '{{ httpd_image }}'
+        name: '{{ meta.name }}-httpd'
         env:
           - name: PHP_FPM_host
             value: '{{ meta.name }}-php-fpm'
@@ -235,15 +235,15 @@ components:
     deploy_spec: "{{ php_fpm_deploy_spec }}"
     service_spec: "{{ php_fpm_service_spec }}"
     pvc_spec: "{{ php_fpm_pvc_spec }}"
-  - name: apache2
-    state: "{{ apache2_state }}"
+  - name: httpd
+    state: "{{ httpd_state }}"
     component: frontend
-    route_annotations: "{{ apache2_route_annotations }}"
+    route_annotations: "{{ httpd_route_annotations }}"
     objects:
       - service
       - deploy
       - route
-    deploy_spec: "{{ apache2_deploy_spec }}"
-    service_spec: "{{ apache2_service_spec }}"
+    deploy_spec: "{{ httpd_deploy_spec }}"
+    service_spec: "{{ httpd_service_spec }}"
     route_name: "{{ meta.name }}"
-    route_spec: "{{ apache2_route_spec }}"
+    route_spec: "{{ httpd_route_spec }}"

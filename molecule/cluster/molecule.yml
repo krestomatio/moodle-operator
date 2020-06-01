@@ -26,6 +26,7 @@ provisioner:
         template_dir: ${MOLECULE_PROJECT_DIRECTORY}/molecule/templates
         operator_image: ${OPERATOR_IMAGE:-""}
         operator_pull_policy: ${OPERATOR_PULL_POLICY:-"Always"}
+        cr_file: ${CR_FILE:-"m4e.krestomatio.com_v1alpha1_m4e_cr.yaml"}
   env:
     K8S_AUTH_KUBECONFIG: ${KUBECONFIG:-"~/.kube/config"}
 verifier:

@@ -8,7 +8,8 @@
     - community.kubernetes
 
   vars:
-    custom_resource: "{{ lookup('template', '/'.join([deploy_dir, 'crds/m4e.krestomatio.com_v1alpha1_m4e_cr.yaml'])) | from_yaml }}"
+    cr_file: "m4e.krestomatio.com_v1alpha1_m4e_cr.yaml"
+    custom_resource: "{{ lookup('template', '/'.join([deploy_dir, 'crds/' + cr_file])) | from_yaml }}"
 
   tasks:
     - name: Create the m4e.krestomatio.com/v1alpha1.M4e and wait for reconciliation to complete
