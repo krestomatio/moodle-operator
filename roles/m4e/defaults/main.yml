@@ -18,6 +18,20 @@ app_container: true
 httpd_size: 1
 httpd_image: quay.io/krestomatio/moodle_httpd
 httpd_state: "{{ state }}"
+httpd_readiness_probe: true
+httpd_readiness_url: /login/index.php
+httpd_readiness_initial: 30
+httpd_readiness_period: 5
+httpd_readiness_timeout: 3
+httpd_readiness_success: 1
+httpd_readiness_failure: 6
+httpd_liveness_probe: true
+httpd_liveness_url: /login/index.php
+httpd_liveness_initial: 30
+httpd_liveness_period: 5
+httpd_liveness_timeout: 3
+httpd_liveness_success: 1
+httpd_liveness_failure: 6
 httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
@@ -70,6 +84,28 @@ httpd_deploy_spec: |
             value: '{{ meta.name }}-php-fpm'
         ports:
         - containerPort: 8080
+  {% if httpd_readiness_probe %}
+        readinessProbe:
+          httpGet:
+            path: '{{ httpd_readiness_url }}'
+            port: 8080
+          initialDelaySeconds: {{ httpd_readiness_initial }}
+          periodSeconds: {{ httpd_readiness_period }}
+          timeoutSeconds: {{ httpd_readiness_timeout }}
+          successThreshold: {{ httpd_readiness_success }}
+          failureThreshold: {{ httpd_readiness_failure }}
+  {% endif %}
+  {% if httpd_liveness_probe %}
+        livenessProbe:
+          httpGet:
+            path: '{{ httpd_liveness_url }}'
+            port: 8080
+          initialDelaySeconds: {{ httpd_liveness_initial }}
+          periodSeconds: {{ httpd_liveness_period }}
+          timeoutSeconds: {{ httpd_liveness_timeout }}
+          successThreshold: {{ httpd_liveness_success }}
+          failureThreshold: {{ httpd_liveness_failure }}
+  {% endif %}
         volumeMounts:
         - mountPath: /var/moodledata
           name: moodledata
@@ -86,6 +122,20 @@ httpd_deploy_spec: |
 php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
+php_fpm_readiness_probe: true
+php_fpm_readiness_command: "['php', 'admin/cli/cfg.php', '--name=wwwroot']"
+php_fpm_readiness_initial: 5
+php_fpm_readiness_period: 10
+php_fpm_readiness_timeout: 3
+php_fpm_readiness_success: 1
+php_fpm_readiness_failure: 6
+php_fpm_liveness_probe: true
+php_fpm_liveness_command: "['php', 'admin/cli/cfg.php', '--name=wwwroot']"
+php_fpm_liveness_initial: 5
+php_fpm_liveness_period: 10
+php_fpm_liveness_timeout: 3
+php_fpm_liveness_success: 1
+php_fpm_liveness_failure: 6
 php_fpm_service_spec: |
   sessionAffinity: ClientIP
   ports:
@@ -126,6 +176,26 @@ php_fpm_deploy_spec: |
             value: any
         ports:
         - containerPort: 9000
+  {% if php_fpm_readiness_probe %}
+        readinessProbe:
+          exec:
+            command: {{ php_fpm_readiness_command }}
+          initialDelaySeconds: {{ php_fpm_readiness_initial }}
+          periodSeconds: {{ php_fpm_readiness_period }}
+          timeoutSeconds: {{ php_fpm_readiness_timeout }}
+          successThreshold: {{ php_fpm_readiness_success }}
+          failureThreshold: {{ php_fpm_readiness_failure }}
+  {% endif %}
+  {% if php_fpm_liveness_probe %}
+        livenessProbe:
+          exec:
+            command: {{ php_fpm_liveness_command }}
+          initialDelaySeconds: {{ php_fpm_liveness_initial }}
+          periodSeconds: {{ php_fpm_liveness_period }}
+          timeoutSeconds: {{ php_fpm_liveness_timeout }}
+          successThreshold: {{ php_fpm_liveness_success }}
+          failureThreshold: {{ php_fpm_liveness_failure }}
+  {% endif %}
         volumeMounts:
         - mountPath: /var/moodledata
           name: moodledata
