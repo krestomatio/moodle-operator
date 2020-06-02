@@ -74,11 +74,12 @@ molecule destroy --all
 
 # moodle
 ## cli installation
+app_name=example-m4e
 php admin/cli/install.php --lang="en"  \
-    --wwwroot="http://example-m4e-osdk-test.apps-crc.testing" \
+    --wwwroot="http://${app_name}-osdk-test.apps-crc.testing" \
     --dataroot="/var/moodledata" \
     --dbtype="pgsql" \
-    --dbhost="example-m4e-postgres" \
+    --dbhost="${app_name}-postgres" \
     --dbname="moodle" \
     --dbuser="user" \
     --dbpass="secret" \

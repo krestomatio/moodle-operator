@@ -11,6 +11,9 @@ ingress_template: ingress.yaml.j2
 database_name: moodle
 database_user: user
 database_password: secret
+# moodle app
+app_image: quay.io/krestomatio/moodle_app
+app_container: true
 # httpd
 httpd_size: 1
 httpd_image: quay.io/krestomatio/moodle_httpd
@@ -50,6 +53,15 @@ httpd_deploy_spec: |
       labels:
         app: '{{ meta.name }}-httpd'
     spec:
+  {% if app_container %}
+      initContainers:
+        - name: '{{ meta.name }}-moodle-app'
+          image: '{{ app_image }}'
+          # Shared volume with main container
+          volumeMounts:
+          - mountPath: /var/www/html
+            name: moodle-app
+  {% endif %}
       containers:
       - image: '{{ httpd_image }}'
         name: '{{ meta.name }}-httpd'
@@ -61,10 +73,14 @@ httpd_deploy_spec: |
         volumeMounts:
         - mountPath: /var/moodledata
           name: moodledata
+        - mountPath: /var/www/html
+          name: moodle-app
       volumes:
       - name: moodledata
         persistentVolumeClaim:
           claimName: '{{ meta.name }}-php-fpm'
+      - name: moodle-app
+        emptyDir: {}
 
 # php-fpm
 php_fpm_size: 1
@@ -93,6 +109,15 @@ php_fpm_deploy_spec: |
       labels:
         app: '{{ meta.name }}-php-fpm'
     spec:
+  {% if app_container %}
+      initContainers:
+        - name: '{{ meta.name }}-moodle-app'
+          image: '{{ app_image }}'
+          # Shared volume with main container
+          volumeMounts:
+          - mountPath: /var/www/html
+            name: moodle-app
+  {% endif %}
       containers:
       - image: '{{ php_fpm_image }}'
         name: '{{ meta.name }}-php-fpm'
@@ -104,10 +129,14 @@ php_fpm_deploy_spec: |
         volumeMounts:
         - mountPath: /var/moodledata
           name: moodledata
+        - mountPath: /var/www/html
+          name: moodle-app
       volumes:
       - name: moodledata
         persistentVolumeClaim:
           claimName: '{{ meta.name }}-php-fpm'
+      - name: moodle-app
+        emptyDir: {}
 
 # postgres
 postgres_size: 1
