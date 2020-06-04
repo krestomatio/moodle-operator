@@ -73,9 +73,10 @@ molecule converge -s cluster
 molecule destroy --all
 
 # moodle
-## cli installation
+## cli installation with no config.php
 app_name=example-m4e
-php admin/cli/install.php --lang="en"  \
+php admin/cli/install.php \
+    --lang="en"  \
     --wwwroot="http://${app_name}-osdk-test.apps-crc.testing" \
     --dataroot="/var/moodledata" \
     --dbtype="pgsql" \
@@ -91,3 +92,14 @@ php admin/cli/install.php --lang="en"  \
     --adminemail="test@test.com" \
     --agree-license \
     --non-interactive
+    
+## cli installation with config.php
+php admin/cli/install_database.php \
+    --lang="en"  \
+    --fullname="Test moodle_php" \
+    --shortname="Test" \
+    --summary="Summary" \
+    --adminuser="admin" \
+    --adminpass="secret" \
+    --adminemail="test@test.com" \
+    --agree-license

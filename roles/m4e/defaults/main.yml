@@ -20,18 +20,18 @@ httpd_image: quay.io/krestomatio/moodle_httpd
 httpd_state: "{{ state }}"
 httpd_readiness_probe: true
 httpd_readiness_url: /login/index.php
-httpd_readiness_initial: 30
+httpd_readiness_initial: 5
 httpd_readiness_period: 5
 httpd_readiness_timeout: 3
 httpd_readiness_success: 1
-httpd_readiness_failure: 6
+httpd_readiness_failure: 10
 httpd_liveness_probe: true
 httpd_liveness_url: /login/index.php
-httpd_liveness_initial: 30
+httpd_liveness_initial: 5
 httpd_liveness_period: 5
 httpd_liveness_timeout: 3
 httpd_liveness_success: 1
-httpd_liveness_failure: 6
+httpd_liveness_failure: 10
 httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
@@ -136,6 +136,8 @@ php_fpm_liveness_period: 10
 php_fpm_liveness_timeout: 3
 php_fpm_liveness_success: 1
 php_fpm_liveness_failure: 6
+php_fpm_secret_data: |
+  config_php: '{{ lookup('template', 'config.php.j2') | b64encode }}'
 php_fpm_service_spec: |
   sessionAffinity: ClientIP
   ports:
@@ -201,12 +203,23 @@ php_fpm_deploy_spec: |
           name: moodledata
         - mountPath: /var/www/html
           name: moodle-app
+        - mountPath: /var/www/html/config.php
+          name: config-php
+          subPath: config.php
+          readOnly: true
       volumes:
       - name: moodledata
         persistentVolumeClaim:
           claimName: '{{ meta.name }}-php-fpm'
       - name: moodle-app
         emptyDir: {}
+      - name: config-php
+        secret:
+          secretName: '{{ meta.name }}-php-fpm'
+          items:
+          - key: config_php
+            path: config.php
+            mode: 0660
 
 # postgres
 postgres_size: 1
@@ -329,8 +342,10 @@ components:
     component: backend
     objects:
       - pvc
+      - secret
       - service
       - deploy
+    secret_data: "{{ php_fpm_secret_data }}"
     deploy_spec: "{{ php_fpm_deploy_spec }}"
     service_spec: "{{ php_fpm_service_spec }}"
     pvc_spec: "{{ php_fpm_pvc_spec }}"
@@ -346,3 +361,56 @@ components:
     service_spec: "{{ httpd_service_spec }}"
     route_name: "{{ meta.name }}"
     route_spec: "{{ httpd_route_spec }}"
+
+# moodle
+moodle_config_dbhost: "{{ meta.name }}-postgres"
+moodle_config_dbname: "{{ database_name }}"
+moodle_config_dbuser: "{{ database_user }}"
+moodle_config_dbpass: "{{ database_password }}"
+moodle_config_wwwroot: "http://{{ meta.name }}-osdk-test.apps-crc.testing"
+moodle_config_dataroot: "/var/moodledata"
+# moodle_config_context_cache_max_size: 7500
+# moodle_config_dbtype: pgsql
+# moodle_config_dblibrary: native
+# moodle_config_prefix: "mdl_"
+# moodle_config_dbpersist: "false"
+# moodle_config_dbsocket: "false"
+# moodle_config_dbport: "''"
+# moodle_config_dbhandlesoptions: "false"
+# moodle_config_dbcollation: "utf8mb4_unicode_ci"
+# moodle_config_fetchbuffersize: "100000"
+# moodle_config_directorypermissions: "02777"
+# moodle_config_admin: "admin"
+# moodle_config_defaultblocks_override: "' '"
+# moodle_config_xsendfile: "X-Sendfile"
+# moodle_config_yuislasharguments: 1
+# moodle_config_db_sessions: true
+# moodle_config_redis_sessions:
+#   session_redis_host: "redis"
+#   session_redis_prefix: "m1_"
+#   session_redis_auth: "secret"
+# moodle_config_sslproxy: true
+# moodle_config_profilingenabled:
+#   earlyprofilingenabled: 'true'
+#   profilingautofrec: '100'
+#   profilingincluded: '/*view.php,/*index.php'
+#   profilingallowme: 'true'
+#   profilingallowall: 'true'
+#   profilinglifetime: 1440
+#   pathtodot: '/usr/bin/dot'
+# moodle_config_localcachedir: /var/moodledata-localcache
+# moodle_config_extramemorylimit: 256M
+# moodle_config_tool_lockstats: true
+# moodle_config_perfdebug: true
+# moodle_config_noemailever: true
+# moodle_config_forced_plugin_settings:
+#   mod_mymod:
+#     setting_one: "one"
+#     setting_two: 2
+# moodle_config_tool_generator_users_password: secret
+# moodle_config_additional_cfg:
+#    property_name_one: "one"
+#    property_name_two: 2
+# moodle_config_additional_block: |
+#    $CFG->property_name_one = 'value';
+#    $CFG->property_name_two = 2;
