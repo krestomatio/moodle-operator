@@ -49,8 +49,8 @@ $CFG->session_redis_port = {{ moodle_config_redis_sessions.session_redis_port if
 {{ '$CFG->session_redis_auth = ' + "'" + moodle_config_redis_sessions.session_redis_auth + "'" + ';  // Optional, default is db 0.' if moodle_config_redis_sessions.session_redis_auth is defined else "//      $CFG->session_redis_auth = ''; // Optional, default is don't set one." }}
 {{ '$CFG->session_redis_prefix = ' + "'" + moodle_config_redis_sessions.session_redis_prefix + "'" + ';  // Optional, default is db 0.' if moodle_config_redis_sessions.session_redis_prefix is defined else "//      $CFG->session_redis_prefix = ''; // Optional, default is don't set one." }}
 {% endif %}
-{% if moodle_config_sslproxy is defined %}
-$CFG->sslproxy = {{ moodle_config_sslproxy }};
+{% if moodle_config_sslproxy is defined and moodle_config_sslproxy %}
+$CFG->sslproxy = true;
 {% endif %}
 {% if moodle_config_profilingenabled is defined %}
 $CFG->profilingenabled=true;

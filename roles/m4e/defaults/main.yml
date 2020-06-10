@@ -1,6 +1,8 @@
 ---
 # defaults file for m4e
 state: present
+host: "{{ meta.name }}-osdk-test"
+domain: "apps-crc.testing"
 deploy_template: deploy.yaml.j2
 config_template: config.yaml.j2
 pvc_template: pvc.yaml.j2
@@ -19,19 +21,19 @@ httpd_size: 1
 httpd_image: quay.io/krestomatio/moodle_httpd
 httpd_state: "{{ state }}"
 httpd_readiness_probe: true
-httpd_readiness_url: /login/index.php
+httpd_readiness_command: "['/usr/libexec/check-container', '-r']"
 httpd_readiness_initial: 5
-httpd_readiness_period: 5
+httpd_readiness_period: 30
 httpd_readiness_timeout: 3
 httpd_readiness_success: 1
-httpd_readiness_failure: 10
+httpd_readiness_failure: 6
 httpd_liveness_probe: true
-httpd_liveness_url: /login/index.php
+httpd_liveness_command: "['/usr/libexec/check-container', '-l']"
 httpd_liveness_initial: 5
-httpd_liveness_period: 5
+httpd_liveness_period: 10
 httpd_liveness_timeout: 3
 httpd_liveness_success: 1
-httpd_liveness_failure: 10
+httpd_liveness_failure: 3
 httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
@@ -51,10 +53,10 @@ httpd_route_spec: |
 httpd_service_spec: |
   sessionAffinity: ClientIP
   ports:
-  - port: 8080
+  - name: http
+    port: 8080
     protocol: TCP
     targetPort: 8080
-    name: http
   selector:
     app: '{{ meta.name }}-httpd'
 httpd_deploy_spec: |
@@ -80,15 +82,16 @@ httpd_deploy_spec: |
       - image: '{{ httpd_image }}'
         name: '{{ meta.name }}-httpd'
         env:
+          - name: MOODLE_check_host
+            value: '{{ host }}.{{ domain }}'
           - name: PHP_FPM_host
             value: '{{ meta.name }}-php-fpm'
         ports:
         - containerPort: 8080
   {% if httpd_readiness_probe %}
         readinessProbe:
-          httpGet:
-            path: '{{ httpd_readiness_url }}'
-            port: 8080
+          exec:
+            command: {{ httpd_readiness_command }}
           initialDelaySeconds: {{ httpd_readiness_initial }}
           periodSeconds: {{ httpd_readiness_period }}
           timeoutSeconds: {{ httpd_readiness_timeout }}
@@ -97,9 +100,8 @@ httpd_deploy_spec: |
   {% endif %}
   {% if httpd_liveness_probe %}
         livenessProbe:
-          httpGet:
-            path: '{{ httpd_liveness_url }}'
-            port: 8080
+          exec:
+            command: {{ httpd_liveness_command }}
           initialDelaySeconds: {{ httpd_liveness_initial }}
           periodSeconds: {{ httpd_liveness_period }}
           timeoutSeconds: {{ httpd_liveness_timeout }}
@@ -123,26 +125,28 @@ php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
 php_fpm_readiness_probe: true
-php_fpm_readiness_command: "['php', 'admin/cli/cfg.php', '--name=wwwroot']"
+php_fpm_readiness_command: "['/usr/libexec/check-container', '-t', '-r']"
 php_fpm_readiness_initial: 5
-php_fpm_readiness_period: 10
+php_fpm_readiness_period: 30
 php_fpm_readiness_timeout: 3
 php_fpm_readiness_success: 1
 php_fpm_readiness_failure: 6
 php_fpm_liveness_probe: true
-php_fpm_liveness_command: "['php', 'admin/cli/cfg.php', '--name=wwwroot']"
+php_fpm_liveness_command: "['/usr/libexec/check-container', '-t', '-l']"
 php_fpm_liveness_initial: 5
 php_fpm_liveness_period: 10
 php_fpm_liveness_timeout: 3
 php_fpm_liveness_success: 1
-php_fpm_liveness_failure: 6
+php_fpm_liveness_failure: 3
 php_fpm_secret_data: |
   config_php: '{{ lookup('template', 'config.php.j2') | b64encode }}'
 php_fpm_service_spec: |
   sessionAffinity: ClientIP
   ports:
-  - port: 9000
+  - name: php-fpm
+    port: 9000
     protocol: TCP
+    targetPort: 9000
   selector:
     app: '{{ meta.name }}-php-fpm'
 php_fpm_pvc_spec: |
@@ -161,14 +165,28 @@ php_fpm_deploy_spec: |
       labels:
         app: '{{ meta.name }}-php-fpm'
     spec:
-  {% if app_container %}
       initContainers:
-        - name: '{{ meta.name }}-moodle-app'
-          image: '{{ app_image }}'
-          # Shared volume with main container
-          volumeMounts:
-          - mountPath: /var/www/html
-            name: moodle-app
+  {% if app_container %}
+      - name: '{{ meta.name }}-moodle-app'
+        image: '{{ app_image }}'
+        # Shared volume with main container
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: moodle-app
+  {% endif %}
+      - name: '{{ meta.name }}-moodle-config'
+        image: '{{ php_fpm_image }}'
+        command:
+          - '/bin/sh'
+          - '-c'
+          - 'test -f /var/www/html/config.php || cp -pL /config/config.php /var/www/html/config.php'
+        volumeMounts:
+        - mountPath: /config
+          name: config-php
+          readOnly: true
+  {% if app_container %}
+        - mountPath: /var/www/html
+          name: moodle-app
   {% endif %}
       containers:
       - image: '{{ php_fpm_image }}'
@@ -207,6 +225,9 @@ php_fpm_deploy_spec: |
           name: config-php
           subPath: config.php
           readOnly: true
+        - mountPath: /config
+          name: config-php
+          readOnly: true
       volumes:
       - name: moodledata
         persistentVolumeClaim:
@@ -238,6 +259,8 @@ postgres_service_spec: |
   ports:
     - name: postgresql
       port: 5432
+      protocol: TCP
+      targetPort: 5432
   sessionAffinity: ClientIP
 postgres_pvc_spec: |
   accessModes:
@@ -268,10 +291,10 @@ postgres_deploy_spec: |
               secretKeyRef:
                 name: '{{ meta.name }}-postgres'
                 key: database_password
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
           name: postgresql
+        imagePullPolicy: IfNotPresent
         readinessProbe:
           exec:
             command:
@@ -367,7 +390,7 @@ moodle_config_dbhost: "{{ meta.name }}-postgres"
 moodle_config_dbname: "{{ database_name }}"
 moodle_config_dbuser: "{{ database_user }}"
 moodle_config_dbpass: "{{ database_password }}"
-moodle_config_wwwroot: "http://{{ meta.name }}-osdk-test.apps-crc.testing"
+moodle_config_wwwroot: "http://{{ host }}.{{ domain }}"
 moodle_config_dataroot: "/var/moodledata"
 # moodle_config_context_cache_max_size: 7500
 # moodle_config_dbtype: pgsql
