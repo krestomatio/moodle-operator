@@ -1,0 +1,25 @@
+---
+# defaults file for m4e
+state: present
+host: "{{ meta.name }}-{{ namespace }}"
+domain: "apps-crc.testing"
+expose_as: "route"  # only route
+
+# credentials. MUST CHANGED
+database_name: moodle
+database_user: user
+database_password: secret
+
+# templates
+deploy_template: deploy.yaml.j2
+config_template: config.yaml.j2
+pvc_template: pvc.yaml.j2
+secret_template: secret.yaml.j2
+service_template: service.yaml.j2
+route_template: route.yaml.j2
+ingress_template: ingress.yaml.j2
+moodle_config_template: config.php.j2
+
+postgres_deploy_spec_template: postgres_deploy_spec.yaml.j2
+php_fpm_deploy_spec_template: php_fpm_deploy_spec.yaml.j2
+httpd_deploy_spec_template: httpd_deploy_spec.yaml.j2

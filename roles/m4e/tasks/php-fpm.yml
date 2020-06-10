@@ -1,0 +1,51 @@
+---
+- name: php-fpm resource definitions
+  vars:
+    name: php-fpm
+    k8s_state: "{{ php_fpm_state }}"
+    component: php-fpm
+  block:
+  - name: php-fpm pvc resource definition
+    vars:
+      name: php-fpm
+      kind: PersistentVolumeClaim
+      k8s_state: "{{ php_fpm_pvc_state | default(php_fpm_state) }}"
+      template: "{{ pvc_template }}"
+      component: backend
+      pvc_spec: "{{ php_fpm_pvc_spec }}"
+    import_tasks: k8s.yml
+
+  - name: php-fpm secret resource definition
+    vars:
+      name: php-fpm
+      kind: Secret
+      k8s_state: "{{ php_fpm_secret_state | default(php_fpm_state) }}"
+      template: "{{ secret_template }}"
+      component: backend
+      secret_data: "{{ php_fpm_secret_data }}"
+    import_tasks: k8s.yml
+
+  - name: php-fpm service resource definition
+    vars:
+      name: php-fpm
+      kind: Service
+      k8s_state: "{{ php_fpm_service_state | default(php_fpm_state) }}"
+      template: "{{ service_template }}"
+      component: backend
+      service_spec: "{{ php_fpm_service_spec }}"
+    import_tasks: k8s.yml
+
+  - name: set php-fpm deploy spec
+    when: php_fpm_deploy_spec is not defined
+    set_fact:
+      php_fpm_deploy_spec: "{{ lookup('template', php_fpm_deploy_spec_template) }}"
+
+  - name: php-fpm deploy resource definition
+    vars:
+      name: php-fpm
+      kind: Deployment
+      k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
+      template: "{{ deploy_template }}"
+      component: backend
+      deploy_spec: "{{ php_fpm_deploy_spec }}"
+    import_tasks: k8s.yml

@@ -1,0 +1,97 @@
+{% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
+replicas: {{ php_fpm_size }}
+selector:
+  matchLabels:
+    app: '{{ meta.name }}-{{ name }}'
+template:
+  {{ metadata() | indent(width=2) }}
+  spec:
+    initContainers:
+{% if app_container %}
+    - name: '{{ meta.name }}-moodle-app'
+      image: '{{ app_image }}'
+      # Shared volume with main container
+      volumeMounts:
+      - mountPath: /var/www/html
+        name: moodle-app
+{% endif %}
+    - name: '{{ meta.name }}-moodle-config'
+      image: '{{ php_fpm_image }}'
+      command:
+        - '/bin/sh'
+        - '-c'
+        - 'test -f /var/www/html/config.php || cp -pL /config/config.php /var/www/html/config.php'
+      volumeMounts:
+      - mountPath: /config
+        name: config-php
+        readOnly: true
+{% if app_container %}
+      - mountPath: /var/www/html
+        name: moodle-app
+{% endif %}
+    containers:
+    - image: '{{ php_fpm_image }}'
+      name: '{{ meta.name }}-{{ name }}'
+      env:
+        - name: PHP_FPM_listen_allowed_clients
+          value: any
+      ports:
+      - containerPort: 9000
+{% if php_fpm_readiness_probe %}
+      readinessProbe:
+        exec:
+          command: {{ php_fpm_readiness_command }}
+        initialDelaySeconds: {{ php_fpm_readiness_initial }}
+        periodSeconds: {{ php_fpm_readiness_period }}
+        timeoutSeconds: {{ php_fpm_readiness_timeout }}
+        successThreshold: {{ php_fpm_readiness_success }}
+        failureThreshold: {{ php_fpm_readiness_failure }}
+{% endif %}
+{% if php_fpm_liveness_probe %}
+      livenessProbe:
+        exec:
+          command: {{ php_fpm_liveness_command }}
+        initialDelaySeconds: {{ php_fpm_liveness_initial }}
+        periodSeconds: {{ php_fpm_liveness_period }}
+        timeoutSeconds: {{ php_fpm_liveness_timeout }}
+        successThreshold: {{ php_fpm_liveness_success }}
+        failureThreshold: {{ php_fpm_liveness_failure }}
+{% endif %}
+{% if php_fpm_resource_requests or php_fpm_resource_limits %}
+      resources:
+{% if php_fpm_resource_requests %}
+        requests:
+          cpu: '{{ php_fpm_resource_requests_cpu }}'
+          memory: '{{ php_fpm_resource_requests_memory }}'
+{% endif %}
+{% if php_fpm_resource_limits %}
+        limits:
+          cpu: '{{ php_fpm_resource_limits_cpu }}'
+          memory: '{{ php_fpm_resource_limits_memory }}'
+{% endif %}
+{% endif %}
+      volumeMounts:
+      - mountPath: /var/moodledata
+        name: moodledata
+      - mountPath: /var/www/html
+        name: moodle-app
+      - mountPath: /var/www/html/config.php
+        name: config-php
+        subPath: config.php
+        readOnly: true
+      - mountPath: /config
+        name: config-php
+        readOnly: true
+    volumes:
+    - name: moodledata
+      persistentVolumeClaim:
+        claimName: '{{ meta.name }}-{{ name }}'
+    - name: moodle-app
+      emptyDir: {}
+    - name: config-php
+      secret:
+        secretName: '{{ meta.name }}-{{ name }}'
+        items:
+        - key: config_php
+          path: config.php
+          mode: 0660

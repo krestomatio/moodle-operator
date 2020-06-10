@@ -1,0 +1,56 @@
+---
+# moodle app
+app_image: quay.io/krestomatio/moodle_app
+app_container: true
+# moodle config
+moodle_config_dbhost: "{{ meta.name }}-postgres"
+moodle_config_dbname: "{{ database_name }}"
+moodle_config_dbuser: "{{ database_user }}"
+moodle_config_dbpass: "{{ database_password }}"
+moodle_config_wwwroot: "http://{{ host }}.{{ domain }}"
+moodle_config_dataroot: "/var/moodledata"
+# moodle_config_context_cache_max_size: 7500
+# moodle_config_dbtype: pgsql
+# moodle_config_dblibrary: native
+# moodle_config_prefix: "mdl_"
+# moodle_config_dbpersist: "false"
+# moodle_config_dbsocket: "false"
+# moodle_config_dbport: "''"
+# moodle_config_dbhandlesoptions: "false"
+# moodle_config_dbcollation: "utf8mb4_unicode_ci"
+# moodle_config_fetchbuffersize: "100000"
+# moodle_config_directorypermissions: "02777"
+# moodle_config_admin: "admin"
+# moodle_config_defaultblocks_override: "' '"
+# moodle_config_xsendfile: "X-Sendfile"
+# moodle_config_yuislasharguments: 1
+# moodle_config_db_sessions: true
+# moodle_config_redis_sessions:
+#   session_redis_host: "redis"
+#   session_redis_prefix: "m1_"
+#   session_redis_auth: "secret"
+# moodle_config_sslproxy: true
+# moodle_config_profilingenabled:
+#   earlyprofilingenabled: 'true'
+#   profilingautofrec: '100'
+#   profilingincluded: '/*view.php,/*index.php'
+#   profilingallowme: 'true'
+#   profilingallowall: 'true'
+#   profilinglifetime: 1440
+#   pathtodot: '/usr/bin/dot'
+# moodle_config_localcachedir: /var/moodledata-localcache
+# moodle_config_extramemorylimit: 256M
+# moodle_config_tool_lockstats: true
+# moodle_config_perfdebug: true
+# moodle_config_noemailever: true
+# moodle_config_forced_plugin_settings:
+#   mod_mymod:
+#     setting_one: "one"
+#     setting_two: 2
+# moodle_config_tool_generator_users_password: secret
+# moodle_config_additional_cfg:
+#    property_name_one: "one"
+#    property_name_two: 2
+# moodle_config_additional_block: |
+#    $CFG->property_name_one = 'value';
+#    $CFG->property_name_two = 2;

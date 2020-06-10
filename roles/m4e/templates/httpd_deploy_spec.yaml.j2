@@ -1,0 +1,71 @@
+{% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
+replicas: {{ httpd_size }}
+selector:
+  matchLabels:
+    app: '{{ meta.name }}-{{ name }}'
+template:
+  {{ metadata() | indent(width=2) }}
+  spec:
+{% if app_container %}
+    initContainers:
+    - name: '{{ meta.name }}-moodle-app'
+      image: '{{ app_image }}'
+      # Shared volume with main container
+      volumeMounts:
+      - mountPath: /var/www/html
+        name: moodle-app
+{% endif %}
+    containers:
+    - image: '{{ httpd_image }}'
+      name: '{{ meta.name }}-{{ name }}'
+      env:
+        - name: MOODLE_check_host
+          value: '{{ host }}.{{ domain }}'
+        - name: PHP_FPM_host
+          value: '{{ meta.name }}-php-fpm'
+      ports:
+      - containerPort: 8080
+{% if httpd_readiness_probe %}
+      readinessProbe:
+        exec:
+          command: {{ httpd_readiness_command }}
+        initialDelaySeconds: {{ httpd_readiness_initial }}
+        periodSeconds: {{ httpd_readiness_period }}
+        timeoutSeconds: {{ httpd_readiness_timeout }}
+        successThreshold: {{ httpd_readiness_success }}
+        failureThreshold: {{ httpd_readiness_failure }}
+{% endif %}
+{% if httpd_liveness_probe %}
+      livenessProbe:
+        exec:
+          command: {{ httpd_liveness_command }}
+        initialDelaySeconds: {{ httpd_liveness_initial }}
+        periodSeconds: {{ httpd_liveness_period }}
+        timeoutSeconds: {{ httpd_liveness_timeout }}
+        successThreshold: {{ httpd_liveness_success }}
+        failureThreshold: {{ httpd_liveness_failure }}
+{% endif %}
+{% if httpd_resource_requests or httpd_resource_limits %}
+      resources:
+{% if httpd_resource_requests %}
+        requests:
+          cpu: '{{ httpd_resource_requests_cpu }}'
+          memory: '{{ httpd_resource_requests_memory }}'
+{% endif %}
+{% if httpd_resource_limits %}
+        limits:
+          cpu: '{{ httpd_resource_limits_cpu }}'
+          memory: '{{ httpd_resource_limits_memory }}'
+{% endif %}
+{% endif %}
+      volumeMounts:
+      - mountPath: /var/moodledata
+        name: moodledata
+      - mountPath: /var/www/html
+        name: moodle-app
+    volumes:
+    - name: moodledata
+      persistentVolumeClaim:
+        claimName: '{{ meta.name }}-php-fpm'
+    - name: moodle-app
+      emptyDir: {}

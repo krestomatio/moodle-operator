@@ -1,0 +1,43 @@
+---
+# postgres
+postgres_size: 1
+postgres_image: quay.io/krestomatio/postgres
+postgres_state: "{{ state }}"
+postgres_readiness_probe: true
+postgres_readiness_command: "['/usr/libexec/check-container']"
+postgres_readiness_initial: 5
+postgres_readiness_period: 10
+postgres_readiness_timeout: 1
+postgres_readiness_success: 1
+postgres_readiness_failure: 3
+postgres_liveness_probe: true
+postgres_liveness_command: "['/usr/libexec/check-container', '--live']"
+postgres_liveness_initial: 120
+postgres_liveness_period: 10
+postgres_liveness_timeout: 10
+postgres_liveness_success: 1
+postgres_liveness_failure: 3
+postgres_resource_requests: true
+postgres_resource_requests_cpu: 200m
+postgres_resource_requests_memory: 256Mi
+postgres_resource_limits: true
+postgres_resource_limits_cpu: 1
+postgres_resource_limits_memory: 1Gi
+postgres_secret_data: |
+  database_password: '{{ database_password | b64encode }}'
+postgres_service_spec: |
+  selector:
+    app: '{{ meta.name }}-postgres'
+  clusterIP: None
+  ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  sessionAffinity: ClientIP
+postgres_pvc_spec: |
+  accessModes:
+    - 'ReadWriteOnce'
+  resources:
+    requests:
+      storage: '1Gi'

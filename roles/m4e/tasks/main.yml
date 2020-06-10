@@ -1,31 +1,7 @@
 ---
 # tasks file for m4e
-- name: "Iterate over components for their resource definitions"
-  vars:
-    name: "{{ item[1].name }}"
-    k8s_state: "{{ item[1].state }}"
-    kind: "{{ item[0].name }}"
-    template: "{{ item[0].template }}"
-    component: "{{ item[1].component | default(false) }}"
-    annotations: "{{ item[1].annotations | default(false) }}"
-    version: "{{ item[1].version | default(false) }}"
-    config_environment: "{{ item[1].config_environment | default(false) }}"
-    config_conf: "{{ item[1].config_conf | default(false) }}"
-    config_entrypoint: "{{ item[1].config_entrypoint | default(false) }}"
-    secret_type: "{{ item[1].secret_type | default(false) }}"
-    secret_data: "{{ item[1].secret_data | default(false) }}"
-    secret_string_data: "{{ item[1].secret_string_data | default(false) }}"
-    deploy_spec: "{{ item[1].deploy_spec | default(false) }}"
-    service_spec: "{{ item[1].service_spec | default(false) }}"
-    route_name: "{{ item[1].route_name | default(false) }}"
-    route_annotations: "{{ item[1].route_annotations | default(false) }}"
-    route_spec: "{{ item[1].route_spec | default(false) }}"
-    ingress_spec: "{{ item[1].ingress_spec | default(false) }}"
-    pvc_name: "{{ item[1].pvc_name | default(false) }}"
-    pvc_annotations: "{{ item[1].pvc_annotations | default(false) }}"
-    pvc_spec: "{{ item[1].pvc_spec | default(false) }}"
-  include_tasks: k8s.yml
-  with_nested:
-    - "{{ objects }}"
-    - "{{ components }}"
-  when: item[0].name in item[1].objects
+- import_tasks: postgres.yml
+
+- import_tasks: php-fpm.yml
+
+- import_tasks: httpd.yml

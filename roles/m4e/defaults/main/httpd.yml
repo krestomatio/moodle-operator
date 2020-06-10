@@ -1,0 +1,50 @@
+---
+# httpd
+httpd_size: 1
+httpd_image: quay.io/krestomatio/moodle_httpd
+httpd_state: "{{ state }}"
+httpd_readiness_probe: true
+httpd_readiness_command: "['/usr/libexec/check-container', '-r']"
+httpd_readiness_initial: 5
+httpd_readiness_period: 30
+httpd_readiness_timeout: 3
+httpd_readiness_success: 1
+httpd_readiness_failure: 6
+httpd_liveness_probe: true
+httpd_liveness_command: "['/usr/libexec/check-container', '-l']"
+httpd_liveness_initial: 5
+httpd_liveness_period: 10
+httpd_liveness_timeout: 3
+httpd_liveness_success: 1
+httpd_liveness_failure: 3
+httpd_resource_requests: true
+httpd_resource_requests_cpu: 200m
+httpd_resource_requests_memory: 256Mi
+httpd_resource_limits: true
+httpd_resource_limits_cpu: 1
+httpd_resource_limits_memory: 1Gi
+httpd_route_annotations: |
+  haproxy.router.openshift.io/rate-limit-connections: 'true'
+  haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
+  haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
+  haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
+httpd_route_spec: |
+  to:
+    kind: Service
+    name: '{{ meta.name }}-httpd'
+    weight: 100
+  port:
+    targetPort: http
+  # tls:
+  #   termination: edge
+  #   insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+httpd_service_spec: |
+  sessionAffinity: ClientIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: '{{ meta.name }}-httpd'

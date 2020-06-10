@@ -1,5 +1,5 @@
-{% if route_name %}{% set metadata_name = route_name %}{% endif %}
-{% if route_annotations %}{% set annotations = route_annotations %}{% endif %}
+{% if route_name | default(false) %}{% set metadata_name = route_name %}{% endif %}
+{% if route_annotations | default(false) %}{% set annotations = route_annotations %}{% endif %}
 # {{ name }} route
 ---
 kind: Route

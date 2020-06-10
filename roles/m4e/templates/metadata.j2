@@ -1,19 +1,20 @@
+{% set default_name = meta.name + '-' + name %}
 metadata:
-  name: '{{ metadata_name | default(meta.name + '-' + name) }}'
+  name: '{{ metadata_name | default(default_name) }}'
   namespace: '{{ meta.namespace }}'
   labels:
-    app: '{{ metadata_app | default(metadata_name) | default(meta.name + '-' + name) }}'
-    app.kubernetes.io/name: '{{ metadata_app | default(metadata_name) | default(meta.name + '-' + name) }}'
+    app: '{{ metadata_app | default(metadata_name) | default(default_name) }}'
+    app.kubernetes.io/name: '{{ metadata_app | default(metadata_name) | default(default_name) }}'
     app.kubernetes.io/instance: '{{ meta.name }}'
     app.kubernetes.io/part-of: moodle
     app.kubernetes.io/managed-by: ansible
-{% if component != false %}
+{% if component | default(false) != false %}
     app.kubernetes.io/component: '{{ component }}'
 {% endif %}
-{% if version != false %}
+{% if version | default(false) != false %}
     app.kubernetes.io/version: '{{ version }}'
 {% endif %}
-{% if annotations != false %}
+{% if annotations | default(false) != false %}
   annotations:
     {{ annotations | indent( width=4) }}
-{%- endif -%}
+{% endif %}

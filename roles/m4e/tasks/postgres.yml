@@ -1,0 +1,43 @@
+---
+- name: postgres resource definitions
+  vars:
+    name: postgres
+    k8s_state: "{{ postgres_state }}"
+    component: postgres
+  block:
+  - name: postgres pvc resource definition
+    vars:
+      kind: PersistentVolumeClaim
+      k8s_state: "{{ postgres_pvc_state | default(postgres_state) }}"
+      template: "{{ pvc_template }}"
+      pvc_spec: "{{ postgres_pvc_spec }}"
+    import_tasks: k8s.yml
+
+  - name: postgres secret resource definition
+    vars:
+      kind: Secret
+      k8s_state: "{{ postgres_secret_state | default(postgres_state) }}"
+      template: "{{ secret_template }}"
+      secret_data: "{{ postgres_secret_data }}"
+    import_tasks: k8s.yml
+
+  - name: postgres service resource definition
+    vars:
+      kind: Service
+      k8s_state: "{{ postgres_service_state | default(postgres_state) }}"
+      template: "{{ service_template }}"
+      service_spec: "{{ postgres_service_spec }}"
+    import_tasks: k8s.yml
+
+  - name: set postgres deploy spec
+    when: postgres_deploy_spec is not defined
+    set_fact:
+      postgres_deploy_spec: "{{ lookup('template', postgres_deploy_spec_template) }}"
+
+  - name: postgres deploy resource definition
+    vars:
+      kind: Deployment
+      k8s_state: "{{ postgres_deploy_state | default(postgres_state) }}"
+      template: "{{ deploy_template }}"
+      deploy_spec: "{{ postgres_deploy_spec }}"
+    import_tasks: k8s.yml
