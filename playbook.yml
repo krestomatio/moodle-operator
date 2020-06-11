@@ -4,7 +4,9 @@
   collections:
     - community.kubernetes
     - operator_sdk.util
-
   tasks:
     - import_role:
         name: "m4e"
+
+- import_playbook: sync_config.yml
+  when: moodle_config_autosync | default(true)

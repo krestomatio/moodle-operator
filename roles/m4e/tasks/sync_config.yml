@@ -1,0 +1,7 @@
+- name: keep config.php update without need of pod restart
+  when: moodle_config_autosync
+  copy:
+    remote_src: true
+    src: "{{ moodle_config_path }}/config.php"
+    dest: "{{ moodle_app }}/config.php"
+    mode: preserve

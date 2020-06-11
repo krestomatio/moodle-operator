@@ -1,0 +1,48 @@
+---
+- name: refresh dynamic inventory
+  meta: refresh_inventory
+
+- name: "Get pods information until {{ info_until }}"
+  when: info_until is defined
+  k8s_info:
+    kind: Pod
+    namespace: "{{ meta.namespace }}"
+    label_selectors: "{{ label_selectors if label_selectors is defined else omit }}"
+    field_selectors: "{{ field_selectors if field_selectors is defined else omit }}"
+  until: "{{ info_until }}"
+  delay: "{{ info_delay | default(5)  }}"
+  retries: "{{ info_retries | default(6) }}"
+  register: k8s_info_until
+
+- name: save pod_list
+  when: info_until is defined
+  set_fact:
+    pod_list: "{{ k8s_info_until.resources }}"
+
+- name: Get pods information
+  when: info_until is not defined
+  k8s_info:
+    kind: Pod
+    namespace: "{{ meta.namespace }}"
+    label_selectors: "{{ label_selectors if label_selectors is defined else omit }}"
+    field_selectors: "{{ field_selectors if field_selectors is defined else omit }}"
+  register: k8s_info
+
+- name: save pod_list
+  when: info_until is not defined
+  set_fact:
+    pod_list: "{{ k8s_info.resources }}"
+
+- name: Add host
+  with_items: "{{ pod_list }}"
+  changed_when: false
+  add_host:
+    groups:
+      - pods
+      - "{{ item.metadata.labels.app | replace('-', '_') }}"
+      - "{{ item.metadata.labels['app.kubernetes.io/component'] | replace('-', '_') }}"
+      - "{{ namespace | replace('-', '_') }}"
+    name: "{{ item.metadata.name }}"
+    ansible_kubectl_namespace: "{{ namespace }}"
+    ansible_connection: kubectl
+    ansible_remote_tmp: /var/tmp/.ansible

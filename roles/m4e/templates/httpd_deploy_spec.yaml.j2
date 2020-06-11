@@ -6,13 +6,13 @@ selector:
 template:
   {{ metadata() | indent(width=2) }}
   spec:
-{% if app_container %}
+{% if moodle_container %}
     initContainers:
     - name: '{{ meta.name }}-moodle-app'
-      image: '{{ app_image }}'
+      image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
-      - mountPath: /var/www/html
+      - mountPath: {{ moodle_app }}
         name: moodle-app
 {% endif %}
     containers:
@@ -59,9 +59,9 @@ template:
 {% endif %}
 {% endif %}
       volumeMounts:
-      - mountPath: /var/moodledata
+      - mountPath: {{ moodle_data }}
         name: moodledata
-      - mountPath: /var/www/html
+      - mountPath: {{ moodle_app }}
         name: moodle-app
     volumes:
     - name: moodledata
