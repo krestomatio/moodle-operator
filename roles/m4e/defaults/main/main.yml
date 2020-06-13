@@ -4,6 +4,7 @@ state: present
 host: "{{ meta.name }}-{{ namespace }}"
 domain: "apps-crc.testing"
 expose_as: "route"  # only route
+expose_tls: false
 
 # credentials. MUST CHANGED
 database_name: moodle

@@ -1,5 +1,3 @@
-{% if pvc_name | default(false) %}{% set metadata_name = pvc_name %}{% endif %}
-{% if pvc_annotations | default(false) %}{% set annotations = pvc_annotations %}{% endif %}
 # {{ name }} persistent volume claim
 ---
 kind: PersistentVolumeClaim

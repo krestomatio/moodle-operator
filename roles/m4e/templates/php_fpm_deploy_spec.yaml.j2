@@ -2,7 +2,7 @@
 replicas: {{ php_fpm_size }}
 selector:
   matchLabels:
-    app: '{{ meta.name }}-{{ name }}'
+    app: '{{ php_fpm_appname }}'
 template:
   {{ metadata() | indent(width=2) }}
   spec:
@@ -31,7 +31,7 @@ template:
 {% endif %}
     containers:
     - image: '{{ php_fpm_image }}'
-      name: '{{ meta.name }}-{{ name }}'
+      name: '{{ php_fpm_appname }}'
       env:
         - name: PHP_FPM_listen_allowed_clients
           value: any
@@ -85,12 +85,12 @@ template:
     volumes:
     - name: moodledata
       persistentVolumeClaim:
-        claimName: '{{ meta.name }}-{{ name }}'
+        claimName: '{{ moodle_data_pvc }}'
     - name: moodle-app
       emptyDir: {}
     - name: config-php
       secret:
-        secretName: '{{ meta.name }}-{{ name }}'
+        secretName: '{{ php_fpm_secret }}'
         items:
         - key: config_php
           path: config.php

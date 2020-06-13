@@ -5,23 +5,23 @@
     k8s_state: "{{ php_fpm_state }}"
     component: php-fpm
   block:
-  - name: php-fpm pvc resource definition
+  - name: moodledata pvc resource definition
     vars:
       name: php-fpm
       kind: PersistentVolumeClaim
       k8s_state: "{{ php_fpm_pvc_state | default(php_fpm_state) }}"
       template: "{{ pvc_template }}"
-      component: backend
+      metadata_name: "{{ moodle_data_pvc }}"
       pvc_spec: "{{ php_fpm_pvc_spec }}"
     import_tasks: k8s.yml
 
-  - name: php-fpm secret resource definition
+  - name: moodle config.php secret resource definition
     vars:
       name: php-fpm
       kind: Secret
       k8s_state: "{{ php_fpm_secret_state | default(php_fpm_state) }}"
       template: "{{ secret_template }}"
-      component: backend
+      metadata_name: "{{ php_fpm_secret }}"
       secret_data: "{{ php_fpm_secret_data }}"
     import_tasks: k8s.yml
 
@@ -31,7 +31,7 @@
       kind: Service
       k8s_state: "{{ php_fpm_service_state | default(php_fpm_state) }}"
       template: "{{ service_template }}"
-      component: backend
+      metadata_name: "{{ php_fpm_service }}"
       service_spec: "{{ php_fpm_service_spec }}"
     import_tasks: k8s.yml
 
@@ -46,6 +46,6 @@
       kind: Deployment
       k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
       template: "{{ deploy_template }}"
-      component: backend
+      metadata_name: "{{ php_fpm_deploy }}"
       deploy_spec: "{{ php_fpm_deploy_spec }}"
     import_tasks: k8s.yml

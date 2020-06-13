@@ -11,7 +11,7 @@
       kind: Service
       k8s_state: "{{ httpd_pvc_state | default(httpd_state) }}"
       template: "{{ service_template }}"
-      component: frontend
+      metadata_name: "{{ httpd_service }}"
       service_spec: "{{ httpd_service_spec }}"
     import_tasks: k8s.yml
 
@@ -26,7 +26,7 @@
       kind: Deployment
       k8s_state: "{{ httpd_deploy_state | default(httpd_state) }}"
       template: "{{ deploy_template }}"
-      component: frontend
+      metadata_name: "{{ httpd_deploy }}"
       deploy_spec: "{{ httpd_deploy_spec }}"
     import_tasks: k8s.yml
 
@@ -37,8 +37,7 @@
       kind: Route
       k8s_state: "{{ httpd_route_state | default(httpd_state) }}"
       template: "{{ route_template }}"
-      component: frontend
-      route_name: "{{ meta.name }}"
+      metadata_name: "{{ httpd_route }}"
+      annotations: "{{ httpd_route_annotations }}"
       route_spec: "{{ httpd_route_spec }}"
-      route_annotations: "{{ httpd_route_annotations }}"
     import_tasks: k8s.yml

@@ -2,13 +2,13 @@
 replicas: {{ postgres_size }}
 selector:
   matchLabels:
-    app: '{{ meta.name }}-{{ name }}'
+    app: '{{ postgres_appname }}'
 template:
   {{ metadata() | indent(width=2) }}
   spec:
     containers:
     - image: '{{ postgres_image }}'
-      name: '{{ meta.name }}-{{ name }}'
+      name: '{{ postgres_appname }}'
       env:
         - name: POSTGRESQL_DATABASE
           value: '{{ database_name }}'
@@ -17,7 +17,7 @@ template:
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: '{{ meta.name }}-{{ name }}'
+              name: '{{ postgres_secret }}'
               key: database_password
       ports:
       - containerPort: 5432
@@ -62,4 +62,4 @@ template:
     volumes:
     - name: postgres-data
       persistentVolumeClaim:
-        claimName: '{{ meta.name }}-{{ name }}'
+        claimName: '{{ postgres_pvc }}'

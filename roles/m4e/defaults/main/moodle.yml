@@ -5,13 +5,17 @@ moodle_container: true
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
 moodle_config_path: /config
+moodle_data_pvc: "{{ meta.name }}-moodledata"
+moodle_uri: "{{ host }}.{{ domain }}"
+moodle_protocol: "{{ 'https' if expose_tls else 'http' }}"
+moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
 moodle_config_autosync: true
 # moodle config.php
-moodle_config_dbhost: "{{ meta.name }}-postgres"
+moodle_config_dbhost: "{{ postgres_service }}"
 moodle_config_dbname: "{{ database_name }}"
 moodle_config_dbuser: "{{ database_user }}"
 moodle_config_dbpass: "{{ database_password }}"
-moodle_config_wwwroot: "http://{{ host }}.{{ domain }}"
+moodle_config_wwwroot: "{{ moodle_url }}"
 moodle_config_dataroot: "{{ moodle_data }}"
 # moodle_config_context_cache_max_size: 7500
 # moodle_config_dbtype: pgsql

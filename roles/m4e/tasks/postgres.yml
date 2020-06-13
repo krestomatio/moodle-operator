@@ -10,6 +10,7 @@
       kind: PersistentVolumeClaim
       k8s_state: "{{ postgres_pvc_state | default(postgres_state) }}"
       template: "{{ pvc_template }}"
+      metadata_name: "{{ postgres_pvc }}"
       pvc_spec: "{{ postgres_pvc_spec }}"
     import_tasks: k8s.yml
 
@@ -18,6 +19,7 @@
       kind: Secret
       k8s_state: "{{ postgres_secret_state | default(postgres_state) }}"
       template: "{{ secret_template }}"
+      metadata_name: "{{ postgres_secret }}"
       secret_data: "{{ postgres_secret_data }}"
     import_tasks: k8s.yml
 
@@ -26,6 +28,7 @@
       kind: Service
       k8s_state: "{{ postgres_service_state | default(postgres_state) }}"
       template: "{{ service_template }}"
+      metadata_name: "{{ postgres_service }}"
       service_spec: "{{ postgres_service_spec }}"
     import_tasks: k8s.yml
 
@@ -39,5 +42,6 @@
       kind: Deployment
       k8s_state: "{{ postgres_deploy_state | default(postgres_state) }}"
       template: "{{ deploy_template }}"
+      metadata_name: "{{ postgres_deploy }}"
       deploy_spec: "{{ postgres_deploy_spec }}"
     import_tasks: k8s.yml

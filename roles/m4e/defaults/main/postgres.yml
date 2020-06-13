@@ -3,6 +3,11 @@
 postgres_size: 1
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
+postgres_appname: "{{ meta.name }}-postgres"
+postgres_pvc: "{{ postgres_appname }}-pvc"
+postgres_secret: "{{ postgres_appname }}-secret"
+postgres_service: "{{ postgres_appname }}-service"
+postgres_deploy: "{{ postgres_appname }}-deploy"
 postgres_readiness_probe: true
 postgres_readiness_command: "['/usr/libexec/check-container']"
 postgres_readiness_initial: 5
@@ -27,7 +32,7 @@ postgres_secret_data: |
   database_password: '{{ database_password | b64encode }}'
 postgres_service_spec: |
   selector:
-    app: '{{ meta.name }}-postgres'
+    app: '{{ postgres_appname }}'
   clusterIP: None
   ports:
     - name: postgresql

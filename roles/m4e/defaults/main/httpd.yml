@@ -3,6 +3,10 @@
 httpd_size: 1
 httpd_image: quay.io/krestomatio/moodle_httpd
 httpd_state: "{{ state }}"
+httpd_appname: "{{ meta.name }}-httpd"
+httpd_service: "{{ httpd_appname }}-service"
+httpd_deploy: "{{ httpd_appname }}-deploy"
+httpd_route: "{{ httpd_appname }}-route"
 httpd_readiness_probe: true
 httpd_readiness_command: "['/usr/libexec/check-container', '-r']"
 httpd_readiness_initial: 5
@@ -29,15 +33,18 @@ httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
 httpd_route_spec: |
+  host: {{ moodle_uri }}
   to:
     kind: Service
-    name: '{{ meta.name }}-httpd'
+    name: '{{ httpd_service }}'
     weight: 100
   port:
     targetPort: http
-  # tls:
-  #   termination: edge
-  #   insecureEdgeTerminationPolicy: Redirect
+  {% if expose_tls %}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  {% endif %}
   wildcardPolicy: None
 httpd_service_spec: |
   sessionAffinity: ClientIP
@@ -47,4 +54,4 @@ httpd_service_spec: |
     protocol: TCP
     targetPort: 8080
   selector:
-    app: '{{ meta.name }}-httpd'
+    app: '{{ httpd_appname }}'

@@ -2,7 +2,7 @@
 replicas: {{ httpd_size }}
 selector:
   matchLabels:
-    app: '{{ meta.name }}-{{ name }}'
+    app: '{{ httpd_appname }}'
 template:
   {{ metadata() | indent(width=2) }}
   spec:
@@ -17,12 +17,12 @@ template:
 {% endif %}
     containers:
     - image: '{{ httpd_image }}'
-      name: '{{ meta.name }}-{{ name }}'
+      name: '{{ httpd_appname }}'
       env:
         - name: MOODLE_check_host
-          value: '{{ host }}.{{ domain }}'
+          value: '{{ moodle_uri }}'
         - name: PHP_FPM_host
-          value: '{{ meta.name }}-php-fpm'
+          value: '{{ php_fpm_service }}'
       ports:
       - containerPort: 8080
 {% if httpd_readiness_probe %}
@@ -66,6 +66,6 @@ template:
     volumes:
     - name: moodledata
       persistentVolumeClaim:
-        claimName: '{{ meta.name }}-php-fpm'
+        claimName: '{{ moodle_data_pvc }}'
     - name: moodle-app
       emptyDir: {}
