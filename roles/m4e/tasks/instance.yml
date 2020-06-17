@@ -1,0 +1,19 @@
+- name: instantiate moodle
+  when:
+    - moodle_instance_new | default(true)
+    - moodle_agree_license | bool
+  run_once: true
+  block:
+  - name: check if moodle database exists
+    command: /usr/libexec/check-container -d
+    changed_when: false
+    register: moodle_database_exists_out
+
+  - name: instantiate moodle
+    when:
+      - moodle_database_exists_out.rc == 2
+    command: "{{ moodle_instance_cmd }}"
+    register: moodle_instance_cmd_out
+
+  - debug:
+      msg: "{{ moodle_instance_cmd_out }}"
