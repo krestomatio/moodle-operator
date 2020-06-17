@@ -4,6 +4,7 @@
     name: postgres
     k8s_state: "{{ postgres_state }}"
     component: postgres
+    metadata_app: "{{ postgres_appname }}"
   block:
   - name: postgres pvc resource definition
     vars:
@@ -13,6 +14,10 @@
       metadata_name: "{{ postgres_pvc }}"
       pvc_spec: "{{ postgres_pvc_spec }}"
     import_tasks: k8s.yml
+
+  - name: save postgres pvc resource definition task output
+    set_fact:
+      k8s_postgres_pvc: "{{ k8s_task }}"
 
   - name: postgres secret resource definition
     vars:
@@ -41,7 +46,12 @@
     vars:
       kind: Deployment
       k8s_state: "{{ postgres_deploy_state | default(postgres_state) }}"
+      k8s_wait: true
       template: "{{ deploy_template }}"
       metadata_name: "{{ postgres_deploy }}"
       deploy_spec: "{{ postgres_deploy_spec }}"
     import_tasks: k8s.yml
+
+  - name: save postgres deploy resource definition task output
+    set_fact:
+      k8s_postgres_deploy: "{{ k8s_task }}"

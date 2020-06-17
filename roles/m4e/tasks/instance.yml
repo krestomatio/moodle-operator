@@ -1,19 +1,34 @@
-- name: instantiate moodle
+- name: set moodle new instance job spec
+  when: moodle_new_instance_job_spec is not defined
+  vars:
+    metadata_name: "{{ moodle_new_instance_job }}"
+    metadata_app: "{{ php_fpm_appname }}"
+  set_fact:
+    moodle_new_instance_job_spec:
+      "{{ lookup('template', moodle_new_instance_job_spec_template) }}"
+
+- name: moodle new instance job resource definition
+  vars:
+    kind: Job
+    k8s_state: "{{ moodle_new_instance_job_state | default(php_fpm_state) }}"
+    k8s_wait: true
+    k8s_wait_timeout: 180
+    k8s_wait_condition:
+      type: "Complete"
+      status: "True"
+    template: "{{ job_template }}"
+    metadata_name: "{{ moodle_new_instance_job }}"
+    metadata_app: "{{ php_fpm_appname }}"
+    job_spec: "{{ moodle_new_instance_job_spec }}"
+  import_tasks: k8s.yml
+
+- name: verify job pod is deleted and not orphan if state absent
+  vars:
+    k8s_definition: "{{ lookup('k8s', kind='Pod', namespace=meta.namespace,
+      label_selector='job-name=' + moodle_new_instance_job ) }}"
   when:
-    - moodle_instance_new | default(true)
-    - moodle_agree_license | bool
-  run_once: true
-  block:
-  - name: check if moodle database exists
-    command: /usr/libexec/check-container -d
-    changed_when: false
-    register: moodle_database_exists_out
-
-  - name: instantiate moodle
-    when:
-      - moodle_database_exists_out.rc == 2
-    command: "{{ moodle_instance_cmd }}"
-    register: moodle_instance_cmd_out
-
-  - debug:
-      msg: "{{ moodle_instance_cmd_out }}"
+    - (k8s_definition | length) > 0
+    - "php_fpm_secret_state | default(php_fpm_state) == 'absent'"
+  k8s:
+    definition: "{{ k8s_definition }}"
+    state: "{{ moodle_new_instance_job_state | default(php_fpm_state) }}"

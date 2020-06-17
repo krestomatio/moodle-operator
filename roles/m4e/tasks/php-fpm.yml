@@ -4,10 +4,10 @@
     name: php-fpm
     k8s_state: "{{ php_fpm_state }}"
     component: php-fpm
+    metadata_app: "{{ php_fpm_appname }}"
   block:
   - name: moodledata pvc resource definition
     vars:
-      name: php-fpm
       kind: PersistentVolumeClaim
       k8s_state: "{{ php_fpm_pvc_state | default(php_fpm_state) }}"
       template: "{{ pvc_template }}"
@@ -15,9 +15,12 @@
       pvc_spec: "{{ php_fpm_pvc_spec }}"
     import_tasks: k8s.yml
 
+  - name: save php-fpm pvc resource definition task output
+    set_fact:
+      k8s_php_fpm_pvc: "{{ k8s_task }}"
+
   - name: moodle config.php secret resource definition
     vars:
-      name: php-fpm
       kind: Secret
       k8s_state: "{{ php_fpm_secret_state | default(php_fpm_state) }}"
       template: "{{ secret_template }}"
@@ -27,13 +30,36 @@
 
   - name: php-fpm service resource definition
     vars:
-      name: php-fpm
       kind: Service
       k8s_state: "{{ php_fpm_service_state | default(php_fpm_state) }}"
       template: "{{ service_template }}"
       metadata_name: "{{ php_fpm_service }}"
       service_spec: "{{ php_fpm_service_spec }}"
     import_tasks: k8s.yml
+
+  - name: set moodle new instance job fact
+    when:
+      - k8s_postgres_pvc is changed
+      - k8s_postgres_pvc.method is defined
+      - "'create' in k8s_postgres_pvc.method"
+      - k8s_postgres_deploy is changed
+      - k8s_postgres_deploy.method is defined
+      - "'create' in k8s_postgres_deploy.method"
+      - k8s_php_fpm_pvc is changed
+      - k8s_php_fpm_pvc.method is defined
+      - "'create' in k8s_php_fpm_pvc.method"
+      - moodle_new_instance_agree_license | bool
+    set_fact:
+      moodle_new_instance: true
+
+  - name: set moodle new instance job absent fact
+    when: "php_fpm_secret_state | default(php_fpm_state) == 'absent'"
+    set_fact:
+      moodle_new_instance_absent: true
+
+  - include_tasks: instance.yml
+    when: moodle_new_instance | default(false) or
+          moodle_new_instance_absent | default(false)
 
   - name: set php-fpm deploy spec
     when: php_fpm_deploy_spec is not defined
@@ -42,7 +68,6 @@
 
   - name: php-fpm deploy resource definition
     vars:
-      name: php-fpm
       kind: Deployment
       k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
       template: "{{ deploy_template }}"

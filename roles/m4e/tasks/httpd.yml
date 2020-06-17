@@ -4,10 +4,10 @@
     name: httpd
     k8s_state: "{{ httpd_state }}"
     component: httpd
+    metadata_app: "{{ httpd_appname }}"
   block:
   - name: httpd service resource definition
     vars:
-      name: httpd
       kind: Service
       k8s_state: "{{ httpd_pvc_state | default(httpd_state) }}"
       template: "{{ service_template }}"
@@ -22,7 +22,6 @@
 
   - name: httpd deploy resource definition
     vars:
-      name: httpd
       kind: Deployment
       k8s_state: "{{ httpd_deploy_state | default(httpd_state) }}"
       template: "{{ deploy_template }}"
@@ -33,7 +32,6 @@
   - name: httpd route resource definition
     when: "expose_as == 'route'"
     vars:
-      name: httpd
       kind: Route
       k8s_state: "{{ httpd_route_state | default(httpd_state) }}"
       template: "{{ route_template }}"

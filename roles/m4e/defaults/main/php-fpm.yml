@@ -28,6 +28,7 @@ php_fpm_resource_limits: true
 php_fpm_resource_limits_cpu: 1
 php_fpm_resource_limits_memory: 1Gi
 php_fpm_secret_data: |
+  moodle_new_instance_adminpass: '{{ moodle_new_instance_adminpass | b64encode }}'
   config_php: '{{ lookup('template', moodle_config_template) | b64encode }}'
 php_fpm_service_spec: |
   sessionAffinity: ClientIP

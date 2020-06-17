@@ -6,3 +6,4 @@ spec:
   # Add fields here
   httpd_size: 1
   php_fpm_size: 1
+  moodle_new_instance_agree_license: true

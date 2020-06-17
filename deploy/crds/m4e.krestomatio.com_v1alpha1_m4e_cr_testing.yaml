@@ -12,3 +12,4 @@ spec:
   httpd_image: image-registry.openshift-image-registry.svc:5000/osdk-test/moodle_httpd
   php_fpm_image: image-registry.openshift-image-registry.svc:5000/osdk-test/moodle_php-fpm
   postgres_image: image-registry.openshift-image-registry.svc:5000/osdk-test/postgres
+  moodle_new_instance_agree_license: true

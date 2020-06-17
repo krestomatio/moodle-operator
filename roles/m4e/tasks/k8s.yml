@@ -6,3 +6,7 @@
     state: "{{ k8s_state }}"
     definition: "{{ lookup('template', template) | from_yaml_all | list }}"
     namespace: "{{ namespace }}"
+    wait: "{{ k8s_wait | default(omit) }}"
+    wait_condition: "{{ k8s_wait_condition | default(omit) }}"
+    wait_timeout: "{{ k8s_wait_timeout | default(omit) }}"
+  register: k8s_task
