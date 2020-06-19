@@ -6,6 +6,7 @@ selector:
 template:
   {{ metadata() | indent(width=2) }}
   spec:
+    terminationGracePeriodSeconds: {{ postgres_term_grace_period }}
     containers:
     - image: '{{ postgres_image }}'
       name: '{{ postgres_appname }}'

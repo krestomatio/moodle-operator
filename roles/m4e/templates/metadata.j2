@@ -11,6 +11,9 @@ metadata:
 {% if component | default(false) != false %}
     app.kubernetes.io/component: '{{ component }}'
 {% endif %}
+{% if extra_labels | default(false) != false %}
+    {{ extra_labels | indent(width=4) }}
+{% endif %}
 {% if version | default(false) != false %}
     app.kubernetes.io/version: '{{ version }}'
 {% endif %}

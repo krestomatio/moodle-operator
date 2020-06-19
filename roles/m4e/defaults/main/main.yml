@@ -14,6 +14,7 @@ database_password: secret
 # templates
 deploy_template: deploy.yaml.j2
 job_template: job.yaml.j2
+cronjob_template: cronjob.yaml.j2
 config_template: config.yaml.j2
 pvc_template: pvc.yaml.j2
 secret_template: secret.yaml.j2
@@ -26,3 +27,4 @@ postgres_deploy_spec_template: postgres_deploy_spec.yaml.j2
 php_fpm_deploy_spec_template: php_fpm_deploy_spec.yaml.j2
 httpd_deploy_spec_template: httpd_deploy_spec.yaml.j2
 moodle_new_instance_job_spec_template: moodle_new_instance_job_spec.yaml.j2
+moodle_cronjob_spec_template:  moodle_cronjob_spec.yaml.j2

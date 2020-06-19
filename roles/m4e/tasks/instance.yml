@@ -21,14 +21,3 @@
     metadata_app: "{{ php_fpm_appname }}"
     job_spec: "{{ moodle_new_instance_job_spec }}"
   import_tasks: k8s.yml
-
-- name: verify job pod is deleted and not orphan if state absent
-  vars:
-    k8s_definition: "{{ lookup('k8s', kind='Pod', namespace=meta.namespace,
-      label_selector='job-name=' + moodle_new_instance_job ) }}"
-  when:
-    - (k8s_definition | length) > 0
-    - "php_fpm_secret_state | default(php_fpm_state) == 'absent'"
-  k8s:
-    definition: "{{ k8s_definition }}"
-    state: "{{ moodle_new_instance_job_state | default(php_fpm_state) }}"

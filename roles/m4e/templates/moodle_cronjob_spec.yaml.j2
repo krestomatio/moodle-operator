@@ -1,0 +1,70 @@
+{% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
+schedule: "{{ moodle_cron_schedule }}"
+suspend: {{ moodle_cron_suspend }}
+successfulJobsHistoryLimit: {{ moodle_cron_success_limit }}
+failedJobsHistoryLimit: {{ moodle_cron_failed_limit }}
+jobTemplate:
+  spec:
+    template:
+      {{ metadata() | indent(width=6) }}
+      spec:
+        restartPolicy: Never
+        initContainers:
+{% if moodle_container %}
+        - name: '{{ meta.name }}-moodle-app'
+          image: '{{ moodle_image }}'
+          # Shared volume with main container
+          volumeMounts:
+          - mountPath: {{ moodle_app }}
+            name: moodle-app
+{% endif %}
+        - name: '{{ meta.name }}-moodle-config'
+          image: '{{ php_fpm_image }}'
+          command:
+            - '/bin/sh'
+            - '-c'
+            - 'test -f {{ moodle_app }}/config.php || cp -pL {{ moodle_config_path }}/config.php {{ moodle_app }}/config.php'
+          volumeMounts:
+          - mountPath: {{ moodle_config_path }}
+            name: config-php
+            readOnly: true
+{% if moodle_container %}
+          - mountPath: {{ moodle_app }}
+            name: moodle-app
+{% endif %}
+        containers:
+        - image: '{{ php_fpm_image }}'
+          name: '{{ php_fpm_appname }}'
+          env:
+          - name: PHP_FPM_listen_allowed_clients
+            value: any
+          command:
+            - '/bin/sh'
+            - '-c'
+            - '{{ moodle_cron_command }}'
+          ports:
+          - containerPort: 9000
+          readinessProbe:
+            exec:
+              command: {{ moodle_new_instance_readiness_command }}
+          volumeMounts:
+          - mountPath: {{ moodle_data }}
+            name: moodledata
+          - mountPath: {{ moodle_app }}
+            name: moodle-app
+          - mountPath: {{ moodle_config_path }}
+            name: config-php
+            readOnly: true
+        volumes:
+        - name: moodledata
+          persistentVolumeClaim:
+            claimName: '{{ moodle_data_pvc }}'
+        - name: moodle-app
+          emptyDir: {}
+        - name: config-php
+          secret:
+            secretName: '{{ php_fpm_secret }}'
+            items:
+            - key: config_php
+              path: config.php
+              mode: 0660

@@ -1,0 +1,9 @@
+# {{ name }} cronjob
+---
+kind: CronJob
+apiVersion: batch/v1beta1
+{% include 'metadata.j2' ignore missing %}
+{% if cronjob_spec != false %}
+spec:
+  {{ cronjob_spec | indent(width=2) }}
+{% endif %}

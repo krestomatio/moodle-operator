@@ -7,6 +7,7 @@
   tasks:
     - name: refresh inventory with running pods
       vars:
+        add_host_no_log: true
         field_selectors:
           - status.phase=Running
         label_selectors:

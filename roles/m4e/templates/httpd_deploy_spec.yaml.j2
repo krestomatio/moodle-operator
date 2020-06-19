@@ -6,6 +6,7 @@ selector:
 template:
   {{ metadata() | indent(width=2) }}
   spec:
+    terminationGracePeriodSeconds: {{ httpd_term_grace_period }}
 {% if moodle_container %}
     initContainers:
     - name: '{{ meta.name }}-moodle-app'

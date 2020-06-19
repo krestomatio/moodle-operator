@@ -1,13 +1,12 @@
 {% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
 completions: 1
 parallelism: 1
+backoffLimit: 3
+activeDeadlineSeconds: 180
+# ttlSecondsAfterFinished: 60
 template:
   {{ metadata() | indent(width=2) }}
   spec:
-    spec:
-      backoffLimit: 3
-      activeDeadlineSeconds: 180
-      # ttlSecondsAfterFinished: 60
     restartPolicy: Never
     initContainers:
 {% if moodle_container %}

@@ -2,7 +2,7 @@
 - name: refresh dynamic inventory
   meta: refresh_inventory
 
-- name: "Get pods information"
+- name: get pods information
   k8s_info:
     kind: Pod
     namespace: "{{ meta.namespace }}"
@@ -13,13 +13,14 @@
   retries: "{{ k8s_info_retries | default(0) }}"
   register: k8s_info_pods
 
-- name: Add host
+- name: add hosts to inventory
   with_subelements:
     - "{{ k8s_info_pods.resources }}"
     - status.containerStatuses
   when:
     - item.1.ready
   changed_when: false
+  no_log: "{{ add_host_no_log | default(omit) }}"
   add_host:
     groups:
       - "{{ item.0.metadata.name | replace('-', '_') }}"

@@ -27,6 +27,7 @@ httpd_resource_requests_memory: 256Mi
 httpd_resource_limits: true
 httpd_resource_limits_cpu: 1
 httpd_resource_limits_memory: 1Gi
+httpd_term_grace_period: 30
 httpd_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
