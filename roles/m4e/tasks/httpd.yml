@@ -31,8 +31,8 @@
 
   - name: httpd route resource definition
     when:
-      - expose_type is defined and expose_type
-      - "(expose_type | lower) == 'route'"
+    - expose_type is defined and expose_type
+    - "(expose_type | lower) == 'route'"
     vars:
       kind: Route
       k8s_state: "{{ httpd_route_state | default(httpd_state) }}"
@@ -44,8 +44,8 @@
 
   - name: httpd route resource definition
     when:
-      - expose_type is defined and expose_type
-      - "(expose_type | lower) == 'ingress'"
+    - expose_type is defined and expose_type
+    - "(expose_type | lower) == 'ingress'"
     vars:
       kind: Ingress
       k8s_state: "{{ httpd_ingress_state | default(httpd_state) }}"

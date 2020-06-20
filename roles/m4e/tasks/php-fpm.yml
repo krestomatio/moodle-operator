@@ -39,16 +39,16 @@
 
   - name: set moodle new instance job fact
     when:
-      - k8s_postgres_pvc is changed
-      - k8s_postgres_pvc.method is defined
-      - "'create' in k8s_postgres_pvc.method"
-      - k8s_postgres_deploy is changed
-      - k8s_postgres_deploy.method is defined
-      - "'create' in k8s_postgres_deploy.method"
-      - k8s_php_fpm_pvc is changed
-      - k8s_php_fpm_pvc.method is defined
-      - "'create' in k8s_php_fpm_pvc.method"
-      - moodle_new_instance_agree_license | bool
+    - k8s_postgres_pvc is changed
+    - k8s_postgres_pvc.method is defined
+    - "'create' in k8s_postgres_pvc.method"
+    - k8s_postgres_deploy is changed
+    - k8s_postgres_deploy.method is defined
+    - "'create' in k8s_postgres_deploy.method"
+    - k8s_php_fpm_pvc is changed
+    - k8s_php_fpm_pvc.method is defined
+    - "'create' in k8s_php_fpm_pvc.method"
+    - moodle_new_instance_agree_license | bool
     set_fact:
       moodle_new_instance: true
 
@@ -92,14 +92,14 @@
 
   - name: remove any remaining jobs and its pods in php-fpm app
     loop:
-      - Job
-      - Pod
+    - Job
+    - Pod
     vars:
       k8s_definition: "{{ lookup('k8s', kind=item, namespace=meta.namespace,
         label_selector='job-name,app=' + php_fpm_appname ) }}"
     when:
-      - (k8s_definition | length) > 0
-      - "(moodle_cronjob_state | default(php_fpm_state)) == 'absent'"
+    - (k8s_definition | length) > 0
+    - "(moodle_cronjob_state | default(php_fpm_state)) == 'absent'"
     k8s:
       definition: "{{ k8s_definition }}"
       state: absent
