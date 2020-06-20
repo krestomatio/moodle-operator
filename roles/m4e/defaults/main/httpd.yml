@@ -7,6 +7,8 @@ httpd_appname: "{{ meta.name }}-httpd"
 httpd_service: "{{ httpd_appname }}-service"
 httpd_deploy: "{{ httpd_appname }}-deploy"
 httpd_route: "{{ httpd_appname }}-route"
+httpd_ingress: "{{ httpd_appname }}-ingress"
+httpd_port: 8080
 httpd_readiness_probe: true
 httpd_readiness_command: "['/usr/libexec/check-container', '-r']"
 httpd_readiness_initial: 5
@@ -47,12 +49,21 @@ httpd_route_spec: |
     insecureEdgeTerminationPolicy: Redirect
   {% endif %}
   wildcardPolicy: None
+httpd_ingress_spec: |
+  rules:
+  - host: '{{ moodle_uri }}'
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: '{{ httpd_service }}'
+          servicePort: {{ httpd_port }}
 httpd_service_spec: |
   sessionAffinity: ClientIP
   ports:
   - name: http
-    port: 8080
+    port: {{ httpd_port }}
     protocol: TCP
-    targetPort: 8080
+    targetPort: {{ httpd_port }}
   selector:
     app: '{{ httpd_appname }}'

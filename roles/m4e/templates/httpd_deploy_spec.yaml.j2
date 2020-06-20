@@ -25,7 +25,7 @@ template:
         - name: PHP_FPM_host
           value: '{{ php_fpm_service }}'
       ports:
-      - containerPort: 8080
+      - containerPort: {{ httpd_port }}
 {% if httpd_readiness_probe %}
       readinessProbe:
         exec:

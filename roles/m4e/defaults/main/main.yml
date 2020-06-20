@@ -3,7 +3,7 @@
 state: present
 host: "{{ meta.name }}-{{ namespace }}"
 domain: "apps-crc.testing"
-expose_as: "route"  # only route
+expose_type: "ingress"  # only route
 expose_tls: false
 
 # credentials. MUST CHANGED
