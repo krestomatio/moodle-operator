@@ -26,6 +26,9 @@
       k8s_state: "{{ httpd_deploy_state | default(httpd_state) }}"
       template: "{{ deploy_template }}"
       metadata_name: "{{ httpd_deploy }}"
+      annotations: "{{ httpd_deploy_annotations | default(false) }}"
+      connects_to: "{{ php_fpm_appname }}"
+      runtime: apache
       deploy_spec: "{{ httpd_deploy_spec }}"
     import_tasks: k8s.yml
 

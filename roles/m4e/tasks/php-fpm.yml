@@ -26,5 +26,8 @@
       k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
       template: "{{ deploy_template }}"
       metadata_name: "{{ php_fpm_deploy }}"
+      annotations: "{{ php_fpm_deploy_annotations | default(false) }}"
+      connects_to: "{{ postgres_appname }}"
+      runtime: php
       deploy_spec: "{{ php_fpm_deploy_spec }}"
     import_tasks: k8s.yml

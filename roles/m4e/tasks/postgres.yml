@@ -49,6 +49,8 @@
       k8s_wait: true
       template: "{{ deploy_template }}"
       metadata_name: "{{ postgres_deploy }}"
+      annotations: "{{ postgres_deploy_annotations | default(false) }}"
+      runtime: postgresql
       deploy_spec: "{{ postgres_deploy_spec }}"
     import_tasks: k8s.yml
 
