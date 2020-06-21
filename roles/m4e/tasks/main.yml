@@ -2,6 +2,8 @@
 # tasks file for m4e
 - import_tasks: postgres.yml
 
+- import_tasks: moodle.yml
+
 - import_tasks: php-fpm.yml
 
 - import_tasks: httpd.yml

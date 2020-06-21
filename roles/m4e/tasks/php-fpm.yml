@@ -6,28 +6,6 @@
     component: php-fpm
     metadata_app: "{{ php_fpm_appname }}"
   block:
-  - name: moodledata pvc resource definition
-    vars:
-      kind: PersistentVolumeClaim
-      k8s_state: "{{ php_fpm_pvc_state | default(php_fpm_state) }}"
-      template: "{{ pvc_template }}"
-      metadata_name: "{{ moodle_data_pvc }}"
-      pvc_spec: "{{ php_fpm_pvc_spec }}"
-    import_tasks: k8s.yml
-
-  - name: save php-fpm pvc resource definition task output
-    set_fact:
-      k8s_php_fpm_pvc: "{{ k8s_task }}"
-
-  - name: moodle config.php secret resource definition
-    vars:
-      kind: Secret
-      k8s_state: "{{ php_fpm_secret_state | default(php_fpm_state) }}"
-      template: "{{ secret_template }}"
-      metadata_name: "{{ php_fpm_secret }}"
-      secret_data: "{{ php_fpm_secret_data }}"
-    import_tasks: k8s.yml
-
   - name: php-fpm service resource definition
     vars:
       kind: Service
@@ -36,30 +14,6 @@
       metadata_name: "{{ php_fpm_service }}"
       service_spec: "{{ php_fpm_service_spec }}"
     import_tasks: k8s.yml
-
-  - name: set moodle new instance job fact
-    when:
-    - k8s_postgres_pvc is changed
-    - k8s_postgres_pvc.method is defined
-    - "'create' in k8s_postgres_pvc.method"
-    - k8s_postgres_deploy is changed
-    - k8s_postgres_deploy.method is defined
-    - "'create' in k8s_postgres_deploy.method"
-    - k8s_php_fpm_pvc is changed
-    - k8s_php_fpm_pvc.method is defined
-    - "'create' in k8s_php_fpm_pvc.method"
-    - moodle_new_instance_agree_license | bool
-    set_fact:
-      moodle_new_instance: true
-
-  - name: set moodle new instance job absent fact
-    when: "php_fpm_secret_state | default(php_fpm_state) == 'absent'"
-    set_fact:
-      moodle_new_instance_absent: true
-
-  - include_tasks: instance.yml
-    when: moodle_new_instance | default(false) or
-          moodle_new_instance_absent | default(false)
 
   - name: set php-fpm deploy spec
     when: php_fpm_deploy_spec is not defined
@@ -74,32 +28,3 @@
       metadata_name: "{{ php_fpm_deploy }}"
       deploy_spec: "{{ php_fpm_deploy_spec }}"
     import_tasks: k8s.yml
-
-  - name: set moodle cronjob spec
-    when: moodle_cronjob_spec is not defined
-    set_fact:
-      moodle_cronjob_spec: "{{ lookup('template', moodle_cronjob_spec_template) }}"
-
-  - name: moodle cronjob resource definition
-    vars:
-      kind: CronJob
-      k8s_state: "{{ moodle_cronjob_state | default(php_fpm_state) }}"
-      template: "{{ cronjob_template }}"
-      metadata_name: "{{ moodle_cronjob }}"
-      metadata_app: "{{ php_fpm_appname }}"
-      cronjob_spec: "{{ moodle_cronjob_spec }}"
-    import_tasks: k8s.yml
-
-  - name: remove any remaining jobs and its pods in php-fpm app
-    loop:
-    - Job
-    - Pod
-    vars:
-      k8s_definition: "{{ lookup('k8s', kind=item, namespace=meta.namespace,
-        label_selector='job-name,app=' + php_fpm_appname ) }}"
-    when:
-    - (k8s_definition | length) > 0
-    - "(moodle_cronjob_state | default(php_fpm_state)) == 'absent'"
-    k8s:
-      definition: "{{ k8s_definition }}"
-      state: absent

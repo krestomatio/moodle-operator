@@ -1,7 +1,7 @@
 ---
 # defaults file for m4e
 state: present
-host: "{{ meta.name }}-{{ namespace }}"
+host: "{{ meta.name }}{{ '-' + meta.namespace if meta.namespace is defined else '' }}"
 domain: "apps-crc.testing"
 expose_type: "ingress"  # only route
 expose_tls: false

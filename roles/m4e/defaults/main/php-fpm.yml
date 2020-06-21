@@ -4,7 +4,6 @@ php_fpm_size: 1
 php_fpm_image: quay.io/krestomatio/moodle_php-fpm
 php_fpm_state: "{{ state }}"
 php_fpm_appname: "{{ meta.name }}-php-fpm"
-php_fpm_secret: "{{php_fpm_appname }}-secret"
 php_fpm_service: "{{ php_fpm_appname }}-service"
 php_fpm_deploy: "{{ php_fpm_appname }}-deploy"
 php_fpm_readiness_probe: true
@@ -28,9 +27,6 @@ php_fpm_resource_limits: true
 php_fpm_resource_limits_cpu: 1
 php_fpm_resource_limits_memory: 1Gi
 php_fpm_term_grace_period: 30
-php_fpm_secret_data: |
-  moodle_new_instance_adminpass: '{{ moodle_new_instance_adminpass | b64encode }}'
-  config_php: '{{ lookup('template', moodle_config_template) | b64encode }}'
 php_fpm_service_spec: |
   sessionAffinity: ClientIP
   ports:
@@ -40,9 +36,3 @@ php_fpm_service_spec: |
     targetPort: 9000
   selector:
     app: '{{ php_fpm_appname }}'
-php_fpm_pvc_spec: |
-  accessModes:
-    - 'ReadWriteOnce'
-  resources:
-    requests:
-      storage: '1Gi'

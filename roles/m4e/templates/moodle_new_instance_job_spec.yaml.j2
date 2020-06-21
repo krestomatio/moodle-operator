@@ -40,7 +40,7 @@ template:
       - name: MOODLE_adminpass
         valueFrom:
           secretKeyRef:
-            name: {{ php_fpm_secret }}
+            name: {{ moodle_secret }}
             key: moodle_new_instance_adminpass
       command:
         - '/bin/sh'
@@ -76,8 +76,8 @@ template:
       emptyDir: {}
     - name: config-php
       secret:
-        secretName: '{{ php_fpm_secret }}'
+        secretName: '{{ moodle_secret }}'
         items:
-        - key: config_php
+        - key: config.php
           path: config.php
           mode: 0660

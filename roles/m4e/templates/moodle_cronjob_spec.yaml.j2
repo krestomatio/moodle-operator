@@ -63,8 +63,8 @@ jobTemplate:
           emptyDir: {}
         - name: config-php
           secret:
-            secretName: '{{ php_fpm_secret }}'
+            secretName: '{{ moodle_secret }}'
             items:
-            - key: config_php
+            - key: config.php
               path: config.php
               mode: 0660

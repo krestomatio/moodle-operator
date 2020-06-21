@@ -1,16 +1,18 @@
 ---
 # moodle app
 moodle_image: quay.io/krestomatio/moodle_app
+moodle_state: "{{ state }}"
+moodle_appname: "{{ meta.name }}-moodle"
 moodle_container: true
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
 moodle_config_path: /config
-moodle_data_pvc: "{{ meta.name }}-moodledata"
 moodle_uri: "{{ host }}.{{ domain }}"
 moodle_protocol: "{{ 'https' if expose_tls else 'http' }}"
 moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
 moodle_config_autosync: true
-moodle_new_instance_job: "{{ meta.name }}-moodle-new-instance-job"
+moodle_secret: "{{ moodle_appname }}-secret"
+moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"
 moodle_new_instance_lang: en
 moodle_new_instance_fullname: Demo site
 moodle_new_instance_shortname: demo
@@ -35,7 +37,18 @@ moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1
 moodle_cron_suspend: "false"
 moodle_cron_command: "php ${MOODLE_app}/admin/cli/cron.php"
-moodle_cronjob: "{{ meta.name }}-moodle-cronjob"
+moodle_cronjob: "{{ moodle_appname }}-cronjob"
+moodle_data_pvc: "{{ moodle_appname }}-data"
+moodle_data_pvc_size: 1Gi
+moodle_pvc_spec: |
+  accessModes:
+    - 'ReadWriteOnce'
+  resources:
+    requests:
+      storage: '{{ moodle_data_pvc_size }}'
+moodle_secret_data: |
+  moodle_new_instance_adminpass: '{{ moodle_new_instance_adminpass | b64encode }}'
+  config.php: '{{ lookup('template', moodle_config_template) | b64encode }}'
 # moodle config.php
 moodle_config_dbhost: "{{ postgres_service }}"
 moodle_config_dbname: "{{ database_name }}"
