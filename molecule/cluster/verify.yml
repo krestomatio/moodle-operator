@@ -6,11 +6,8 @@
   gather_facts: no
   collections:
     - community.kubernetes
-
   vars:
-    cr_file: "m4e.krestomatio.com_v1alpha1_m4e_cr.yaml"
-    custom_resource: "{{ lookup('template', '/'.join([deploy_dir, 'crds/' + cr_file])) | from_yaml }}"
-
+    custom_resource: "{{ lookup('template', '/'.join([template_dir, cr_template])) }}"
   tasks:
     - name: Create the m4e.krestomatio.com/v1alpha1.M4e and wait for reconciliation to complete
       k8s:

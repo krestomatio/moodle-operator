@@ -1,0 +1,15 @@
+apiVersion: m4e.krestomatio.com/v1alpha1
+kind: M4e
+metadata:
+  name: testing-m4e
+  annotations:
+    "ansible.operator-sdk/verbosity": "3"
+spec:
+  # Add fields here
+  httpd_size: 1
+  php_fpm_size: 1
+  moodle_image: image-registry.openshift-image-registry.svc:5000/osdk-test/moodle_app
+  httpd_image: image-registry.openshift-image-registry.svc:5000/osdk-test/moodle_httpd
+  php_fpm_image: image-registry.openshift-image-registry.svc:5000/osdk-test/moodle_php-fpm
+  postgres_image: image-registry.openshift-image-registry.svc:5000/osdk-test/postgres
+  moodle_new_instance_agree_license: true

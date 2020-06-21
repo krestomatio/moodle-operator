@@ -24,9 +24,9 @@ provisioner:
         ansible_python_interpreter: '{{ ansible_playbook_python }}'
         deploy_dir: ${MOLECULE_PROJECT_DIRECTORY}/deploy
         template_dir: ${MOLECULE_PROJECT_DIRECTORY}/molecule/templates
-        operator_image: ${OPERATOR_IMAGE:-""}
+        operator_image: ${OPERATOR_IMAGE:-"image-registry.openshift-image-registry.svc:5000/osdk-test/m4e-operator"}
         operator_pull_policy: ${OPERATOR_PULL_POLICY:-"Always"}
-        cr_file: ${CR_FILE:-"m4e.krestomatio.com_v1alpha1_m4e_cr.yaml"}
+        cr_template: ${CR_TEMPLATE:-"m4e_cr.yaml.j2"}
   env:
     K8S_AUTH_KUBECONFIG: ${KUBECONFIG:-"~/.kube/config"}
 verifier:
