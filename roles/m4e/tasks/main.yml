@@ -6,4 +6,4 @@
 
 - import_tasks: php-fpm.yml
 
-- import_tasks: httpd.yml
+- import_tasks: nginx.yml

@@ -25,6 +25,6 @@ moodle_config_template: config.php.j2
 
 postgres_deploy_spec_template: postgres_deploy_spec.yaml.j2
 php_fpm_deploy_spec_template: php_fpm_deploy_spec.yaml.j2
-httpd_deploy_spec_template: httpd_deploy_spec.yaml.j2
+nginx_deploy_spec_template: nginx_deploy_spec.yaml.j2
 moodle_new_instance_job_spec_template: moodle_new_instance_job_spec.yaml.j2
 moodle_cronjob_spec_template: moodle_cronjob_spec.yaml.j2

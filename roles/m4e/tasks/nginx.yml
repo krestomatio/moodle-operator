@@ -1,0 +1,59 @@
+---
+- name: nginx resource definitions
+  vars:
+    name: nginx
+    k8s_state: "{{ nginx_state }}"
+    component: nginx
+    metadata_app: "{{ nginx_appname }}"
+  block:
+  - name: nginx service resource definition
+    vars:
+      kind: Service
+      k8s_state: "{{ nginx_pvc_state | default(nginx_state) }}"
+      template: "{{ service_template }}"
+      metadata_name: "{{ nginx_service }}"
+      service_spec: "{{ nginx_service_spec }}"
+    import_tasks: k8s.yml
+
+  - name: set nginx deploy spec
+    when: nginx_deploy_spec is not defined
+    set_fact:
+      nginx_deploy_spec: "{{ lookup('template', nginx_deploy_spec_template) }}"
+
+  - name: nginx deploy resource definition
+    vars:
+      kind: Deployment
+      k8s_state: "{{ nginx_deploy_state | default(nginx_state) }}"
+      template: "{{ deploy_template }}"
+      metadata_name: "{{ nginx_deploy }}"
+      annotations: "{{ nginx_deploy_annotations | default(false) }}"
+      connects_to: "{{ php_fpm_appname }}"
+      runtime: nginx
+      deploy_spec: "{{ nginx_deploy_spec }}"
+    import_tasks: k8s.yml
+
+  - name: nginx route resource definition
+    when:
+    - expose_type is defined and expose_type
+    - "(expose_type | lower) == 'route'"
+    vars:
+      kind: Route
+      k8s_state: "{{ nginx_route_state | default(nginx_state) }}"
+      template: "{{ route_template }}"
+      metadata_name: "{{ nginx_route }}"
+      annotations: "{{ nginx_route_annotations | default(false) }}"
+      route_spec: "{{ nginx_route_spec }}"
+    import_tasks: k8s.yml
+
+  - name: nginx route resource definition
+    when:
+    - expose_type is defined and expose_type
+    - "(expose_type | lower) == 'ingress'"
+    vars:
+      kind: Ingress
+      k8s_state: "{{ nginx_ingress_state | default(nginx_state) }}"
+      template: "{{ ingress_template }}"
+      metadata_name: "{{ nginx_ingress }}"
+      annotations: "{{ nginx_ingress_annotations | default(false) }}"
+      ingress_spec: "{{ nginx_ingress_spec }}"
+    import_tasks: k8s.yml
