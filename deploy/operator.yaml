@@ -17,7 +17,7 @@ spec:
       containers:
         - name: m4e-operator
           # Replace this with the built image name
-          image: "quay.io/krestomatio/m4e-operator"
+          image: "quay.io/krestomatio/m4e-operator:v0.0.1"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
