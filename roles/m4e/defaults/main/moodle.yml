@@ -3,10 +3,9 @@
 moodle_image: quay.io/krestomatio/moodle_app
 moodle_state: "{{ state }}"
 moodle_appname: "{{ meta.name }}-moodle"
-moodle_container: true
+moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
-moodle_config_path: /config
 moodle_uri: "{{ host }}.{{ domain }}"
 moodle_protocol: "{{ 'https' if expose_tls else 'http' }}"
 moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
@@ -31,7 +30,7 @@ moodle_new_instance_cmd:
     --adminpass="${MOODLE_adminpass}"
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
-moodle_new_instance_readiness_command: "['/usr/libexec/check-container', '-t', '-c', '-m']"
+moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"
 moodle_cron_schedule: "*/1 * * * *"
 moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1

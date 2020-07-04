@@ -6,15 +6,16 @@ php_fpm_state: "{{ state }}"
 php_fpm_appname: "{{ meta.name }}-php-fpm"
 php_fpm_service: "{{ php_fpm_appname }}-service"
 php_fpm_deploy: "{{ php_fpm_appname }}-deploy"
+php_fpm_args: "['php-fpm']"
 php_fpm_readiness_probe: true
-php_fpm_readiness_command: "['/usr/libexec/check-container', '-t', '-r']"
+php_fpm_readiness_command: "['/usr/libexec/check-container-php', '-t', '-r']"
 php_fpm_readiness_initial: 5
 php_fpm_readiness_period: 30
 php_fpm_readiness_timeout: 3
 php_fpm_readiness_success: 1
 php_fpm_readiness_failure: 6
 php_fpm_liveness_probe: true
-php_fpm_liveness_command: "['/usr/libexec/check-container', '-t', '-l']"
+php_fpm_liveness_command: "['/usr/libexec/check-container-php', '-t', '-l']"
 php_fpm_liveness_initial: 5
 php_fpm_liveness_period: 10
 php_fpm_liveness_timeout: 3

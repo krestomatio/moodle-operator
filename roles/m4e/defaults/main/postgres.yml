@@ -9,14 +9,14 @@ postgres_secret: "{{ postgres_appname }}-secret"
 postgres_service: "{{ postgres_appname }}-service"
 postgres_deploy: "{{ postgres_appname }}-deploy"
 postgres_readiness_probe: true
-postgres_readiness_command: "['/usr/libexec/check-container']"
+postgres_readiness_command: "['/usr/libexec/check-container-postgres']"
 postgres_readiness_initial: 5
 postgres_readiness_period: 10
 postgres_readiness_timeout: 1
 postgres_readiness_success: 1
 postgres_readiness_failure: 3
 postgres_liveness_probe: true
-postgres_liveness_command: "['/usr/libexec/check-container', '--live']"
+postgres_liveness_command: "['/usr/libexec/check-container-postgres', '--live']"
 postgres_liveness_initial: 120
 postgres_liveness_period: 10
 postgres_liveness_timeout: 10

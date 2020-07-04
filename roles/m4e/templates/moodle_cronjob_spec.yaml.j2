@@ -9,26 +9,12 @@ jobTemplate:
       {{ metadata() | indent(width=6) }}
       spec:
         restartPolicy: Never
+{% if moodle_app_container %}
         initContainers:
-{% if moodle_container %}
         - name: '{{ meta.name }}-moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:
-          - mountPath: {{ moodle_app }}
-            name: moodle-app
-{% endif %}
-        - name: '{{ meta.name }}-moodle-config'
-          image: '{{ php_fpm_image }}'
-          command:
-            - '/bin/sh'
-            - '-c'
-            - 'test -f {{ moodle_app }}/config.php || cp -pL {{ moodle_config_path }}/config.php {{ moodle_app }}/config.php'
-          volumeMounts:
-          - mountPath: {{ moodle_config_path }}
-            name: config-php
-            readOnly: true
-{% if moodle_container %}
           - mountPath: {{ moodle_app }}
             name: moodle-app
 {% endif %}
@@ -50,17 +36,22 @@ jobTemplate:
           volumeMounts:
           - mountPath: {{ moodle_data }}
             name: moodledata
+{% if moodle_app_container %}
           - mountPath: {{ moodle_app }}
             name: moodle-app
-          - mountPath: {{ moodle_config_path }}
+{% endif %}
+          - mountPath: '{{ moodle_app }}/config.php'
             name: config-php
+            subPath: config.php
             readOnly: true
         volumes:
         - name: moodledata
           persistentVolumeClaim:
             claimName: '{{ moodle_data_pvc }}'
+{% if moodle_app_container %}
         - name: moodle-app
           emptyDir: {}
+{% endif %}
         - name: config-php
           secret:
             secretName: '{{ moodle_secret }}'

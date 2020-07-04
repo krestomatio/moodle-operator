@@ -7,7 +7,7 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     terminationGracePeriodSeconds: {{ nginx_term_grace_period }}
-{% if moodle_container %}
+{% if moodle_app_container %}
     initContainers:
     - name: '{{ meta.name }}-moodle-app'
       image: '{{ moodle_image }}'
@@ -26,6 +26,7 @@ template:
           value: '{{ php_fpm_service }}'
       ports:
       - containerPort: {{ nginx_port }}
+      args: {{ nginx_args }}
 {% if nginx_readiness_probe %}
       readinessProbe:
         exec:
@@ -62,8 +63,10 @@ template:
       volumeMounts:
       - mountPath: {{ moodle_data }}
         name: moodledata
+{% if moodle_app_container %}
       - mountPath: {{ moodle_app }}
         name: moodle-app
+{% endif %}
     volumes:
     - name: moodledata
       persistentVolumeClaim:
