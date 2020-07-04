@@ -22,6 +22,8 @@ template:
       env:
         - name: PHP_FPM_listen_allowed_clients
           value: any
+        - name: MOODLE_config_dir
+          value: '{{ moodle_config_path }}'
       ports:
       - containerPort: 9000
       args: {{ php_fpm_args }}
@@ -61,14 +63,13 @@ template:
       volumeMounts:
       - mountPath: {{ moodle_data }}
         name: moodledata
+      - mountPath: {{ moodle_config_path }}
+        name: config-php
+        readOnly: true
 {% if moodle_app_container %}
       - mountPath: {{ moodle_app }}
         name: moodle-app
 {% endif %}
-      - mountPath: '{{ moodle_app }}/config.php'
-        name: config-php
-        subPath: config.php
-        readOnly: true
     volumes:
     - name: moodledata
       persistentVolumeClaim:

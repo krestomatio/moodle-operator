@@ -6,6 +6,7 @@ moodle_appname: "{{ meta.name }}-moodle"
 moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
+moodle_config_path: /config
 moodle_uri: "{{ host }}.{{ domain }}"
 moodle_protocol: "{{ 'https' if expose_tls else 'http' }}"
 moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
