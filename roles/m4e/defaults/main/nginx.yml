@@ -31,13 +31,14 @@ nginx_resource_limits: true
 nginx_resource_limits_cpu: 1
 nginx_resource_limits_memory: 1Gi
 nginx_term_grace_period: 30
+nginx_tls_secret_name: moodle-tls
 nginx_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
 nginx_route_spec: |
-  host: {{ moodle_uri }}
+  host: '{{ moodle_uri }}'
   to:
     kind: Service
     name: '{{ nginx_service }}'
@@ -51,6 +52,12 @@ nginx_route_spec: |
   {% endif %}
   wildcardPolicy: None
 nginx_ingress_spec: |
+  {% if expose_tls %}
+  tls:
+  - hosts:
+    - '{{ moodle_uri }}'
+    secretName: {{ nginx_tls_secret_name }}
+  {% endif %}
   rules:
   - host: '{{ moodle_uri }}'
     http:
