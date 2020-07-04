@@ -1,7 +1,7 @@
 ---
 # nginx
 nginx_size: 1
-nginx_image: quay.io/krestomatio/moodle_nginx
+nginx_image: quay.io/krestomatio/moodle_web
 nginx_state: "{{ state }}"
 nginx_appname: "{{ meta.name }}-nginx"
 nginx_service: "{{ nginx_appname }}-service"
