@@ -1,6 +1,39 @@
-# https://docs.openshift.com/container-platform/4.2/operators/operator_sdk/osdk-ansible.html#osdk-building-ansible-operator_osdk-ansible
+This is a Moodle Operator for Kubernetes or Openshift. It is based on Ansible operator sdk.
+
+## TODO
+The operator is in the early alpha stage. There is work in progress for: 
+* Publish container images
+* Documentation
+  - Code of conduct
+  - Conventions
+  - Architecture
+  - Containers
+  - Features
+  - Installation
+  - Operation
+* CI
+  - Pipelines
+  - Tests
+    - Container test
+    - Moodle unit test
+    - Deployment
+    - Performance
+* Operator life cycle manager
+
+## Suggested readings when developing operators
+
+[Operator SDK](https://docs.openshift.com/container-platform/4.2/operators/operator_sdk/osdk-ansible.html#osdk-building-ansible-operator_osdk-ansible)
+
+[O’Reilly: Kubernetes Operators ebook](https://www.redhat.com/es/resources/oreilly-kubernetes-operators-automation-ebook)
+
+[O’Reilly: Kubernetes Patterns ebook](https://www.redhat.com/es/resources/oreilly-kubernetes-patterns-cloud-native-apps)
+
+
+
+## NOTES
+```bash
 # install operator-sdk
-# pip docker openshift molecule
+pip docker openshift molecule
 
 operator-sdk new m4e-operator --api-version=m4e.krestomatio.com/v1alpha1 --kind=M4e --type=ansible --git-init --generate-playbook
 
@@ -92,7 +125,7 @@ php admin/cli/install.php \
     --adminemail="test@test.com" \
     --agree-license \
     --non-interactive
-    
+
 ## cli installation with config.php
 php admin/cli/install_database.php \
     --lang="en"  \
@@ -103,3 +136,4 @@ php admin/cli/install_database.php \
     --adminpass="secret" \
     --adminemail="test@test.com" \
     --agree-license
+```
