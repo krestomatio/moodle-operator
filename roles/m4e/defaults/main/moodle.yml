@@ -7,9 +7,9 @@ moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
 moodle_config_path: /config
-moodle_uri: "{{ host }}.{{ domain }}"
+moodle_host: "{{ fqdn }}"
 moodle_protocol: "{{ 'https' if expose_tls else 'http' }}"
-moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
+moodle_url: "{{ moodle_protocol }}://{{ moodle_host }}"
 moodle_config_autosync: true
 moodle_secret: "{{ moodle_appname }}-secret"
 moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"

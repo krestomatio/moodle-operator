@@ -9,6 +9,7 @@ nginx_deploy: "{{ nginx_appname }}-deploy"
 nginx_route: "{{ nginx_appname }}-route"
 nginx_ingress: "{{ nginx_appname }}-ingress"
 nginx_port: 8080
+nginx_host: "{{ fqdn }}"
 nginx_args: "['nginx', '-g', 'daemon off;']"
 nginx_readiness_probe: true
 nginx_readiness_command: "['/usr/libexec/check-container-nginx', '-r']"
@@ -38,7 +39,7 @@ nginx_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
 nginx_route_spec: |
-  host: '{{ moodle_uri }}'
+  host: '{{ nginx_route_host }}'
   to:
     kind: Service
     name: '{{ nginx_service }}'
@@ -55,11 +56,11 @@ nginx_ingress_spec: |
   {% if expose_tls %}
   tls:
   - hosts:
-    - '{{ moodle_uri }}'
+    - '{{ nginx_host }}'
     secretName: {{ nginx_tls_secret_name }}
   {% endif %}
   rules:
-  - host: '{{ moodle_uri }}'
+  - host: '{{ nginx_host }}'
     http:
       paths:
       - path: /

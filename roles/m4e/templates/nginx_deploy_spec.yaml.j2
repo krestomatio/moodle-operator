@@ -21,7 +21,7 @@ template:
       name: '{{ nginx_appname }}'
       env:
         - name: MOODLE_check_host
-          value: '{{ moodle_uri }}'
+          value: '{{ nginx_host }}'
         - name: PHP_FPM_host
           value: '{{ php_fpm_service }}'
       ports:
