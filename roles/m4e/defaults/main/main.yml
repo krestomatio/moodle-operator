@@ -1,8 +1,8 @@
 ---
 # defaults file for m4e
 state: present
-host: "{{ ansible_operator_meta.name }}{{ '-' + ansible_operator_meta.namespace if ansible_operator_meta.namespace is defined else '' }}"
-domain: "apps-crc.testing"
+host: "m4e"
+domain: "krestomat.io"
 fqdn: "{{ host }}.{{ domain }}"
 expose_type: "ingress"  # only route
 expose_tls: false
