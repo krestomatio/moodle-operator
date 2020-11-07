@@ -36,8 +36,8 @@ galaxy_info:
   # To view available platforms and versions (or releases), visit:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
-  # platforms:
-  # - name: Fedora
+  platforms:
+  - name: GenericLinux
   #   versions:
   #   - all
   #   - 25
