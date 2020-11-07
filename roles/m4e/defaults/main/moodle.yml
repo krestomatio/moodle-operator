@@ -2,7 +2,7 @@
 # moodle app
 moodle_image: quay.io/krestomatio/moodle_app
 moodle_state: "{{ state }}"
-moodle_appname: "{{ meta.name }}-moodle"
+moodle_appname: "{{ ansible_operator_meta.name }}-moodle"
 moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
@@ -13,6 +13,7 @@ moodle_url: "{{ moodle_protocol }}://{{ moodle_uri }}"
 moodle_config_autosync: true
 moodle_secret: "{{ moodle_appname }}-secret"
 moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"
+moodle_new_instance_active_deadline_seconds: 300
 moodle_new_instance_lang: en
 moodle_new_instance_fullname: Demo site
 moodle_new_instance_shortname: demo

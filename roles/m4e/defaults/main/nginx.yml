@@ -3,7 +3,7 @@
 nginx_size: 1
 nginx_image: quay.io/krestomatio/moodle_web
 nginx_state: "{{ state }}"
-nginx_appname: "{{ meta.name }}-nginx"
+nginx_appname: "{{ ansible_operator_meta.name }}-nginx"
 nginx_service: "{{ nginx_appname }}-service"
 nginx_deploy: "{{ nginx_appname }}-deploy"
 nginx_route: "{{ nginx_appname }}-route"

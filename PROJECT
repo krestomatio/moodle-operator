@@ -1,0 +1,8 @@
+domain: krestomat.io
+layout: ansible.sdk.operatorframework.io/v1
+projectName: m4e-operator
+resources:
+- group: m4e
+  kind: M4e
+  version: v1alpha1
+version: 3-alpha

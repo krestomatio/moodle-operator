@@ -93,7 +93,7 @@
     - Job
     - Pod
     vars:
-      k8s_definition: "{{ lookup('k8s', kind=item, namespace=meta.namespace,
+      k8s_definition: "{{ lookup('k8s', kind=item, namespace=ansible_operator_meta.namespace,
         label_selector='app=' + moodle_appname ) }}"
     when:
     - (k8s_definition | length) > 0

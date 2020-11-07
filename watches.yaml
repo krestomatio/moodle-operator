@@ -1,5 +1,7 @@
 ---
+# Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
-  group: m4e.krestomatio.com
+  group: m4e.krestomat.io
   kind: M4e
-  playbook: playbook.yml
+  playbook: playbooks/m4e.yml
+# +kubebuilder:scaffold:watch

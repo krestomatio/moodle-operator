@@ -11,7 +11,7 @@ jobTemplate:
         restartPolicy: Never
 {% if moodle_app_container %}
         initContainers:
-        - name: '{{ meta.name }}-moodle-app'
+        - name: '{{ ansible_operator_meta.name }}-moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:
@@ -58,4 +58,3 @@ jobTemplate:
             items:
             - key: config.php
               path: config.php
-              mode: 0660

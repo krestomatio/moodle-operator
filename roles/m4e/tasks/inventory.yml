@@ -5,7 +5,7 @@
 - name: get pods information
   k8s_info:
     kind: Pod
-    namespace: "{{ meta.namespace }}"
+    namespace: "{{ ansible_operator_meta.namespace }}"
     label_selectors: "{{ label_selectors if label_selectors is defined else omit }}"
     field_selectors: "{{ field_selectors if field_selectors is defined else omit }}"
   until: "{{ k8s_info_until | default(true) }}"

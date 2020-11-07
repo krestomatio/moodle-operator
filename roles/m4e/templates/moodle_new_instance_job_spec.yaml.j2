@@ -2,7 +2,7 @@
 completions: 1
 parallelism: 1
 backoffLimit: 3
-activeDeadlineSeconds: 180
+activeDeadlineSeconds: {{ moodle_new_instance_active_deadline_seconds }}
 # ttlSecondsAfterFinished: 60
 template:
   {{ metadata() | indent(width=2) }}
@@ -10,7 +10,7 @@ template:
     restartPolicy: Never
 {% if moodle_app_container %}
     initContainers:
-    - name: '{{ meta.name }}-moodle-app'
+    - name: '{{ ansible_operator_meta.name }}-moodle-app'
       image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
@@ -71,4 +71,3 @@ template:
         items:
         - key: config.php
           path: config.php
-          mode: 0660

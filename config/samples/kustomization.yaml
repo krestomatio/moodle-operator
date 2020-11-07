@@ -1,0 +1,4 @@
+## Append samples you want in your CSV to this file as resources ##
+resources:
+- m4e_v1alpha1_m4e.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

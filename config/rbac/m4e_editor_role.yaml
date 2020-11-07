@@ -1,0 +1,24 @@
+# permissions for end users to edit m4es.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: m4e-editor-role
+rules:
+- apiGroups:
+  - m4e.krestomat.io
+  resources:
+  - m4es
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - m4e.krestomat.io
+  resources:
+  - m4es/status
+  verbs:
+  - get
