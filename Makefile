@@ -1,7 +1,13 @@
+# Image
+REGISTRY ?= quay.io
+ORG ?= krestomatio
+OPERATOR_NAME ?= m4e-operator
+IMG_REGISTRY_PATH ?= $(REGISTRY)/$(ORG)/$(OPERATOR_NAME)
+
 # Current Operator version
 VERSION ?= 0.2.0
 # Default bundle image tag
-BUNDLE_IMG ?= controller-bundle:$(VERSION)
+BUNDLE_IMG ?= $(IMG_REGISTRY_PATH)-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -12,7 +18,7 @@ endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= $(IMG_REGISTRY_PATH):$(VERSION)
 
 all: docker-build
 
