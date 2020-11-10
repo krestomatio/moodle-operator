@@ -20,18 +20,18 @@
   when:
     - item.1.ready
   changed_when: false
-  no_log: "{{ add_host_no_log | default(omit) }}"
+  # no_log: "{{ add_host_no_log | default(omit) }}"
   add_host:
     groups:
       - "{{ item.0.metadata.name | replace('-', '_') }}"
       - pods
       - "{{ item.0.metadata.labels.app | replace('-', '_') }}"
       - "{{ item.0.metadata.labels['app.kubernetes.io/component'] | replace('-', '_') }}"
-      - "{{ namespace | replace('-', '_') }}"
+      - "{{ ansible_operator_meta.namespace | replace('-', '_') }}"
     name: "{{ item.0.metadata.name }}__{{ item.1.name }}"
     ansible_kubectl_pod: "{{ item.0.metadata.name }}"
     ansible_kubectl_container: "{{ item.1.name }}"
-    ansible_kubectl_namespace: "{{ namespace }}"
+    ansible_kubectl_namespace: "{{ ansible_operator_meta.namespace }}"
     ansible_connection: kubectl
     ansible_remote_tmp: /var/tmp/.ansible
     state: "{{ item.1.state }}"
