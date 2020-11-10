@@ -6,98 +6,98 @@
     component: moodle
     metadata_app: "{{ moodle_appname }}"
   block:
-  - name: moodledata pvc resource definition
-    vars:
-      kind: PersistentVolumeClaim
-      k8s_state: "{{ moodle_pvc_state | default(moodle_state) }}"
-      template: "{{ pvc_template }}"
-      metadata_name: "{{ moodle_data_pvc }}"
-      pvc_spec: "{{ moodle_pvc_spec }}"
-    import_tasks: k8s.yml
-
-  - name: save moodle pvc resource definition task output
-    set_fact:
-      k8s_moodle_pvc: "{{ k8s_task }}"
-
-  - name: moodle config.php secret resource definition
-    vars:
-      kind: Secret
-      k8s_state: "{{ moodle_secret_state | default(moodle_state) }}"
-      template: "{{ secret_template }}"
-      metadata_name: "{{ moodle_secret }}"
-      secret_data: "{{ moodle_secret_data }}"
-    import_tasks: k8s.yml
-
-  - name: set moodle new instance job fact
-    when:
-    - k8s_postgres_pvc is changed
-    - k8s_postgres_pvc.method is defined
-    - "'create' in k8s_postgres_pvc.method"
-    - k8s_postgres_deploy is changed
-    - k8s_postgres_deploy.method is defined
-    - "'create' in k8s_postgres_deploy.method"
-    - k8s_moodle_pvc is changed
-    - k8s_moodle_pvc.method is defined
-    - "'create' in k8s_moodle_pvc.method"
-    - moodle_new_instance_agree_license | bool
-    set_fact:
-      moodle_new_instance: true
-
-  - name: set moodle new instance job absent fact
-    when: "moodle_secret_state | default(moodle_state) == 'absent'"
-    set_fact:
-      moodle_new_instance_absent: true
-
-  - name: moodle instance
-    when: moodle_new_instance | default(false) or
-          moodle_new_instance_absent | default(false)
-    block:
-    - name: set moodle new instance job spec
-      when: moodle_new_instance_job_spec is not defined
+    - name: moodledata pvc resource definition
       vars:
-        metadata_name: "{{ moodle_new_instance_job }}"
-      set_fact:
-        moodle_new_instance_job_spec:
-          "{{ lookup('template', moodle_new_instance_job_spec_template) }}"
-
-    - name: moodle new instance job resource definition
-      vars:
-        kind: Job
-        k8s_state: "{{ moodle_new_instance_job_state | default(moodle_state) }}"
-        k8s_wait: true
-        k8s_wait_timeout: 180
-        k8s_wait_condition:
-          type: "Complete"
-          status: "True"
-        template: "{{ job_template }}"
-        metadata_name: "{{ moodle_new_instance_job }}"
-        job_spec: "{{ moodle_new_instance_job_spec }}"
+        kind: PersistentVolumeClaim
+        k8s_state: "{{ moodle_pvc_state | default(moodle_state) }}"
+        template: "{{ pvc_template }}"
+        metadata_name: "{{ moodle_data_pvc }}"
+        pvc_spec: "{{ moodle_pvc_spec }}"
       import_tasks: k8s.yml
 
-  - name: set moodle cronjob spec
-    when: moodle_cronjob_spec is not defined
-    set_fact:
-      moodle_cronjob_spec: "{{ lookup('template', moodle_cronjob_spec_template) }}"
+    - name: save moodle pvc resource definition task output
+      set_fact:
+        k8s_moodle_pvc: "{{ k8s_task }}"
 
-  - name: moodle cronjob resource definition
-    vars:
-      kind: CronJob
-      k8s_state: "{{ moodle_cronjob_state | default(moodle_state) }}"
-      template: "{{ cronjob_template }}"
-      metadata_name: "{{ moodle_cronjob }}"
-      cronjob_spec: "{{ moodle_cronjob_spec }}"
-    import_tasks: k8s.yml
+    - name: moodle config.php secret resource definition
+      vars:
+        kind: Secret
+        k8s_state: "{{ moodle_secret_state | default(moodle_state) }}"
+        template: "{{ secret_template }}"
+        metadata_name: "{{ moodle_secret }}"
+        secret_data: "{{ moodle_secret_data }}"
+      import_tasks: k8s.yml
 
-  - name: remove any remaining jobs and its pods in moodle app
-    loop:
-    - Job
-    - Pod
-    vars:
-      k8s_definition: "{{ lookup('k8s', kind=item, namespace=ansible_operator_meta.namespace,
-        label_selector='app=' + moodle_appname ) }}"
-    when:
-    - (k8s_definition | length) > 0
-    - "(moodle_cronjob_state | default(moodle_state)) == 'absent'"
-    k8s:
-      definition: "{{ k8s_definition }}"
-      state: absent
+    - name: set moodle new instance job fact
+      when:
+        - k8s_postgres_pvc is changed
+        - k8s_postgres_pvc.method is defined
+        - "'create' in k8s_postgres_pvc.method"
+        - k8s_postgres_deploy is changed
+        - k8s_postgres_deploy.method is defined
+        - "'create' in k8s_postgres_deploy.method"
+        - k8s_moodle_pvc is changed
+        - k8s_moodle_pvc.method is defined
+        - "'create' in k8s_moodle_pvc.method"
+        - moodle_new_instance_agree_license | bool
+      set_fact:
+        moodle_new_instance: true
+
+    - name: set moodle new instance job absent fact
+      when: "moodle_secret_state | default(moodle_state) == 'absent'"
+      set_fact:
+        moodle_new_instance_absent: true
+
+    - name: moodle instance
+      when: moodle_new_instance | default(false) or
+            moodle_new_instance_absent | default(false)
+      block:
+        - name: set moodle new instance job spec
+          when: moodle_new_instance_job_spec is not defined
+          vars:
+            metadata_name: "{{ moodle_new_instance_job }}"
+          set_fact:
+            moodle_new_instance_job_spec:
+              "{{ lookup('template', moodle_new_instance_job_spec_template) }}"
+
+        - name: moodle new instance job resource definition
+          vars:
+            kind: Job
+            k8s_state: "{{ moodle_new_instance_job_state | default(moodle_state) }}"
+            k8s_wait: true
+            k8s_wait_timeout: 180
+            k8s_wait_condition:
+              type: "Complete"
+              status: "True"
+            template: "{{ job_template }}"
+            metadata_name: "{{ moodle_new_instance_job }}"
+            job_spec: "{{ moodle_new_instance_job_spec }}"
+          import_tasks: k8s.yml
+
+    - name: set moodle cronjob spec
+      when: moodle_cronjob_spec is not defined
+      set_fact:
+        moodle_cronjob_spec: "{{ lookup('template', moodle_cronjob_spec_template) }}"
+
+    - name: moodle cronjob resource definition
+      vars:
+        kind: CronJob
+        k8s_state: "{{ moodle_cronjob_state | default(moodle_state) }}"
+        template: "{{ cronjob_template }}"
+        metadata_name: "{{ moodle_cronjob }}"
+        cronjob_spec: "{{ moodle_cronjob_spec }}"
+      import_tasks: k8s.yml
+
+    - name: remove any remaining jobs and its pods in moodle app
+      loop:
+        - Job
+        - Pod
+      vars:
+        k8s_definition: "{{ lookup('k8s', kind=item, namespace=ansible_operator_meta.namespace,
+          label_selector='app=' + moodle_appname ) }}"
+      when:
+        - (k8s_definition | length) > 0
+        - "(moodle_cronjob_state | default(moodle_state)) == 'absent'"
+      k8s:
+        definition: "{{ k8s_definition }}"
+        state: absent
