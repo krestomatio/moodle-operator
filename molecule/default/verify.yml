@@ -8,6 +8,7 @@
 
   vars:
     ctrl_label: control-plane=controller-manager
+    cr_removal: false
 
   tasks:
     - block:
@@ -30,6 +31,8 @@
               kind: Secret
             - api_version: v1
               kind: ConfigMap
+            - api_version: v1
+              kind: Job
           register: debug_resources
 
         - name: Retrieve Pod logs
