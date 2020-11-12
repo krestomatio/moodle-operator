@@ -23,7 +23,7 @@ postgres_liveness_timeout: 10
 postgres_liveness_success: 1
 postgres_liveness_failure: 3
 postgres_resource_requests: true
-postgres_resource_requests_cpu: 200m
+postgres_resource_requests_cpu: 150m
 postgres_resource_requests_memory: 256Mi
 postgres_resource_limits: true
 postgres_resource_limits_cpu: 1

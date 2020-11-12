@@ -26,8 +26,8 @@ nginx_liveness_timeout: 3
 nginx_liveness_success: 1
 nginx_liveness_failure: 3
 nginx_resource_requests: true
-nginx_resource_requests_cpu: 200m
-nginx_resource_requests_memory: 256Mi
+nginx_resource_requests_cpu: 75m
+nginx_resource_requests_memory: 128Mi
 nginx_resource_limits: true
 nginx_resource_limits_cpu: 1
 nginx_resource_limits_memory: 1Gi
