@@ -65,7 +65,7 @@
             kind: Job
             k8s_state: "{{ moodle_new_instance_job_state | default(moodle_state) }}"
             k8s_wait: true
-            k8s_wait_timeout: 180
+            k8s_wait_timeout: "{{ moodle_new_instance_wait_timeout }}"
             k8s_wait_condition:
               type: "Complete"
               status: "True"

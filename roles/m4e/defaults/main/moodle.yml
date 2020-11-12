@@ -13,7 +13,8 @@ moodle_url: "{{ moodle_protocol }}://{{ moodle_host }}"
 moodle_config_autosync: true
 moodle_secret: "{{ moodle_appname }}-secret"
 moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"
-moodle_new_instance_active_deadline_seconds: 900
+moodle_new_instance_wait_timeout: 900
+moodle_new_instance_active_deadline_seconds: "{{ moodle_new_instance_wait_timeout }}"
 moodle_new_instance_lang: en
 moodle_new_instance_fullname: Demo site
 moodle_new_instance_shortname: demo
