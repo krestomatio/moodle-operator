@@ -15,13 +15,19 @@ moodle_secret: "{{ moodle_appname }}-secret"
 moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"
 moodle_new_instance_wait_timeout: 900
 moodle_new_instance_active_deadline_seconds: "{{ moodle_new_instance_wait_timeout }}"
-moodle_new_instance_lang: en
+moodle_new_instance_resource_requests: true
+moodle_new_instance_resource_requests_cpu: 200m
+moodle_new_instance_resource_requests_memory: 256Mi
+moodle_new_instance_resource_limits: true
+moodle_new_instance_resource_limits_cpu: 1
+moodle_new_instance_resource_limits_memory: 1Gi
 moodle_new_instance_fullname: Demo site
 moodle_new_instance_shortname: demo
 moodle_new_instance_summary: A demo site
 moodle_new_instance_adminuser: admin
 moodle_new_instance_adminpass: secret
 moodle_new_instance_adminmail: admin@example.com
+moodle_new_instance_lang: en
 moodle_new_instance_agree_license: false
 moodle_new_instance_cmd:
   php admin/cli/install_database.php
