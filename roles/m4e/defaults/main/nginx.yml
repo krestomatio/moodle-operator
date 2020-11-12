@@ -39,7 +39,7 @@ nginx_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections.rate-http: '100'
   haproxy.router.openshift.io/rate-limit-connections.rate-tcp: '100'
 nginx_route_spec: |
-  host: '{{ nginx_route_host }}'
+  host: '{{ nginx_host }}'
   to:
     kind: Service
     name: '{{ nginx_service }}'
