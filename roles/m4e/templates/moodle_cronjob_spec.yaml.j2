@@ -1,6 +1,7 @@
 {% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
 schedule: "{{ moodle_cron_schedule }}"
 suspend: {{ moodle_cron_suspend }}
+concurrencyPolicy: {{ moodle_cron_concurrency_policy }}
 successfulJobsHistoryLimit: {{ moodle_cron_success_limit }}
 failedJobsHistoryLimit: {{ moodle_cron_failed_limit }}
 jobTemplate:

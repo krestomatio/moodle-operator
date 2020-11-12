@@ -44,6 +44,7 @@ moodle_cron_schedule: "*/1 * * * *"
 moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1
 moodle_cron_suspend: "false"
+moodle_cron_concurrency_policy: Allow
 moodle_cron_args: "['php', 'admin/cli/cron.php']"
 moodle_cron_resource_requests: true
 moodle_cron_resource_requests_cpu: 50m
