@@ -33,6 +33,19 @@ jobTemplate:
           readinessProbe:
             exec:
               command: {{ moodle_new_instance_readiness_command }}
+{% if moodle_cron_resource_requests or moodle_cron_resource_limits %}
+          resources:
+{% if moodle_cron_resource_requests %}
+            requests:
+              cpu: '{{ moodle_cron_resource_requests_cpu }}'
+              memory: '{{ moodle_cron_resource_requests_memory }}'
+{% endif %}
+{% if moodle_cron_resource_limits %}
+            limits:
+              cpu: '{{ moodle_cron_resource_limits_cpu }}'
+              memory: '{{ moodle_cron_resource_limits_memory }}'
+{% endif %}
+{% endif %}
           volumeMounts:
           - mountPath: {{ moodle_data }}
             name: moodledata

@@ -45,6 +45,12 @@ moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1
 moodle_cron_suspend: "false"
 moodle_cron_command: "php ${MOODLE_app}/admin/cli/cron.php"
+moodle_cron_resource_requests: true
+moodle_cron_resource_requests_cpu: 50m
+moodle_cron_resource_requests_memory: 128Mi
+moodle_cron_resource_limits: true
+moodle_cron_resource_limits_cpu: 1
+moodle_cron_resource_limits_memory: 1Gi
 moodle_cronjob: "{{ moodle_appname }}-cronjob"
 moodle_data_pvc: "{{ moodle_appname }}-data"
 moodle_data_pvc_size: 1Gi
