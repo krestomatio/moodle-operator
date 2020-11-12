@@ -18,9 +18,6 @@ provisioner:
   playbooks:
     prepare: ../default/prepare.yml
     verify: ../default/verify.yml
-  lint: |
-    set -e
-    ansible-lint
   inventory:
     group_vars:
       all:
@@ -38,8 +35,3 @@ provisioner:
   env:
     K8S_AUTH_KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig
     KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig
-verifier:
-  name: ansible
-  lint: |
-    set -e
-    ansible-lint
