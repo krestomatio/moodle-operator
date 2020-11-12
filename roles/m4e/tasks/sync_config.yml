@@ -12,4 +12,4 @@
       remote_src: true
       src: "{{ moodle_config_path }}/config.php"
       dest: "{{ moodle_app }}/config.php"
-      mode: preserve
+      mode: 0660
