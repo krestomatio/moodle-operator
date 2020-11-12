@@ -24,10 +24,7 @@ jobTemplate:
           env:
           - name: PHP_FPM_listen_allowed_clients
             value: any
-          command:
-            - '/bin/sh'
-            - '-c'
-            - '{{ moodle_cron_command }}'
+          args: {{ moodle_cron_args }}
           ports:
           - containerPort: 9000
           readinessProbe:
