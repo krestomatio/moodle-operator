@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   annotations:
-    lighthouse.jenkins-x.io/prependStepsURL: https://raw.githubusercontent.com/krestomatio/jx3-pipeline-catalog/8b75eedc3d2386a38fe596afc2c9f6f82f10c3d5/tasks/git-clone/git-clone-pr.yaml
+    lighthouse.jenkins-x.io/prependStepsURL: https://raw.githubusercontent.com/krestomatio/jx3-pipeline-catalog/master/tasks/git-clone/git-clone-pr.yaml
   name: pullrequest
 spec:
   pipelineSpec:
@@ -17,6 +17,12 @@ spec:
             value: pullrequest
           - name: JX_BATCH_MODE
             value: "true"
+          - name: UPDATE_VERSION
+            value: Makefile
+          - name: PROJECT_TIMESTAMP
+            value: midnight
+          - name: REGISTRY_PATH
+            value: docker-registry.jx.krestomat.io/krestomatio
           name: ""
           resources:
             requests:
@@ -24,11 +30,27 @@ spec:
               memory: 512Mi
           workingDir: /workspace/source
         steps:
-        - image: gcr.io/jenkinsxio/jx-cli:latest
-          name: test
-          resources: {}
+        - args:
+          - "200"
           command:
-            - sleep 180
+          - sleep
+          image: quay.io/krestomatio/ansible-operator-ci:0.0.8
+          name: test
+          workingDir: /workspace/source
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - name: libcontainers
+            mountPath: /var/lib/containers
+          - name: shared
+            mountPath: /shared
+        volumes:
+        - name: libcontainers
+          persistentVolumeClaim:
+            claimName: libcontainers-0sd6j3-pvc
+        - name: shared
+          persistentVolumeClaim:
+            claimName: shared-0sd6j3-pvc
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s

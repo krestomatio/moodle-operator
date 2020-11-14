@@ -1,14 +1,17 @@
 # Image
-REGISTRY ?= quay.io
-ORG ?= krestomatio
+REGISTRY_PATH ?= quay.io/krestomatio
 OPERATOR_NAME ?= m4e-operator
-IMG_REGISTRY_PATH ?= $(REGISTRY)/$(ORG)/$(OPERATOR_NAME)
+OPERATOR_IMAGE ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
 CONTAINER_BUILDER ?= docker
+
+# requirements
+OPERATOR_VERSION ?= 1.1.0
+KUSTOMIZE_VERSION ?= 3.5.4
 
 # Current Operator version
 VERSION ?= 0.2.0
 # Default bundle image tag
-BUNDLE_IMG ?= $(IMG_REGISTRY_PATH)-bundle:$(VERSION)
+BUNDLE_IMG ?= $(OPERATOR_IMAGE)-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -19,7 +22,7 @@ endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
-IMG ?= $(IMG_REGISTRY_PATH):$(VERSION)
+IMG ?= $(OPERATOR_IMAGE):$(VERSION)
 
 all: image-build
 
@@ -64,7 +67,7 @@ ifeq (, $(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.5.4/kustomize_v3.5.4_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v$(KUSTOMIZE_VERSION)/kustomize_v$(KUSTOMIZE_VERSION)_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
 	}
 KUSTOMIZE=$(realpath ./bin/kustomize)
 else
@@ -76,8 +79,8 @@ ifeq (, $(shell which ansible-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.1.0/ansible-operator-v1.1.0-$(ARCHOPER)-$(OSOPER) ;\
-	mv ansible-operator-v1.1.0-$(ARCHOPER)-$(OSOPER) ./bin/ansible-operator ;\
+	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v$(OPERATOR_VERSION)/ansible-operator-v$(OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ;\
+	mv ansible-operator-v$(OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ./bin/ansible-operator ;\
 	chmod +x ./bin/ansible-operator ;\
 	}
 ANSIBLE_OPERATOR=$(realpath ./bin/ansible-operator)

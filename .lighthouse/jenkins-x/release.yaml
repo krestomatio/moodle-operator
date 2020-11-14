@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   annotations:
-    lighthouse.jenkins-x.io/prependStepsURL: https://raw.githubusercontent.com/krestomatio/jx3-pipeline-catalog/8b75eedc3d2386a38fe596afc2c9f6f82f10c3d5/tasks/git-clone/git-clone.yaml
+    lighthouse.jenkins-x.io/prependStepsURL: https://raw.githubusercontent.com/krestomatio/jx3-pipeline-catalog/master/tasks/git-clone/git-clone.yaml
   name: release
 spec:
   pipelineSpec:
@@ -30,8 +30,10 @@ spec:
             value: release
           - name: JX_BATCH_MODE
             value: "true"
-          - name: VERSION
-            value: $(inputs.params.version)
+          - name: UPDATE_VERSION
+            value: Makefile
+          - name: PROJECT_TIMESTAMP
+            value: midnight
           name: ""
           resources:
             requests:
@@ -39,11 +41,13 @@ spec:
               memory: 512Mi
           workingDir: /workspace/source
         steps:
-        - image: gcr.io/jenkinsxio/jx-cli:latest
-          name: test
-          resources: {}
+        - args:
+          - testing
           command:
-            - sleep 180
+          - echo
+          image: quay.io/krestomatio/ansible-operator-ci:0.0.8
+          name: test
+          workingDir: /workspace/source
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
