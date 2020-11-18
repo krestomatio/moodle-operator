@@ -3,6 +3,7 @@ REGISTRY ?= quay.io
 ORG ?= krestomatio
 OPERATOR_NAME ?= m4e-operator
 IMG_REGISTRY_PATH ?= $(REGISTRY)/$(ORG)/$(OPERATOR_NAME)
+CONTAINER_BUILDER ?= docker
 
 # Current Operator version
 VERSION ?= 0.2.0
@@ -20,7 +21,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMG_REGISTRY_PATH):$(VERSION)
 
-all: docker-build
+all: image-build
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
 run: ansible-operator
@@ -43,13 +44,13 @@ deploy: kustomize
 undeploy: kustomize
 	$(KUSTOMIZE) build config/default | kubectl delete -f -
 
-# Build the docker image
-docker-build:
-	docker build . -t ${IMG}
+# Build the container image
+image-build:
+	$(CONTAINER_BUILDER) build . -t ${IMG}
 
-# Push the docker image
-docker-push:
-	docker push ${IMG}
+# Push the container image
+image-push:
+	$(CONTAINER_BUILDER) push ${IMG}
 
 PATH  := $(PATH):$(PWD)/bin
 SHELL := env PATH=$(PATH) /bin/sh
@@ -95,4 +96,4 @@ bundle: kustomize
 # Build the bundle image.
 .PHONY: bundle-build
 bundle-build:
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	$(CONTAINER_BUILDER) build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
