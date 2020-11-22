@@ -36,7 +36,7 @@ moodle_new_instance_cmd:
     --shortname="{{ moodle_new_instance_shortname }}"
     --summary="{{ moodle_new_instance_summary }}"
     --adminuser="{{ moodle_new_instance_adminuser }}"
-    --adminpass="${MOODLE_adminpass}"
+    --adminpass="${MOODLE_ADMINPASS}"
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
 moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"

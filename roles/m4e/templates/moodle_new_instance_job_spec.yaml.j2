@@ -21,9 +21,9 @@ template:
     - image: '{{ php_fpm_image }}'
       name: '{{ php_fpm_appname }}'
       env:
-      - name: PHP_FPM_listen_allowed_clients
+      - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
         value: any
-      - name: MOODLE_adminpass
+      - name: MOODLE_ADMINPASS
         valueFrom:
           secretKeyRef:
             name: {{ moodle_secret }}
