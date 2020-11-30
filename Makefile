@@ -1,17 +1,28 @@
+CONTAINER_BUILDER ?= docker
+OPERATOR_NAME ?= m4e-operator
 # Image
 REGISTRY_PATH ?= quay.io/krestomatio
-OPERATOR_NAME ?= m4e-operator
-OPERATOR_IMAGE ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
-CONTAINER_BUILDER ?= docker
-
+IMAGE_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
 # requirements
 OPERATOR_VERSION ?= 1.1.0
 KUSTOMIZE_VERSION ?= 3.5.4
-
+# Build
+BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
+BUILD_OPERATOR_NAME ?= m4e-operator
+BUILD_IMAGE_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
+BUILD_VERSION ?= $(shell git rev-parse HEAD 2> /dev/null  || echo)
+# molecule
+MOLECULE_SEQUENCE ?= test
+MOLECULE_SCENARIO ?= default
+# skopeo
+SKOPEO_SRC_TLS ?= True
+SKOPEO_DEST_TLS ?= true
+# Release
+GIT_REMOTE ?= origin
 # Current Operator version
 VERSION ?= 0.2.0
 # Default bundle image tag
-BUNDLE_IMG ?= $(OPERATOR_IMAGE)-bundle:$(VERSION)
+BUNDLE_IMG ?= $(IMAGE_NAME)-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -22,7 +33,7 @@ endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
-IMG ?= $(OPERATOR_IMAGE):$(VERSION)
+IMG ?= $(IMAGE_NAME):$(VERSION)
 
 all: image-build
 
@@ -100,3 +111,26 @@ bundle: kustomize
 .PHONY: bundle-build
 bundle-build:
 	$(CONTAINER_BUILDER) build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+
+# test with molecule
+.PHONY: molecule
+molecule:
+	molecule $(MOLECULE_SEQUENCE) -s $(MOLECULE_SCENARIO)
+
+# Pullrequest pipeline
+.PHONY: pr
+pr:	VERSION = $(BUILD_VERSION)
+	export OPERATOR_IMAGE ?= $(IMG)
+pr: image-build image-push molecule
+
+# Release pipeline
+.PHONY: release
+release: promote
+	git add Makefile
+	git commit -m "Release version $(VERSION)" -m "[skip.ci]"
+	git tag v$(VERSION)
+	# git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
+
+# copy image using skopeo
+promote:
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(VERSION)

@@ -21,8 +21,6 @@ spec:
             value: Makefile
           - name: PROJECT_TIMESTAMP
             value: midnight
-          - name: REGISTRY_PATH
-            value: docker-registry.jx.krestomat.io/krestomatio
           name: ""
           resources:
             requests:
@@ -31,10 +29,10 @@ spec:
           workingDir: /workspace/source
         steps:
         - args:
-          - "200"
+          - "1900"
           command:
           - sleep
-          image: quay.io/krestomatio/ansible-operator-ci:0.0.8
+          image: docker-registry.jx.krestomat.io/krestomatio/container_builder/ansible-operator-ci
           name: test
           workingDir: /workspace/source
           securityContext:

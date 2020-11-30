@@ -45,7 +45,7 @@ spec:
           - testing
           command:
           - echo
-          image: quay.io/krestomatio/ansible-operator-ci:0.0.8
+          image: quay.io/krestomatio/ansible-operator-ci
           name: test
           workingDir: /workspace/source
   podTemplate: {}
