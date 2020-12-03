@@ -3,4 +3,10 @@ kind: M4e
 metadata:
   name: m4e-sample
 spec:
+  moodle_new_instance_fullname: Demo site
+  moodle_new_instance_shortname: demo
+  moodle_new_instance_summary: A demo site
+  moodle_new_instance_adminuser: admin
+  moodle_new_instance_adminpass: secret
+  moodle_new_instance_adminmail: admin@example.com
   moodle_new_instance_agree_license: true
