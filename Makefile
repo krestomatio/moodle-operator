@@ -20,7 +20,7 @@ SKOPEO_DEST_TLS ?= true
 # Release
 GIT_REMOTE ?= origin
 # Current Operator version
-VERSION ?= 0.2.0
+VERSION ?= 0.2.4
 # Default bundle image tag
 BUNDLE_IMG ?= $(IMAGE_NAME)-bundle:$(VERSION)
 # Options for 'bundle-build'
