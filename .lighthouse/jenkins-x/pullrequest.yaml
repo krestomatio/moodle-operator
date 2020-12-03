@@ -29,9 +29,9 @@ spec:
           workingDir: /workspace/source
         steps:
         - args:
-          - "1900"
+          - pr
           command:
-          - sleep
+          - make
           image: docker-registry.jx.krestomat.io/krestomatio/container_builder/ansible-operator-ci
           name: test
           workingDir: /workspace/source

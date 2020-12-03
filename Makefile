@@ -1,24 +1,32 @@
 CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= m4e-operator
+
 # Image
 REGISTRY_PATH ?= quay.io/krestomatio
 IMAGE_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
+
 # requirements
 OPERATOR_VERSION ?= 1.1.0
 KUSTOMIZE_VERSION ?= 3.5.4
+
 # Build
 BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
-BUILD_OPERATOR_NAME ?= m4e-operator
-BUILD_IMAGE_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
+BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
+BUILD_IMAGE_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
 BUILD_VERSION ?= $(shell git rev-parse HEAD 2> /dev/null  || echo)
+
 # molecule
 MOLECULE_SEQUENCE ?= test
 MOLECULE_SCENARIO ?= default
+
 # skopeo
 SKOPEO_SRC_TLS ?= True
 SKOPEO_DEST_TLS ?= true
+
 # Release
 GIT_REMOTE ?= origin
+GIT_BRANCH ?= master
+
 # Current Operator version
 VERSION ?= 0.2.4
 # Default bundle image tag
@@ -120,6 +128,7 @@ molecule:
 # Pullrequest pipeline
 .PHONY: pr
 pr:	VERSION = $(BUILD_VERSION)
+	IMAGE_NAME = $(BUILD_IMAGE_NAME)
 	export OPERATOR_IMAGE ?= $(IMG)
 pr: image-build image-push molecule
 
@@ -129,7 +138,7 @@ release: promote
 	git add Makefile
 	git commit -m "Release version $(VERSION)" -m "[skip.ci]"
 	git tag v$(VERSION)
-	# git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
+	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
 
 # copy image using skopeo
 promote:

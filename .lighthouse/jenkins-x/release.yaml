@@ -42,9 +42,9 @@ spec:
           workingDir: /workspace/source
         steps:
         - args:
-          - testing
+          - release
           command:
-          - echo
+          - make
           image: quay.io/krestomatio/ansible-operator-ci
           name: test
           workingDir: /workspace/source
