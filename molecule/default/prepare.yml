@@ -26,3 +26,9 @@
       command: '{{ kustomize }} edit set namespace {{ namespace }}'
       args:
         chdir: '{{ config_dir }}/testing'
+
+    - name: Create Namespace
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: '{{ namespace }}'
