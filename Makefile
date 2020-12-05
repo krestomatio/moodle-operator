@@ -1,5 +1,6 @@
 CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= m4e-operator
+VERSION ?= 0.2.4
 
 # Image
 REGISTRY_PATH ?= quay.io/krestomatio
@@ -23,12 +24,20 @@ MOLECULE_SCENARIO ?= default
 SKOPEO_SRC_TLS ?= True
 SKOPEO_DEST_TLS ?= true
 
+# ci
+SKIP_MSG := skip.ci
+RUN_PIPELINE ?= $(shell git log -1 --pretty=%B | cat | grep -q "\[$(SKIP_MSG)\]" && echo || echo 1)
+ifeq ($(RUN_PIPELINE),)
+SKIP_PIPELINE = true
+endif
+ifeq ($(BUILD_VERSION),)
+SKIP_PIPELINE = true
+endif
+
 # Release
 GIT_REMOTE ?= origin
 GIT_BRANCH ?= master
 
-# Current Operator version
-VERSION ?= 0.2.4
 # Default bundle image tag
 BUNDLE_IMG ?= $(IMAGE_NAME)-bundle:$(VERSION)
 # Options for 'bundle-build'
@@ -42,6 +51,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_NAME):$(VERSION)
+export OPERATOR_IMAGE = $(IMG)
 
 all: image-build
 
@@ -68,11 +78,11 @@ undeploy: kustomize
 
 # Build the container image
 image-build:
-	$(CONTAINER_BUILDER) build . -t ${IMG}
+	$(CONTAINER_BUILDER) build . -t $(IMG)
 
 # Push the container image
 image-push:
-	$(CONTAINER_BUILDER) push ${IMG}
+	$(CONTAINER_BUILDER) push $(IMG)
 
 PATH  := $(PATH):$(PWD)/bin
 SHELL := env PATH=$(PATH) /bin/sh
@@ -125,21 +135,32 @@ bundle-build:
 molecule:
 	molecule $(MOLECULE_SEQUENCE) -s $(MOLECULE_SCENARIO)
 
+# copy image using skopeo
+.PHONY: promote
+promote:
+	# full version
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(VERSION)
+	# major + minor
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
+	# major
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(word 1,$(subst ., ,$(VERSION)))
+
+ifeq ($(origin SKIP_PIPELINE),undefined)
 # Pullrequest pipeline
 .PHONY: pr
-pr:	VERSION = $(BUILD_VERSION)
-	IMAGE_NAME = $(BUILD_IMAGE_NAME)
-	export OPERATOR_IMAGE ?= $(IMG)
+pr: IMG = $(BUILD_IMAGE_NAME):$(BUILD_VERSION)
 pr: image-build image-push molecule
 
 # Release pipeline
 .PHONY: release
 release: promote
 	git add Makefile
-	git commit -m "Release version $(VERSION)" -m "[skip.ci]"
+	git commit -m "Release version $(VERSION)" -m "[$(SKIP_MSG)]"
 	git tag v$(VERSION)
 	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
-
-# copy image using skopeo
-promote:
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(VERSION)
+else
+pr:
+	$(info skipping...)
+release:
+	$(info skipping...)
+endif
