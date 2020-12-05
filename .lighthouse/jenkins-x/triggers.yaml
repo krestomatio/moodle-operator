@@ -2,9 +2,23 @@ apiVersion: config.lighthouse.jenkins-x.io/v1alpha1
 kind: TriggerConfig
 spec:
   presubmits:
-  - name: pr
-    context: "pr"
+  - name: lint
+    context: "lint"
     always_run: true
+    optional: false
+    trigger: "/lint"
+    rerun_command: "/relint"
+    source: "pullrequest.yaml"
+  - name: check
+    context: "check"
+    always_run: true
+    optional: false
+    trigger: "/check"
+    rerun_command: "/recheck"
+    source: "pullrequest.yaml"
+  - name: test
+    context: "test"
+    always_run: false
     optional: false
     trigger: "/test"
     rerun_command: "/retest"

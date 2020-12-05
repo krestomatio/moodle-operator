@@ -46,7 +46,7 @@ spec:
           command:
           - make
           image: quay.io/krestomatio/ansible-operator-ci
-          name: test
+          name: release
           workingDir: /workspace/source
   podTemplate: {}
   serviceAccountName: tekton-bot
