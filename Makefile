@@ -4,8 +4,8 @@ VERSION ?= 0.2.5
 
 # Image
 REGISTRY_PATH ?= quay.io/krestomatio
-IMAGE_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
-IMG ?= $(IMAGE_NAME):$(VERSION)
+IMG_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
+IMG ?= $(IMG_NAME):$(VERSION)
 
 # requirements
 OPERATOR_VERSION ?= 1.1.0
@@ -19,7 +19,7 @@ BUILD_ID ?= 0
 # Build
 BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
 BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
-BUILD_IMAGE_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
+BUILD_IMG_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
 ifeq ($(JOB_NAME),release)
 BUILD_VERSION ?= $(shell git rev-parse HEAD^2 &>/dev/null && git rev-parse HEAD^2 || echo)
 else
@@ -51,7 +51,7 @@ GIT_REMOTE ?= origin
 GIT_BRANCH ?= master
 
 # Default bundle image tag
-BUNDLE_IMG ?= $(IMAGE_NAME)-bundle:$(VERSION)
+BUNDLE_IMG ?= $(IMG_NAME)-bundle:$(VERSION)
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
@@ -142,7 +142,7 @@ bundle-build:
 ifeq ($(origin SKIP_PIPELINE),undefined)
 ## Pullrequest pipeline
 .PHONY: pr
-pr: IMG = $(BUILD_IMAGE_NAME):$(BUILD_VERSION)
+pr: IMG = $(BUILD_IMG_NAME):$(BUILD_VERSION)
 pr: image-build image-push molecule
 
 ### lint
@@ -180,11 +180,11 @@ git:
 .PHONY: promote
 promote:
 	# full version
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(VERSION)
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(VERSION)
 	# major + minor
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
 	# major
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMAGE_NAME):$(BUILD_VERSION) docker://$(IMAGE_NAME):$(word 1,$(subst ., ,$(VERSION)))
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
 else
 pr:
 	$(info skipping...)
