@@ -7,6 +7,8 @@
     - community.kubernetes
 
   tasks:
+    - import_tasks: kustomize-prepare.yml
+
     - import_tasks: kustomize.yml
       vars:
         state: absent
@@ -20,5 +22,15 @@
 
     - name: Unset pull policy
       command: '{{ kustomize }} edit remove patch pull_policy/{{ operator_pull_policy }}.yaml'
+      args:
+        chdir: '{{ config_dir }}/testing'
+
+    - name: Unset testing image
+      command: '{{ kustomize }} edit set image testing=testing-operator'
+      args:
+        chdir: '{{ config_dir }}/testing'
+
+    - name: Unset testing namespace
+      command: '{{ kustomize }} edit set namespace osdk-test'
       args:
         chdir: '{{ config_dir }}/testing'

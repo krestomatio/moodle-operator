@@ -1,7 +1,7 @@
 This is a Moodle Operator for Kubernetes or Openshift. It is based on Ansible operator sdk.
 
 ## TODO
-The operator is in an early alpha stage. There is work in progress for:
+The operator is in alpha stage. There is work in progress for:
 - [X] Publish container images
 - [ ] Publish operator
 - [ ] Documentation

@@ -29,11 +29,11 @@ spec:
           workingDir: /workspace/source
         steps:
         - args:
-          - pr
+          - $(JOB_NAME)
           command:
           - make
-          image: docker-registry.jx.krestomat.io/krestomatio/container_builder/ansible-operator-ci
-          name: test
+          image: quay.io/krestomatio/ansible-operator-ci
+          name: pr
           workingDir: /workspace/source
           securityContext:
             privileged: true

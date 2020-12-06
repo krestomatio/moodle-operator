@@ -7,12 +7,6 @@
     - community.kubernetes
 
   tasks:
-    - name: Create Namespace
-      k8s:
-        api_version: v1
-        kind: Namespace
-        name: '{{ namespace }}'
-
     - import_tasks: kustomize.yml
       vars:
         state: present
