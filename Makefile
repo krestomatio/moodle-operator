@@ -1,6 +1,6 @@
 CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= m4e-operator
-VERSION ?= 0.2.4
+VERSION ?= 0.2.5
 
 # Image
 REGISTRY_PATH ?= quay.io/krestomatio
