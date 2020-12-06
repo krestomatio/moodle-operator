@@ -11,16 +11,20 @@ IMG ?= $(IMAGE_NAME):$(VERSION)
 OPERATOR_VERSION ?= 1.1.0
 KUSTOMIZE_VERSION ?= 3.5.4
 
-# Build
-BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
-BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
-BUILD_IMAGE_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
-BUILD_VERSION ?= $(shell git rev-parse HEAD 2> /dev/null  || echo)
-
 # JX
 JOB_NAME ?= pr
 PULL_NUMBER ?= 0
 BUILD_ID ?= 0
+
+# Build
+BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
+BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
+BUILD_IMAGE_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
+ifeq ($(JOB_NAME),release)
+BUILD_VERSION ?= $(shell git rev-parse HEAD^2 &>/dev/null && git rev-parse HEAD^2 || echo)
+else
+BUILD_VERSION ?= $(shell git rev-parse HEAD 2> /dev/null  || echo)
+endif
 
 # CI
 SKIP_MSG := skip.ci
