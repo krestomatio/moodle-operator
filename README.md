@@ -3,6 +3,7 @@ This is a Moodle Operator for Kubernetes or Openshift. It is based on Ansible op
 ## TODO
 The operator is in alpha stage. There is work in progress for:
 - [X] Publish container images
+- [ ] Centos replacement: Centos Stream or waiting for Rocky Linux?
 - [ ] Publish operator
 - [ ] Documentation
   - [ ] Code of conduct
