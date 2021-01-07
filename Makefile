@@ -151,9 +151,9 @@ lint: molecule
 check: MOLECULE_SEQUENCE = check
 check: pr
 
-### test
-.PHONY: test
-test: pr
+### test k8s
+.PHONY: k8s
+k8s: pr
 
 ### Test with molecule
 .PHONY: molecule
