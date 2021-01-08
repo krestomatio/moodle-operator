@@ -16,7 +16,6 @@ spec:
     trigger: (?m)^/test( all| k8s),?(s+|$)
     rerun_command: /test k8s
     source: "pullrequest.yaml"
-    max_concurrency: 1
   postsubmits:
   - name: release
     context: "release"
