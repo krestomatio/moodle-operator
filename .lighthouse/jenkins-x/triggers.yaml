@@ -7,7 +7,7 @@ spec:
     always_run: true
     optional: false
     trigger: "/lint"
-    rerun_command: "/relint"
+    rerun_command: "lint"
     source: "pullrequest.yaml"
   - name: k8s
     context: "k8s"
