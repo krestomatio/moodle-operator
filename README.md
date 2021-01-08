@@ -14,8 +14,9 @@ The operator is in alpha stage. There is work in progress for:
   - [ ] Installation
   - [ ] Operation
 - [ ] CI
-  - [ ] Templates
-    - [ ] Issues
+  - [X] Templates
+    - [X] Issues
+    - [X] Pullrequest
   - [X] Pipelines
   - [ ] Tests
     - [ ] Operator test
@@ -33,7 +34,11 @@ make deploy
 
 # add a M4e object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
 kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml
+```
+More instructions could be found in the [Ansible Operator Tutorial](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/)
 
+## Uninstall
+```bash
 # delete the M4e object
 # CAUTION with data loss
 kubectl delete -f config/samples/m4e_v1alpha1_m4e.yaml
@@ -41,7 +46,6 @@ kubectl delete -f config/samples/m4e_v1alpha1_m4e.yaml
 # uninstall the operator
 make undeploy
 ```
-More instructions could be found in the [Ansible Operator Tutorial](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/)
 
 ## Suggested readings when developing operators
 
