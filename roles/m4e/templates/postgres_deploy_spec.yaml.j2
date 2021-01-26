@@ -1,5 +1,7 @@
 {% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
 replicas: {{ postgres_size }}
+strategy:
+  type: Recreate
 selector:
   matchLabels:
     app: '{{ postgres_appname }}'
