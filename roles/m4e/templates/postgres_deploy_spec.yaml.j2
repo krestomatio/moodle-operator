@@ -1,5 +1,5 @@
 {% macro metadata() %}{% include 'metadata.j2' ignore missing %}{% endmacro %}
-replicas: {{ postgres_size }}
+replicas: 1
 strategy:
   type: Recreate
 selector:
