@@ -172,7 +172,7 @@ release: promote git
 .PHONY: git
 git:
 	git add Makefile
-	git commit -m "Release version $(VERSION)" -m "[$(SKIP_MSG)]"
+	git commit -m "chore(release): $(VERSION)" -m "[$(SKIP_MSG)]"
 	git tag v$(VERSION)
 	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
 
