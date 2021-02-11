@@ -17,7 +17,7 @@ spec:
             value: pullrequest
           - name: JX_BATCH_MODE
             value: "true"
-          - name: UPDATE_VERSION
+          - name: VERSION_MAKEFILE
             value: Makefile
           - name: PROJECT_TIMESTAMP
             value: midnight
