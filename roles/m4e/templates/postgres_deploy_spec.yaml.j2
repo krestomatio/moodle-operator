@@ -9,6 +9,11 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     terminationGracePeriodSeconds: {{ postgres_term_grace_period }}
+{% if postgres_security_context %}
+    securityContext:
+      runAsUser: {{ postgres_security_context_runasuser }}
+      fsGroup: {{ postgres_security_context_fsgroup }}
+{% endif %}
     containers:
     - image: '{{ postgres_image }}'
       name: '{{ postgres_appname }}'

@@ -28,6 +28,9 @@ php_fpm_resource_limits: true
 php_fpm_resource_limits_cpu: 1
 php_fpm_resource_limits_memory: 1Gi
 php_fpm_term_grace_period: 30
+php_fpm_security_context: "{{ security_context }}"
+php_fpm_security_context_runasuser: 48
+php_fpm_security_context_fsgroup: 48
 php_fpm_service_spec: |
   sessionAffinity: ClientIP
   ports:
