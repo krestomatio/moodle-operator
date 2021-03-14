@@ -1,9 +1,12 @@
 CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= m4e-operator
+REPO_NAME ?= m4e-operator
+REPO_OWNER ?= krestomatio
 VERSION ?= 0.2.5
 
 # Image
-REGISTRY_PATH ?= quay.io/krestomatio
+REGISTRY ?= quay.io
+REGISTRY_PATH ?= $(REGISTRY)/$(REPO_OWNER)
 IMG_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
 IMG ?= $(IMG_NAME):$(VERSION)
 
@@ -35,6 +38,16 @@ endif
 ifeq ($(BUILD_VERSION),)
 SKIP_PIPELINE = true
 endif
+ifeq ($(origin PULL_BASE_SHA),undefined)
+CHANGELOG_FROM ?= HEAD~1
+else
+CHANGELOG_FROM ?= $(PULL_BASE_SHA)
+endif
+ifeq ($(origin PULL_PULL_SHA),undefined)
+COMMITLINT_TO ?= HEAD
+else
+COMMITLINT_TO ?= $(PULL_PULL_SHA)
+endif
 
 # molecule
 MOLECULE_SEQUENCE ?= test
@@ -49,6 +62,8 @@ SKOPEO_DEST_TLS ?= true
 # Release
 GIT_REMOTE ?= origin
 GIT_BRANCH ?= master
+GIT_ADD_FILES ?= Makefile
+CHANGELOG_FILE ?= CHANGELOG.md
 
 # Default bundle image tag
 BUNDLE_IMG ?= $(IMG_NAME)-bundle:$(VERSION)
@@ -168,11 +183,25 @@ molecule:
 .PHONY: release
 release: promote git
 
+### Changelog using jx
+.PHONY: changelog
+changelog:
+ifeq (0, $(shell test -d  "charts/$(REPO_NAME)"; echo $$?))
+	sed -i "s/^version:.*/version: $(VERSION)/" charts/$(REPO_NAME)/Chart.yaml
+	sed -i "s/tag:.*/tag: $(VERSION)/" charts/$(REPO_NAME)/values.yaml
+	sed -i "s@repository:.*@repository: $(IMG_NAME)@" charts/$(REPO_NAME)/values.yaml
+	git add charts/
+else
+	echo no charts
+endif
+	jx changelog create --verbose --version=$(VERSION) --rev=$(CHANGELOG_FROM) --output-markdown=$(CHANGELOG_FILE) --update-release=false
+	git add $(CHANGELOG_FILE)
+
 ### Release pipeline
 .PHONY: git
 git:
-	git add Makefile
-	git commit -m "Release version $(VERSION)" -m "[$(SKIP_MSG)]"
+	git add $(GIT_ADD_FILES)
+	git commit -m "chore(release): $(VERSION)" -m "[$(SKIP_MSG)]"
 	git tag v$(VERSION)
 	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
 
@@ -186,8 +215,17 @@ promote:
 	# major
 	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
 else
+## pr
 pr:
 	$(info skipping...)
+
+lint:
+	$(info skipping...)
+
+## release
+changelog:
+	$(info skipping...)
+
 release:
 	$(info skipping...)
 endif

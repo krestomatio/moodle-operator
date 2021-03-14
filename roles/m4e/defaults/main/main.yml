@@ -7,6 +7,9 @@ fqdn: "{{ host }}.{{ domain }}"
 expose_type: "ingress"  # only route
 expose_tls: false
 
+# security context to run and mount as user
+security_context: true
+
 # credentials. MUST CHANGED
 database_name: moodle
 database_user: user

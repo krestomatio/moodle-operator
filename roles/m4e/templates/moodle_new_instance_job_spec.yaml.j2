@@ -8,6 +8,11 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     restartPolicy: Never
+{% if php_fpm_security_context %}
+    securityContext:
+      runAsUser: {{ php_fpm_security_context_runasuser }}
+      fsGroup: {{ php_fpm_security_context_fsgroup }}
+{% endif %}
 {% if moodle_app_container %}
     initContainers:
     - name: '{{ ansible_operator_meta.name }}-moodle-app'
