@@ -1,53 +1,41 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  annotations:
-    lighthouse.jenkins-x.io/prependStepsURL: https://raw.githubusercontent.com/krestomatio/jx3-pipeline-catalog/master/tasks/git-clone/git-clone.yaml
+  creationTimestamp: null
   name: release
 spec:
   pipelineSpec:
-    params:
-    - default: master
-      description: git revision to checkout (branch, tag, sha, ref…)
-      name: revision
-      type: string
     tasks:
-    - name: from-build-pack
-      params:
-      - name: revision
-        value: $(params.revision)
-      resources: {}
-      taskSpec:
-        metadata: {}
-        params:
-        - default: master
-          description: git revision to checkout (branch, tag, sha, ref…)
-          name: revision
-          type: string
-        stepTemplate:
-          env:
-          - name: PIPELINE_KIND
-            value: release
-          - name: JX_BATCH_MODE
-            value: "true"
-          - name: VERSION_MAKEFILE
-            value: Makefile
-          - name: PROJECT_TIMESTAMP
-            value: midnight
-          name: ""
-          resources:
-            requests:
-              cpu: 400m
-              memory: 512Mi
-          workingDir: /workspace/source
-        steps:
-        - args:
-          - release
-          command:
-          - make
-          image: quay.io/krestomatio/ansible-operator-ci
-          name: release
-          workingDir: /workspace/source
+      - name: release
+        resources: {}
+        taskSpec:
+          metadata: {}
+          stepTemplate:
+            name: ''
+            env:
+              - name: VERSION_MAKEFILE
+                value: "true"
+              - name: PROJECT_TIMESTAMP
+                value: midnight
+            resources:
+              requests:
+                cpu: 400m
+                memory: 512Mi
+            workingDir: /workspace/source
+          steps:
+            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@4a2339d4be2ca7f857302ac9441cac7966bfb875
+            - image: gcr.io/jenkinsxio/jx-changelog:0.0.33
+              name: changelog
+              args:
+              - changelog
+              command:
+              - make
+            - image: quay.io/krestomatio/ansible-operator-ci
+              name: release
+              args:
+              - release
+              command:
+              - make
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
