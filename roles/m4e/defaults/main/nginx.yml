@@ -34,8 +34,8 @@ nginx_resource_limits_memory: 1Gi
 nginx_term_grace_period: 30
 nginx_tls_secret_name: moodle-tls
 nginx_security_context: "{{ security_context }}"
-nginx_security_context_runasuser: 998
-nginx_security_context_fsgroup: 998
+nginx_security_context_runasuser: 999
+nginx_security_context_fsgroup: "{{ php_fpm_security_context_fsgroup }}"
 nginx_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'
