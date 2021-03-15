@@ -30,6 +30,8 @@ spec:
                 - $(JOB_NAME)
               command:
                 - make
+              securityContext:
+                privileged: true
               volumeMounts:
                 - name: libcontainers
                   mountPath: /var/lib/containers
