@@ -76,5 +76,7 @@ template:
     - name: moodledata
       persistentVolumeClaim:
         claimName: '{{ moodle_data_pvc }}'
+{% if moodle_app_container %}
     - name: moodle-app
       emptyDir: {}
+{% endif %}
