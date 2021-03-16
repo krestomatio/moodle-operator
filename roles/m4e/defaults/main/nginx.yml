@@ -12,14 +12,14 @@ nginx_port: 8080
 nginx_host: "{{ fqdn }}"
 nginx_args: "['nginx', '-g', 'daemon off;']"
 nginx_readiness_probe: true
-nginx_readiness_command: "['/usr/libexec/check-container-nginx', '-r']"
+nginx_readiness_path: "/login/index.php"
 nginx_readiness_initial: 5
 nginx_readiness_period: 30
 nginx_readiness_timeout: 3
 nginx_readiness_success: 1
 nginx_readiness_failure: 6
 nginx_liveness_probe: true
-nginx_liveness_command: "['/usr/libexec/check-container-nginx', '-l']"
+nginx_liveness_path: "/login/index.php"
 nginx_liveness_initial: 5
 nginx_liveness_period: 10
 nginx_liveness_timeout: 3

@@ -34,8 +34,12 @@ template:
       args: {{ nginx_args }}
 {% if nginx_readiness_probe %}
       readinessProbe:
-        exec:
-          command: {{ nginx_readiness_command }}
+        httpGet:
+          path: '{{ nginx_readiness_path }}'
+          port: {{ nginx_port }}
+          httpHeaders:
+          - name: 'Host'
+            value: '{{ nginx_host }}'
         initialDelaySeconds: {{ nginx_readiness_initial }}
         periodSeconds: {{ nginx_readiness_period }}
         timeoutSeconds: {{ nginx_readiness_timeout }}
@@ -44,8 +48,12 @@ template:
 {% endif %}
 {% if nginx_liveness_probe %}
       livenessProbe:
-        exec:
-          command: {{ nginx_liveness_command }}
+        httpGet:
+          path: '{{ nginx_liveness_path }}'
+          port: {{ nginx_port }}
+          httpHeaders:
+          - name: 'Host'
+            value: '{{ nginx_host }}'
         initialDelaySeconds: {{ nginx_liveness_initial }}
         periodSeconds: {{ nginx_liveness_period }}
         timeoutSeconds: {{ nginx_liveness_timeout }}
