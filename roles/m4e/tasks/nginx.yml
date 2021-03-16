@@ -45,7 +45,7 @@
         route_spec: "{{ nginx_route_spec }}"
       import_tasks: k8s.yml
 
-    - name: nginx route resource definition
+    - name: nginx ingress resource definition
       when:
         - expose_type is defined and expose_type
         - "(expose_type | lower) == 'ingress'"
