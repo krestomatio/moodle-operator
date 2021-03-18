@@ -27,6 +27,10 @@ template:
             secretKeyRef:
               name: '{{ postgres_secret }}'
               key: database_password
+{% if postgres_log_stderr %}
+        - name: POSTGRESQL_LOG_STDERR
+          value: "true"
+{% endif %}
       ports:
       - containerPort: 5432
         name: postgresql
