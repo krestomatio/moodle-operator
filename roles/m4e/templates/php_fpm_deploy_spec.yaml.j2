@@ -27,6 +27,8 @@ template:
       env:
         - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
           value: any
+        - name: PHP_FPM_PROCESS_CONTROL_TIMEOUT
+          value: '{{ php_fpm_process_control_timeout }}'
         - name: MOODLE_CONFIG_DIR
           value: '{{ moodle_config_path }}'
       ports:
