@@ -2,24 +2,26 @@
 
 ### New Features
 
-* add option to mount and run as user (Job Céspedes Ortiz)
+* php-fpm: set default process control timeout (Job Céspedes Ortiz)
+* postgres: set option to log to stderr by default (Job Céspedes Ortiz)
 
 ### Bug Fixes
 
+* add config.php ssl proxy option when tls enable (Job Céspedes Ortiz)
 * set fsgroup in nginx same as php-fpm (Job Céspedes Ortiz)
 * add conditional for moodle_app in nginx deployment (Job Céspedes Ortiz)
-* postgres: set strategy to recreate (Job Céspedes Ortiz)
-* add make target for JOB_NAME k8s (Job Céspedes Ortiz)
 
 ### Code Refactoring
 
-* postgres: set replica to 1 (Job Céspedes Ortiz)
+* adjust nginx ingress rule (Job Céspedes Ortiz)
+* use httpget probes for nginx (Job Céspedes Ortiz)
+* change ingress api version (Job Céspedes Ortiz)
+* add condition for secret name in expose tls(https) (Job Céspedes Ortiz)
+
+### Documentation
+
+* update tasks in README.md (Job Céspedes Ortiz)
 
 ### Chores
 
-* release: 0.2.6 (krestomatio-cibot)
-* add sample file for okd (Job Céspedes Ortiz)
-* update README (Job Céspedes Ortiz)
-* add issue and pr templates (Job Céspedes Ortiz)
-* update README (Job Céspedes Ortiz)
-* add issue and pr templates (Job Céspedes Ortiz)
+* release: 0.2.7 (krestomatio-cibot)
