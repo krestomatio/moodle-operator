@@ -12,14 +12,14 @@ nginx_port: 8080
 nginx_host: "{{ fqdn }}"
 nginx_args: "['nginx', '-g', 'daemon off;']"
 nginx_readiness_probe: true
-nginx_readiness_command: "['/usr/libexec/check-container-nginx', '-r']"
+nginx_readiness_path: "/login/index.php"
 nginx_readiness_initial: 5
 nginx_readiness_period: 30
 nginx_readiness_timeout: 3
 nginx_readiness_success: 1
 nginx_readiness_failure: 6
 nginx_liveness_probe: true
-nginx_liveness_command: "['/usr/libexec/check-container-nginx', '-l']"
+nginx_liveness_path: "/login/index.php"
 nginx_liveness_initial: 5
 nginx_liveness_period: 10
 nginx_liveness_timeout: 3
@@ -32,7 +32,9 @@ nginx_resource_limits: true
 nginx_resource_limits_cpu: 1
 nginx_resource_limits_memory: 1Gi
 nginx_term_grace_period: 30
-nginx_tls_secret_name: moodle-tls
+nginx_ingress_tls: "{{ expose_tls }}"
+nginx_route_tls: "{{ expose_tls }}"
+nginx_ingress_tls_secret_name: "{{ expose_tls_secret_name }}"
 nginx_security_context: "{{ security_context }}"
 nginx_security_context_runasuser: 999
 nginx_security_context_fsgroup: "{{ php_fpm_security_context_fsgroup }}"
@@ -49,24 +51,26 @@ nginx_route_spec: |
     weight: 100
   port:
     targetPort: http
-  {% if expose_tls %}
+  {% if nginx_route_tls %}
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
   {% endif %}
   wildcardPolicy: None
 nginx_ingress_spec: |
-  {% if expose_tls %}
+  {% if nginx_ingress_tls %}
   tls:
   - hosts:
     - '{{ nginx_host }}'
-    secretName: {{ nginx_tls_secret_name }}
+  {% if nginx_ingress_tls_secret_name is defined and nginx_ingress_tls_secret_name %}
+    secretName: {{ nginx_ingress_tls_secret_name }}
+  {% endif %}
   {% endif %}
   rules:
   - host: '{{ nginx_host }}'
     http:
       paths:
-      - path: /
+      - path: /*
         backend:
           serviceName: '{{ nginx_service }}'
           servicePort: {{ nginx_port }}

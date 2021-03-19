@@ -3,7 +3,7 @@ This is a Moodle Operator for Kubernetes or Openshift. It is based on Ansible op
 ## TODO
 The operator is in alpha stage. There is work in progress for:
 - [X] Publish container images
-- [ ] Centos replacement: Centos Stream or waiting for Rocky Linux?
+- [X] Centos replacement: Centos Stream or waiting for Rocky Linux? Centos Stream was chosen
 - [ ] Publish operator
 - [ ] Documentation
   - [ ] Code of conduct
@@ -19,9 +19,11 @@ The operator is in alpha stage. There is work in progress for:
     - [X] Pullrequest
   - [X] Pipelines
   - [ ] Tests
-    - [ ] Operator test
-      - [X] K8s
-      - [ ] Okd
+    - [ ] Operator platforms
+      - [X] Minikube
+      - [ ] GKE
+      - [ ] AWS
+      - [ ] OKD
     - [ ] Moodle unit test
     - [ ] Deployment
     - [ ] Performance

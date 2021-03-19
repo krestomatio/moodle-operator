@@ -1,7 +1,7 @@
 # {{ name }} ingress
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 {% include 'metadata.j2' ignore missing %}
 {% if ingress_spec != false %}
 spec:

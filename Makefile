@@ -20,7 +20,7 @@ PULL_NUMBER ?= 0
 BUILD_ID ?= 0
 
 # Build
-BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio/m4e-operator
+BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio
 BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
 BUILD_IMG_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
 ifeq ($(JOB_NAME),release)

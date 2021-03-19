@@ -91,7 +91,7 @@ moodle_config_dataroot: "{{ moodle_data }}"
 #   session_redis_host: "redis"
 #   session_redis_prefix: "m1_"
 #   session_redis_auth: "secret"
-# moodle_config_sslproxy: true
+moodle_config_sslproxy: "{{ true if expose_tls else false }}"
 # moodle_config_profilingenabled:
 #   earlyprofilingenabled: 'true'
 #   profilingautofrec: '100'

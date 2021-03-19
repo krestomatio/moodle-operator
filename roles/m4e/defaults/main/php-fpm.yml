@@ -40,3 +40,6 @@ php_fpm_service_spec: |
     targetPort: 9000
   selector:
     app: '{{ php_fpm_appname }}'
+
+# php-fpm config
+php_fpm_process_control_timeout: 20

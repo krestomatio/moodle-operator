@@ -6,6 +6,7 @@ domain: "krestomat.io"
 fqdn: "{{ host }}.{{ domain }}"
 expose_type: "ingress"  # only route
 expose_tls: false
+expose_tls_secret_name: false
 
 # security context to run and mount as user
 security_context: true
