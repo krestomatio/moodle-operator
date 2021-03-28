@@ -96,8 +96,8 @@
         k8s_definition: "{{ lookup('k8s', kind=item, namespace=ansible_operator_meta.namespace,
           label_selector='app=' + moodle_appname ) }}"
       when:
-        - (k8s_definition | length) > 0
         - "(moodle_cronjob_state | default(moodle_state)) == 'absent'"
+        - (k8s_definition | length) > 0
       k8s:
         definition: "{{ k8s_definition }}"
         state: absent
