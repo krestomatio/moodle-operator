@@ -1,0 +1,11 @@
+- name: set status
+  register: k8s_status_task
+  when:
+    - not ansible_check_mode # https://github.com/operator-framework/operator-sdk-ansible-util/issues/18
+  k8s_status:
+    api_version: "{{ k8s_status_api_version | default(api_version) }}"
+    kind: "{{ k8s_status_kind | default(kind)}}"
+    name: "{{ k8s_status_name | default(meta_name) }}"
+    namespace: "{{ k8s_status_namespace | default(meta_namespace) }}"
+    status: "{{ k8s_status_status | default(omit) }}"
+    conditions: "{{ k8s_status_conditions | default(omit) }}"

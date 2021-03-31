@@ -1,14 +1,22 @@
 ---
 # defaults file for m4e
+version: v1alpha1
+api: m4e.krestomat.io
+api_version: "{{ api }}/{{ version }}"
+kind: M4e
 meta_name: "{{ ansible_operator_meta.name }}"
 meta_namespace: "{{ ansible_operator_meta.namespace }}"
 state: present
-host: "m4e"
-domain: "krestomat.io"
-fqdn: "{{ host }}.{{ domain }}"
+
+# expose
 expose_type: "ingress"  # only route
 expose_tls: false
 expose_tls_secret_name: false
+
+# url
+host: "m4e"
+domain: "krestomat.io"
+fqdn: "{{ host }}.{{ domain }}"
 
 # security context to run and mount as user
 security_context: true

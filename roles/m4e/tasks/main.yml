@@ -1,9 +1,33 @@
 ---
 # tasks file for m4e
-- import_tasks: postgres.yml
+- name: import tasks
+  block:
+    - name: handle status
+      import_tasks: status/main.yml
 
-- import_tasks: moodle.yml
+    - name: handle postgres
+      import_tasks: postgres.yml
 
-- import_tasks: php-fpm.yml
+    - name: handle moodle
+      import_tasks: moodle.yml
 
-- import_tasks: nginx.yml
+    - name: handle php-fpm
+      import_tasks: php-fpm.yml
+
+    - name: handle nginx
+      import_tasks: nginx.yml
+
+    - name: set successful in ready status
+      set_fact:
+        set_ready_status: "True"
+        set_ready_reason: "Successful"
+        set_ready_message: "All tasks completed successfully"
+  rescue:
+    - name: set error in ready status
+      set_fact:
+        set_ready_status: "False"
+        set_ready_reason: "Error"
+        set_ready_message: "There was an error before completing all tasks"
+  always:
+    - name: handle status
+      include_tasks: status/main.yml

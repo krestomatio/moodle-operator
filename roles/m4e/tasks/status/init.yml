@@ -1,0 +1,7 @@
+- name: set ready default status
+  when: get_ready_condition is not defined
+  set_fact:
+    set_ready_type: "Ready"
+    set_ready_status: "False"
+    set_ready_reason: "Init"
+    set_ready_message: "Initiating tasks"

@@ -1,0 +1,23 @@
+- name: set ready condition fact
+  vars:
+    set_ready_status: "{{ get_ready_condition.status | default('Unknown') }}"
+    set_ready_reason: "{{ get_ready_condition.reason | default('ReasonUnknown') }}"
+    set_ready_message: "{{ get_ready_condition.message | default('Reason unknown') }}"
+  when: get_ready_condition is not defined or
+        get_ready_condition.status | lower != set_ready_status | lower or
+        get_ready_condition.reason != set_ready_reason or
+        get_ready_condition.message != set_ready_message
+  register: set_ready_condition_task
+  set_fact:
+    set_ready_condition:
+      - type: "Ready"
+        status: "{{ set_ready_status }}"
+        reason: "{{ set_ready_reason  }}"
+        message: "{{ set_ready_message }}"
+        lastTransitionTime: "{{ lookup('pipe', 'date --iso-8601=seconds') }}"
+
+- name: "set {{ meta_name }} status"
+  when: set_ready_condition is defined
+  vars:
+    k8s_status_conditions: "{{ set_ready_condition }}"
+  import_tasks: k8s_status.yml

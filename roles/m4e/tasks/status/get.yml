@@ -1,0 +1,11 @@
+- name: "get {{ meta_name }} status"
+  set_fact:
+    get_k8s_status: "{{ k8s_status.return.status | default(lookup('k8s', api_version=api_version, kind=kind,
+      namespace=meta_namespace, resource_name=meta_name).status) }}"
+
+- name: get ready condition
+  when:
+    - get_k8s_status is defined and get_k8s_status.conditions is defined
+    - get_k8s_status.conditions | selectattr('type','equalto','Ready') | list | length > 0
+  set_fact:
+    get_ready_condition: "{{ get_k8s_status.conditions | selectattr('type','equalto','Ready') | first }}"
