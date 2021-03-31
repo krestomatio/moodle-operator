@@ -1,5 +1,7 @@
 ---
 # defaults file for m4e
+meta_name: "{{ ansible_operator_meta.name }}"
+meta_namespace: "{{ ansible_operator_meta.namespace }}"
 state: present
 host: "m4e"
 domain: "krestomat.io"

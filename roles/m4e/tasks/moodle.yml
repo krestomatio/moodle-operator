@@ -93,7 +93,7 @@
         - Job
         - Pod
       vars:
-        k8s_definition: "{{ lookup('k8s', kind=item, namespace=ansible_operator_meta.namespace,
+        k8s_definition: "{{ lookup('k8s', kind=item, namespace=meta_namespace,
           label_selector='app=' + moodle_appname ) }}"
       when:
         - "(moodle_cronjob_state | default(moodle_state)) == 'absent'"

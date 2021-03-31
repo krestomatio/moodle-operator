@@ -17,7 +17,7 @@ jobTemplate:
 {% endif %}
 {% if moodle_app_container %}
         initContainers:
-        - name: '{{ ansible_operator_meta.name }}-moodle-app'
+        - name: '{{ meta_name }}-moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:

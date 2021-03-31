@@ -2,7 +2,7 @@
 # moodle app
 moodle_image: quay.io/krestomatio/moodle_app
 moodle_state: "{{ state }}"
-moodle_appname: "{{ ansible_operator_meta.name }}-moodle"
+moodle_appname: "{{ meta_name }}-moodle"
 moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata

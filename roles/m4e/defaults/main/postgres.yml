@@ -2,7 +2,7 @@
 # postgres
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
-postgres_appname: "{{ ansible_operator_meta.name }}-postgres"
+postgres_appname: "{{ meta_name }}-postgres"
 postgres_pvc: "{{ postgres_appname }}-pvc"
 postgres_secret: "{{ postgres_appname }}-secret"
 postgres_service: "{{ postgres_appname }}-service"

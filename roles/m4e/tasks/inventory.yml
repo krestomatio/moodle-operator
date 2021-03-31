@@ -5,7 +5,7 @@
 - name: get pods information
   k8s_info:
     kind: Pod
-    namespace: "{{ ansible_operator_meta.namespace }}"
+    namespace: "{{ meta_namespace }}"
     label_selectors: "{{ label_selectors if label_selectors is defined else omit }}"
     field_selectors: "{{ field_selectors if field_selectors is defined else omit }}"
   until: "{{ k8s_info_until | default(true) }}"
@@ -27,11 +27,11 @@
       - pods
       - "{{ item.0.metadata.labels.app | replace('-', '_') }}"
       - "{{ item.0.metadata.labels['app.kubernetes.io/component'] | replace('-', '_') }}"
-      - "{{ ansible_operator_meta.namespace | replace('-', '_') }}"
+      - "{{ meta_namespace | replace('-', '_') }}"
     name: "{{ item.0.metadata.name }}__{{ item.1.name }}"
     ansible_kubectl_pod: "{{ item.0.metadata.name }}"
     ansible_kubectl_container: "{{ item.1.name }}"
-    ansible_kubectl_namespace: "{{ ansible_operator_meta.namespace }}"
+    ansible_kubectl_namespace: "{{ meta_namespace }}"
     ansible_connection: kubectl
     ansible_remote_tmp: /var/tmp/.ansible
     state: "{{ item.1.state }}"

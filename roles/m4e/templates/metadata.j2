@@ -1,11 +1,11 @@
-{% set default_name = ansible_operator_meta.name + '-' + name %}
+{% set default_name = meta_name + '-' + name %}
 metadata:
   name: '{{ metadata_name | default(default_name) }}'
-  namespace: '{{ ansible_operator_meta.namespace }}'
+  namespace: '{{ meta_namespace }}'
   labels:
     app: '{{ metadata_app | default(metadata_name) | default(default_name) }}'
     app.kubernetes.io/name: '{{ metadata_app | default(metadata_name) | default(default_name) }}'
-    app.kubernetes.io/instance: '{{ ansible_operator_meta.name }}'
+    app.kubernetes.io/instance: '{{ meta_name }}'
     app.kubernetes.io/part-of: moodle
     app.kubernetes.io/managed-by: ansible
 {% if component | default(false) != false %}
