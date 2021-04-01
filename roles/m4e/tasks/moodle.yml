@@ -52,6 +52,11 @@
       when: moodle_new_instance | default(false) or
             moodle_new_instance_absent | default(false)
       block:
+        - name: include instantiated status
+          vars:
+            instantiated_condition: false
+          import_tasks: status/main.yml
+
         - name: set moodle new instance job spec
           when: moodle_new_instance_job_spec is not defined
           vars:
@@ -73,6 +78,11 @@
             metadata_name: "{{ moodle_new_instance_job }}"
             job_spec: "{{ moodle_new_instance_job_spec }}"
           import_tasks: k8s.yml
+
+        - name: include instantiated status
+          vars:
+            instantiated_condition: true
+          import_tasks: status/main.yml
 
     - name: set moodle cronjob spec
       when: moodle_cronjob_spec is not defined

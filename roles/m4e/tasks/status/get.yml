@@ -9,3 +9,10 @@
     - get_k8s_status.conditions | selectattr('type','equalto','Ready') | list | length > 0
   set_fact:
     get_ready_condition: "{{ get_k8s_status.conditions | selectattr('type','equalto','Ready') | first }}"
+
+- name: get instantiated condition
+  when:
+    - get_k8s_status is defined and get_k8s_status.conditions is defined
+    - get_k8s_status.conditions | selectattr('type','equalto','Instantiated') | list | length > 0
+  set_fact:
+    get_instantiated_condition: "{{ get_k8s_status.conditions | selectattr('type','equalto','Instantiated') | first }}"

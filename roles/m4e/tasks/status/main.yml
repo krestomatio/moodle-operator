@@ -1,8 +1,5 @@
 - name: get status
   import_tasks: get.yml
 
-- name: set init status
-  import_tasks: init.yml
-
 - name: set status
-  import_tasks: set.yml
+  import_tasks: set/main.yml

@@ -17,17 +17,14 @@
     - name: handle nginx
       import_tasks: nginx.yml
 
-    - name: set successful in ready status
+    - name: set successful status fact
+      when: successful_condition is not defined
       set_fact:
-        set_ready_status: "True"
-        set_ready_reason: "Successful"
-        set_ready_message: "All tasks completed successfully"
+        successful_condition: true
   rescue:
-    - name: set error in ready status
+    - name: set error status fact
       set_fact:
-        set_ready_status: "False"
-        set_ready_reason: "Error"
-        set_ready_message: "There was an error before completing all tasks"
+        error_condition: true
   always:
     - name: handle status
-      include_tasks: status/main.yml
+      import_tasks: status/main.yml
