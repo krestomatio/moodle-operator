@@ -24,6 +24,8 @@
       vars:
         kind: Deployment
         k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
+        k8s_wait: "{{ php_fpm_deploy_wait | default(true) }}"
+        k8s_wait_timeout: "{{ php_fpm_deploy_wait_timeout | default(120) }}"
         template: "{{ deploy_template }}"
         metadata_name: "{{ php_fpm_deploy }}"
         annotations: "{{ php_fpm_deploy_annotations | default(false) }}"

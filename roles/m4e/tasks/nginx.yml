@@ -24,6 +24,8 @@
       vars:
         kind: Deployment
         k8s_state: "{{ nginx_deploy_state | default(nginx_state) }}"
+        k8s_wait: "{{ nginx_deploy_wait | default(true) }}"
+        k8s_wait_timeout: "{{ nginx_deploy_wait_timeout | default(120) }}"
         template: "{{ deploy_template }}"
         metadata_name: "{{ nginx_deploy }}"
         annotations: "{{ nginx_deploy_annotations | default(false) }}"
