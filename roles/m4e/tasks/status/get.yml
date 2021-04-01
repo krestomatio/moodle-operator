@@ -1,6 +1,6 @@
 - name: "get {{ meta_name }} status"
   set_fact:
-    get_k8s_status: "{{ k8s_status.return.status | default(lookup('k8s', api_version=api_version, kind=kind,
+    get_k8s_status: "{{ k8s_status_task.result.status | default(lookup('k8s', api_version=api_version, kind=kind,
       namespace=meta_namespace, resource_name=meta_name).status) }}"
 
 - name: get ready condition
