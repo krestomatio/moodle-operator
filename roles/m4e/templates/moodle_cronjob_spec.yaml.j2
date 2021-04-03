@@ -37,7 +37,7 @@ jobTemplate:
           - containerPort: 9000
           readinessProbe:
             exec:
-              command: {{ moodle_new_instance_readiness_command }}
+              command: {{ php_fpm_readiness_command }}
 {% if moodle_cron_resource_requests or moodle_cron_resource_limits %}
           resources:
 {% if moodle_cron_resource_requests %}
