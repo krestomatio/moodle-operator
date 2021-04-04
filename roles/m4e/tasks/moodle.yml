@@ -13,7 +13,7 @@
         template: "{{ pvc_template }}"
         metadata_name: "{{ moodle_data_pvc }}"
         pvc_spec: "{{ moodle_pvc_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: save moodle pvc resource definition task output
       set_fact:
@@ -26,7 +26,7 @@
         template: "{{ secret_template }}"
         metadata_name: "{{ moodle_secret }}"
         secret_data: "{{ moodle_secret_data }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: set moodle new instance job fact
       when:
@@ -77,7 +77,7 @@
             template: "{{ job_template }}"
             metadata_name: "{{ moodle_new_instance_job }}"
             job_spec: "{{ moodle_new_instance_job_spec }}"
-          import_tasks: k8s.yml
+          import_tasks: k8s/object.yml
 
         - name: include instantiated status
           vars:
@@ -96,7 +96,7 @@
         template: "{{ cronjob_template }}"
         metadata_name: "{{ moodle_cronjob }}"
         cronjob_spec: "{{ moodle_cronjob_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: remove any remaining jobs and its pods in moodle app
       loop:

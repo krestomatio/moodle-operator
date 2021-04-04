@@ -13,7 +13,7 @@
         template: "{{ pvc_template }}"
         metadata_name: "{{ postgres_pvc }}"
         pvc_spec: "{{ postgres_pvc_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: save postgres pvc resource definition task output
       set_fact:
@@ -26,7 +26,7 @@
         template: "{{ secret_template }}"
         metadata_name: "{{ postgres_secret }}"
         secret_data: "{{ postgres_secret_data }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: postgres service resource definition
       vars:
@@ -35,7 +35,7 @@
         template: "{{ service_template }}"
         metadata_name: "{{ postgres_service }}"
         service_spec: "{{ postgres_service_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: set postgres deploy spec
       when: postgres_deploy_spec is not defined
@@ -53,7 +53,7 @@
         annotations: "{{ postgres_deploy_annotations | default(false) }}"
         runtime: postgresql
         deploy_spec: "{{ postgres_deploy_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: save postgres deploy resource definition task output
       set_fact:

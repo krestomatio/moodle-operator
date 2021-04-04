@@ -8,4 +8,4 @@
   vars:
     k8s_status_conditions: "{{ set_instantiated_condition | default([]) +
       set_ready_condition | default([]) }}"
-  include_tasks: k8s_status.yml
+  include_tasks: k8s/status.yml

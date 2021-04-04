@@ -13,7 +13,7 @@
         template: "{{ service_template }}"
         metadata_name: "{{ php_fpm_service }}"
         service_spec: "{{ php_fpm_service_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: set php-fpm deploy spec
       when: php_fpm_deploy_spec is not defined
@@ -32,4 +32,4 @@
         connects_to: "{{ postgres_appname }}"
         runtime: php
         deploy_spec: "{{ php_fpm_deploy_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml

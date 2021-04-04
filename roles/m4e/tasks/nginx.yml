@@ -13,7 +13,7 @@
         template: "{{ service_template }}"
         metadata_name: "{{ nginx_service }}"
         service_spec: "{{ nginx_service_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: set nginx deploy spec
       when: nginx_deploy_spec is not defined
@@ -32,7 +32,7 @@
         connects_to: "{{ php_fpm_appname }}"
         runtime: nginx
         deploy_spec: "{{ nginx_deploy_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: nginx route resource definition
       when:
@@ -45,7 +45,7 @@
         metadata_name: "{{ nginx_route }}"
         annotations: "{{ nginx_route_annotations | default(false) }}"
         route_spec: "{{ nginx_route_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
 
     - name: nginx ingress resource definition
       when:
@@ -58,4 +58,4 @@
         metadata_name: "{{ nginx_ingress }}"
         annotations: "{{ nginx_ingress_annotations | default(false) }}"
         ingress_spec: "{{ nginx_ingress_spec }}"
-      import_tasks: k8s.yml
+      import_tasks: k8s/object.yml
