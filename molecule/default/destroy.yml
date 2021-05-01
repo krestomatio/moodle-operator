@@ -31,6 +31,6 @@
         chdir: '{{ config_dir }}/testing'
 
     - name: Unset testing namespace
-      command: '{{ kustomize }} edit set namespace osdk-test'
+      command: '{{ kustomize }} edit set namespace m4e-test'
       args:
         chdir: '{{ config_dir }}/testing'
