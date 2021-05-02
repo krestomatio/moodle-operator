@@ -1,4 +1,4 @@
-- name: moodle instance
+- name: moodle new instance
   when: not resource_status_properties.instantiated | default('False') | bool
   block:
     - name: include not instantiated status

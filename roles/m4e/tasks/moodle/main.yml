@@ -1,4 +1,3 @@
----
 - name: moodle resource definitions
   vars:
     name: moodle
@@ -44,17 +43,3 @@
         metadata_name: "{{ moodle_cronjob }}"
         cronjob_spec: "{{ moodle_cronjob_spec }}"
       import_tasks: k8s/object.yml
-
-    - name: remove any remaining jobs and its pods in moodle app
-      loop:
-        - Job
-        - Pod
-      vars:
-        k8s_definition: "{{ lookup('k8s', kind=item, namespace=meta_namespace,
-          label_selector='app=' + moodle_appname ) }}"
-      when:
-        - "(moodle_cronjob_state | default(moodle_state)) == 'absent'"
-        - (k8s_definition | length) > 0
-      k8s:
-        definition: "{{ k8s_definition }}"
-        state: absent
