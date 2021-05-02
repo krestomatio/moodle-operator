@@ -1,8 +1,8 @@
 ---
 # defaults file for m4e
 version: v1alpha1
-api: m4e.krestomat.io
-api_version: "{{ api }}/{{ version }}"
+group: m4e.krestomat.io
+api_version: "{{ group }}/{{ version }}"
 kind: M4e
 meta_name: "{{ ansible_operator_meta.name }}"
 meta_namespace: "{{ ansible_operator_meta.namespace }}"

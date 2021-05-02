@@ -1,5 +1,0 @@
-- name: get status
-  import_tasks: get.yml
-
-- name: set status
-  import_tasks: set/main.yml

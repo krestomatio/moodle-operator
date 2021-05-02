@@ -7,8 +7,17 @@
     kind: "{{ k8s_status_kind | default(kind)}}"
     name: "{{ k8s_status_name | default(meta_name) }}"
     namespace: "{{ k8s_status_namespace | default(meta_namespace) }}"
-    status: "{{ k8s_status_status | default(omit) }}"
-    conditions: "{{ k8s_status_conditions | default(omit) }}"
+    status: "{{ k8s_status_status | default(omit,true) }}"
+    conditions: "{{ k8s_status_conditions | default(omit,true) }}"
+
+- name: set status facts
+  vars:
+    _resource_status: "{{ k8s_status_task.return.status | default({},true) }}"
+  set_fact:
+    resource_status_conditions: "{{ _resource_status.conditions | default([]) }}"
+    resource_status_properties:
+      "{% set copy=_resource_status.copy() %}{% if copy.conditions is defined %}{% set
+      removed=copy.pop('conditions') %}{% endif %}{{ copy }}"
 
 - name: notify status
   when:

@@ -3,7 +3,7 @@
 - name: import tasks
   block:
     - name: handle status
-      import_tasks: status/main.yml
+      import_tasks: k8s/status.yml
 
     - name: handle postgres
       import_tasks: postgres.yml
@@ -17,14 +17,8 @@
     - name: handle nginx
       import_tasks: nginx.yml
 
-    - name: set successful status fact
-      when: successful_condition is not defined
-      set_fact:
-        successful_condition: true
+    - name: include successful status
+      import_tasks: condition/ready/successful.yml
   rescue:
-    - name: set error status fact
-      set_fact:
-        error_condition: true
-  always:
-    - name: handle status
-      import_tasks: status/main.yml
+    - name: include successful status
+      import_tasks: condition/ready/error.yml
