@@ -75,7 +75,13 @@ nginx_ingress_spec: |
           serviceName: '{{ nginx_service }}'
           servicePort: {{ nginx_port }}
 nginx_service_spec: |
-  sessionAffinity: ClientIP
+  type: {{ nginx_service_type | default('ClusterIP') }}
+  sessionAffinity: {{ nginx_service_session_affinity | default('None') }}
+  {% if nginx_service_session_affinity_timeout is defined %}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ nginx_service_session_affinity_timeout }}
+  {% endif %}
   ports:
   - name: http
     port: {{ nginx_port }}

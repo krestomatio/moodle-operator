@@ -32,7 +32,13 @@ php_fpm_security_context: "{{ security_context }}"
 php_fpm_security_context_runasuser: 48
 php_fpm_security_context_fsgroup: 48
 php_fpm_service_spec: |
-  sessionAffinity: ClientIP
+  type: {{ php_fpm_service_type | default('ClusterIP') }}
+  sessionAffinity: {{ php_fpm_service_session_affinity | default('ClientIP')  }}
+  {% if php_fpm_service_session_affinity_timeout is defined %}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ php_fpm_service_session_affinity_timeout }}
+  {% endif %}
   ports:
   - name: php-fpm
     port: 9000
