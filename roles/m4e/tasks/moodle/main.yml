@@ -28,36 +28,8 @@
         secret_data: "{{ moodle_secret_data }}"
       import_tasks: k8s/object.yml
 
-    - name: moodle instance
-      when: not resource_status_properties.instantiated | default('False') | bool
-      block:
-        - name: include not instantiated status
-          import_tasks: condition/instantiated/not_instantiated.yml
-
-        - name: set moodle new instance job spec
-          when: moodle_new_instance_job_spec is not defined
-          vars:
-            metadata_name: "{{ moodle_new_instance_job }}"
-          set_fact:
-            moodle_new_instance_job_spec:
-              "{{ lookup('template', moodle_new_instance_job_spec_template) }}"
-
-        - name: moodle new instance job resource definition
-          vars:
-            kind: Job
-            k8s_state: "{{ moodle_new_instance_job_state | default(moodle_state) }}"
-            k8s_wait: true
-            k8s_wait_timeout: "{{ moodle_new_instance_wait_timeout }}"
-            k8s_wait_condition:
-              type: "Complete"
-              status: "True"
-            template: "{{ job_template }}"
-            metadata_name: "{{ moodle_new_instance_job }}"
-            job_spec: "{{ moodle_new_instance_job_spec }}"
-          import_tasks: k8s/object.yml
-
-        - name: include instantiated status
-          import_tasks: condition/instantiated/instantiated.yml
+    - name: import new instance task
+      import_tasks: moodle/new.yml
 
     - name: set moodle cronjob spec
       when: moodle_cronjob_spec is not defined

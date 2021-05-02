@@ -12,7 +12,7 @@
 
 - name: set status facts
   vars:
-    _resource_status: "{{ k8s_status_task.return.status | default({},true) }}"
+    _resource_status: "{{ k8s_status_task.result.status | default({},true) }}"
   set_fact:
     resource_status_conditions: "{{ _resource_status.conditions | default([]) }}"
     resource_status_properties:

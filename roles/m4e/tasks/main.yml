@@ -9,7 +9,7 @@
       import_tasks: postgres.yml
 
     - name: handle moodle
-      import_tasks: moodle.yml
+      import_tasks: moodle/main.yml
 
     - name: handle php-fpm
       import_tasks: php-fpm.yml
