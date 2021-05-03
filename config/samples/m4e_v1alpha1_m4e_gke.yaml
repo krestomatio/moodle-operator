@@ -11,3 +11,4 @@ spec:
   moodle_new_instance_adminmail: admin@example.com
   moodle_new_instance_agree_license: true
   nginx_service_type: NodePort
+  nginx_ingress_wait_for_ip: true

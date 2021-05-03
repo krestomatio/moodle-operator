@@ -74,8 +74,9 @@ nginx_ingress_spec: |
         backend:
           serviceName: '{{ nginx_service }}'
           servicePort: {{ nginx_port }}
+nginx_service_type: ClusterIP
 nginx_service_spec: |
-  type: {{ nginx_service_type | default('ClusterIP') }}
+  type: {{ nginx_service_type }}
   sessionAffinity: {{ nginx_service_session_affinity | default('None') }}
   {% if nginx_service_session_affinity_timeout is defined %}
   sessionAffinityConfig:
