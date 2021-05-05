@@ -1,9 +1,9 @@
 ---
 # defaults file for m4e
-version: v1alpha1
-group: m4e.krestomat.io
-api_version: "{{ group }}/{{ version }}"
-kind: M4e
+cr_version: v1alpha1
+cr_group: m4e.krestomat.io
+cr_api_version: "{{ cr_group }}/{{ cr_version }}"
+cr_kind: M4e
 meta_name: "{{ ansible_operator_meta.name }}"
 meta_namespace: "{{ ansible_operator_meta.namespace }}"
 state: present
@@ -43,3 +43,9 @@ php_fpm_deploy_spec_template: php_fpm_deploy_spec.yaml.j2
 nginx_deploy_spec_template: nginx_deploy_spec.yaml.j2
 moodle_new_instance_job_spec_template: moodle_new_instance_job_spec.yaml.j2
 moodle_cronjob_spec_template: moodle_cronjob_spec.yaml.j2
+
+# inventory
+inventory_uuid: '{{ (cr_group + cr_version + cr_kind + meta_namespace + meta_name) | to_uuid }}'
+annotation_inventory_hostvars:
+  ansible_remote_tmp: /var/tmp/.ansible
+  ansible_python_interpreter: /usr/libexec/platform-python
