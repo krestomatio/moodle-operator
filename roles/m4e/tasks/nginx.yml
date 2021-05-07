@@ -78,7 +78,8 @@
 
             - name: wait for nginx ingress uri to be accesible
               vars:
-                _moodle_host_ip: "{{ (nginx_ingress_ip_task.resources | first).status.loadBalancer.ingress | map(attribute='ip') | first }}"
+                _moodle_host_ip: "{{ (nginx_ingress_ip_task.resources |
+                  first).status.loadBalancer.ingress | map(attribute='ip') | first }}"
               register: nginx_ingress_uri_task
               check_mode: false
               until: nginx_ingress_uri_task.status == 200

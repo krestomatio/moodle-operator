@@ -14,3 +14,4 @@ bin
 
 # ansible
 __pycache__
+.cache
