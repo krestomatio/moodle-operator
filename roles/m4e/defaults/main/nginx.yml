@@ -11,6 +11,7 @@ nginx_ingress: "{{ nginx_appname }}-ingress"
 nginx_port: 8080
 nginx_host: "{{ fqdn }}"
 nginx_args: "['nginx', '-g', 'daemon off;']"
+nginx_container_name: "{{ nginx_appname }}"
 nginx_readiness_probe: true
 nginx_readiness_path: "/login/index.php"
 nginx_readiness_initial: 5

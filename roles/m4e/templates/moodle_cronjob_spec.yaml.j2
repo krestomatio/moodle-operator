@@ -26,7 +26,7 @@ jobTemplate:
 {% endif %}
         containers:
         - image: '{{ php_fpm_image }}'
-          name: '{{ php_fpm_appname }}'
+          name: '{{ moodle_cron_container_name }}'
           env:
           - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
             value: any

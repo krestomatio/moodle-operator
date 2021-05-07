@@ -16,7 +16,7 @@ template:
 {% endif %}
     containers:
     - image: '{{ postgres_image }}'
-      name: '{{ postgres_appname }}'
+      name: '{{ postgres_container_name }}'
       env:
         - name: POSTGRESQL_DATABASE
           value: '{{ database_name }}'

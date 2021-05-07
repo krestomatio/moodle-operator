@@ -23,7 +23,7 @@ template:
 {% endif %}
     containers:
     - image: '{{ nginx_image }}'
-      name: '{{ nginx_appname }}'
+      name: '{{ nginx_container_name }}'
       env:
         - name: MOODLE_CHECK_HOST
           value: '{{ nginx_host }}'

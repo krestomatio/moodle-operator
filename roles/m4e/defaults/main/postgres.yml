@@ -7,6 +7,7 @@ postgres_pvc: "{{ postgres_appname }}-pvc"
 postgres_secret: "{{ postgres_appname }}-secret"
 postgres_service: "{{ postgres_appname }}-service"
 postgres_deploy: "{{ postgres_appname }}-deploy"
+postgres_container_name: "{{ postgres_appname }}"
 postgres_readiness_probe: true
 postgres_readiness_command: "['/usr/libexec/check-container-postgres']"
 postgres_readiness_initial: 5

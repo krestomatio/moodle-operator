@@ -13,6 +13,7 @@ moodle_url: "{{ moodle_protocol }}://{{ moodle_host }}"
 moodle_config_autosync: true
 moodle_secret: "{{ moodle_appname }}-secret"
 moodle_new_instance_job: "{{ moodle_appname }}-new-instance-job"
+moodle_new_instance_container_name: "{{ moodle_appname }}-new-instance"
 moodle_new_instance_wait_timeout: 900
 moodle_new_instance_active_deadline_seconds: "{{ moodle_new_instance_wait_timeout }}"
 moodle_new_instance_resource_requests: true
@@ -40,6 +41,7 @@ moodle_new_instance_cmd:
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
 moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"
+moodle_cron_container_name: "{{ moodle_appname }}-cron"
 moodle_cron_schedule: "*/1 * * * *"
 moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1
