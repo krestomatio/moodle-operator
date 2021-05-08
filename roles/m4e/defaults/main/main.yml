@@ -6,6 +6,8 @@ cr_api_version: "{{ cr_group }}/{{ cr_version }}"
 cr_kind: M4e
 meta_name: "{{ ansible_operator_meta.name }}"
 meta_namespace: "{{ ansible_operator_meta.namespace }}"
+pods_group: "{{ cr_kind }}__{{ meta_namespace.replace('-', '_') }}__{{ meta_name.replace('-', '_') }}__pods"
+pods_ready_group: "{{ pods_group }}_ready"
 state: present
 
 # expose
@@ -38,11 +40,11 @@ route_template: route.yaml.j2
 ingress_template: ingress.yaml.j2
 moodle_config_template: config.php.j2
 
-postgres_deploy_spec_template: postgres_deploy_spec.yaml.j2
-php_fpm_deploy_spec_template: php_fpm_deploy_spec.yaml.j2
-nginx_deploy_spec_template: nginx_deploy_spec.yaml.j2
-moodle_new_instance_job_spec_template: moodle_new_instance_job_spec.yaml.j2
-moodle_cronjob_spec_template: moodle_cronjob_spec.yaml.j2
+postgres_deploy_spec_template: deploy/postgres-spec.yaml.j2
+php_fpm_deploy_spec_template: deploy/php-fpm-spec.yaml.j2
+nginx_deploy_spec_template: deploy/nginx-spec.yaml.j2
+moodle_new_instance_job_spec_template: job/moodle-new-instance-spec.yaml.j2
+moodle_cronjob_spec_template: cronjob/moodle-spec.yaml.j2
 
 # inventory
 inventory_uuid: '{{ (cr_group + cr_version + cr_kind + meta_namespace + meta_name) | to_uuid }}'

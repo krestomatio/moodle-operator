@@ -15,8 +15,8 @@ template:
       fsGroup: {{ postgres_security_context_fsgroup }}
 {% endif %}
     containers:
-    - image: '{{ postgres_image }}'
-      name: '{{ postgres_container_name }}'
+    - name: '{{ postgres_container }}'
+      image: '{{ postgres_image }}'
       env:
         - name: POSTGRESQL_DATABASE
           value: '{{ database_name }}'

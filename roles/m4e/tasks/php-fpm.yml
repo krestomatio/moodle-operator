@@ -6,30 +6,6 @@
     component: php-fpm
     metadata_app: "{{ php_fpm_appname }}"
   block:
-    - name: php-fpm service resource definition
-      vars:
-        kind: Service
-        k8s_state: "{{ php_fpm_service_state | default(php_fpm_state) }}"
-        template: "{{ service_template }}"
-        metadata_name: "{{ php_fpm_service }}"
-        service_spec: "{{ php_fpm_service_spec }}"
-      import_tasks: k8s/object.yml
+    - import_tasks: php-fpm/deploy.yml
 
-    - name: set php-fpm deploy spec
-      when: php_fpm_deploy_spec is not defined
-      set_fact:
-        php_fpm_deploy_spec: "{{ lookup('template', php_fpm_deploy_spec_template) }}"
-
-    - name: php-fpm deploy resource definition
-      vars:
-        kind: Deployment
-        k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
-        k8s_wait: "{{ php_fpm_deploy_wait | default(true) }}"
-        k8s_wait_timeout: "{{ php_fpm_deploy_wait_timeout | default(120) }}"
-        template: "{{ deploy_template }}"
-        metadata_name: "{{ php_fpm_deploy }}"
-        annotations: "{{ php_fpm_deploy_annotations | default(false) }}"
-        connects_to: "{{ postgres_appname }}"
-        runtime: php
-        deploy_spec: "{{ php_fpm_deploy_spec }}"
-      import_tasks: k8s/object.yml
+    - import_tasks: php-fpm/service.yml

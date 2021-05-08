@@ -24,7 +24,7 @@
   when:
     - k8s_status_task is defined and k8s_status_task is changed
     - notify_status is defined
-  ignore_errors: "{{ notify_status_ignore_errors | default(true) }}"
+  failed_when: "{{ notify_status_failed_when | default(true) }}"
   register: notify_status_task
   uri:
     body: "{{ k8s_status_task.result if (notify_status_object | default(false))

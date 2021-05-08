@@ -1,0 +1,14 @@
+- name: moodle resource definitions
+  vars:
+    name: moodle
+    k8s_state: "{{ moodle_state }}"
+    component: moodle
+    metadata_app: "{{ moodle_appname }}"
+  block:
+    - import_tasks: moodle/moodledata-pvc.yml
+
+    - import_tasks: moodle/config-secret.yml
+
+    - import_tasks: moodle/new-instance-job.yml
+
+    - import_tasks: moodle/cronjob.yml

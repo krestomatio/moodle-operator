@@ -17,7 +17,7 @@ jobTemplate:
 {% endif %}
 {% if moodle_app_container %}
         initContainers:
-        - name: '{{ meta_name }}-moodle-app'
+        - name: 'moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:
@@ -25,8 +25,8 @@ jobTemplate:
             name: moodle-app
 {% endif %}
         containers:
-        - image: '{{ php_fpm_image }}'
-          name: '{{ moodle_cron_container_name }}'
+        - name: 'moodle-php-fpm-cron'
+          image: '{{ php_fpm_image }}'
           env:
           - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
             value: any

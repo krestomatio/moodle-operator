@@ -1,15 +1,19 @@
 - name: keep config.php update without need of pod restart
-  when: moodle_config_autosync
+  run_once: false
+  when:
+    - moodle_config_autosync
+    - hostvars['localhost'].k8s_moodle_secret is defined and
+      hostvars['localhost'].k8s_moodle_secret is changed
   block:
-  - name: check config.php exists from src
+  - name: check config.php src file
     stat:
       path: "{{ moodle_config_path }}/config.php"
     register: moodle_config_autosync_file
 
-  - name: copy config.php to dest
+  - name: update config.php from src file
     when: moodle_config_autosync_file.stat.exists
     copy:
       remote_src: true
       src: "{{ moodle_config_path }}/config.php"
       dest: "{{ moodle_app }}/config.php"
-      mode: 0660
+      mode: 0400
