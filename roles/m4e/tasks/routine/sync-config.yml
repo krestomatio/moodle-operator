@@ -5,15 +5,15 @@
     - hostvars['localhost'].k8s_moodle_secret is defined and
       hostvars['localhost'].k8s_moodle_secret is changed
   block:
-  - name: check config.php src file
-    stat:
-      path: "{{ moodle_config_path }}/config.php"
-    register: moodle_config_autosync_file
+    - name: check config.php src file
+      stat:
+        path: "{{ moodle_config_path }}/config.php"
+      register: moodle_config_autosync_file
 
-  - name: update config.php from src file
-    when: moodle_config_autosync_file.stat.exists
-    copy:
-      remote_src: true
-      src: "{{ moodle_config_path }}/config.php"
-      dest: "{{ moodle_app }}/config.php"
-      mode: 0400
+    - name: update config.php from src file
+      when: moodle_config_autosync_file.stat.exists
+      copy:
+        remote_src: true
+        src: "{{ moodle_config_path }}/config.php"
+        dest: "{{ moodle_app }}/config.php"
+        mode: 0400
