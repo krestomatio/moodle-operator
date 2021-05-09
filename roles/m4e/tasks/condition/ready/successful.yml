@@ -3,8 +3,13 @@
   vars:
     k8s_status_status:
       ready: "True"
+      created: "True"
     k8s_status_conditions:
       - type: "Ready"
         status: "True"
         reason: "Successful"
         message: "All tasks completed successfully"
+      - type: "Created"
+        status: "True"
+        reason: "Created"
+        message: "The site has been created"

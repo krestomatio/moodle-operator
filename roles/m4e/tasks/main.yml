@@ -2,8 +2,8 @@
 # tasks file for m4e
 - name: import tasks
   block:
-    - name: handle status
-      import_tasks: k8s/status.yml
+    - name: handle initial status
+      import_tasks: init-status.yml
 
     - name: handle postgres
       import_tasks: postgres.yml

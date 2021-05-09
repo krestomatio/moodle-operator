@@ -1,8 +1,8 @@
 - name: moodle new instance
-  when: not resource_status_properties.instantiated | default('False') | bool
+  when: not (resource_status_properties.instantiated | default('False') | bool)
   block:
     - name: include not instantiated status
-      import_tasks: condition/instantiated/not_instantiated.yml
+      import_tasks: condition/instantiated/not-instantiated.yml
 
     - name: set moodle new instance job spec
       when: moodle_new_instance_job_spec is not defined
