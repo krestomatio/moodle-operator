@@ -1,0 +1,45 @@
+- name: set status
+  register: k8s_status_task
+  when:
+    # https://github.com/operator-framework/operator-sdk-ansible-util/issues/18
+    - not ansible_check_mode
+  k8s_status:
+    api_version: "{{ k8s_status_api_version | default(cr_api_version) }}"
+    kind: "{{ k8s_status_kind | default(cr_kind) }}"
+    name: "{{ k8s_status_name | default(meta_name) }}"
+    namespace: "{{ k8s_status_namespace | default(meta_namespace) }}"
+    status: "{{ k8s_status_status | default(omit,true) }}"
+    conditions: "{{ k8s_status_conditions | default(omit,true) }}"
+
+- name: set status facts
+  vars:
+    _resource_status: "{{ k8s_status_task.result.status | default({},true) }}"
+  set_fact:
+    resource_status_conditions: "{{ _resource_status.conditions | default([]) }}"
+    resource_status_properties:
+      "{% set copy=_resource_status.copy() %}{% if copy.conditions is defined %}{% set
+      removed=copy.pop('conditions') %}{% endif %}{{ copy }}"
+
+- name: notify status
+  when:
+    - k8s_status_task is defined and k8s_status_task is changed
+    - notify_status is defined
+  failed_when: "{{ notify_status_failed_when | default(true) }}"
+  register: notify_status_task
+  uri:
+    body: "{{ k8s_status_task.result if (notify_status_object | default(false))
+      else k8s_status_task.result.status }}"
+    body_format: "{{ notify_status.body_format | default('json') }}"
+    client_cert: "{{ notify_status.client_cert | default(omit) }}"
+    client_key: "{{ notify_status.client_key | default(omit) }}"
+    force_basic_auth: "{{ notify_status.force_basic_auth | default(omit) }}"
+    headers: "{{ notify_status.headers | default(omit) }}"
+    method: "{{ notify_status.method | default('POST') }}"
+    return_content: "{{ notify_status.return_content | default(omit) }}"
+    status_code: "{{ notify_status.status_code | default([200]) }}"
+    timeout: "{{ notify_status.timeout | default(omit) }}"
+    url: "{{ notify_status.url }}"
+    url_password: "{{ notify_status.url_password | default(omit) }}"
+    url_username: "{{ notify_status.url_username | default(omit) }}"
+    user: "{{ notify_status.user | default(omit) }}"
+    validate_certs: "{{ notify_status.validate_certs | default(omit) }}"

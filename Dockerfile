@@ -10,3 +10,8 @@ RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
 COPY watches.yaml ${HOME}/watches.yaml
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/playbooks/
+COPY plugins/inventory/m4e.py ${HOME}/.ansible/plugins/inventory/m4e.py
+COPY .m4e.yml ${HOME}/.m4e.yml
+
+ENV ANSIBLE_INVENTORY=${HOME}/.m4e.yml \
+    ANSIBLE_INVENTORY_ENABLED=auto,m4e

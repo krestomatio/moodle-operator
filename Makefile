@@ -34,9 +34,11 @@ SKIP_MSG := skip.ci
 RUN_PIPELINE ?= $(shell git log -1 --pretty=%B | cat | grep -q "\[$(SKIP_MSG)\]" && echo || echo 1)
 ifeq ($(RUN_PIPELINE),)
 SKIP_PIPELINE = true
+$(info RUN_PIPELINE not set, skipping...)
 endif
 ifeq ($(BUILD_VERSION),)
 SKIP_PIPELINE = true
+$(info BUILD_VERSION not set, skipping...)
 endif
 ifeq ($(origin PULL_BASE_SHA),undefined)
 CHANGELOG_FROM ?= HEAD~1
@@ -53,7 +55,7 @@ endif
 MOLECULE_SEQUENCE ?= test
 MOLECULE_SCENARIO ?= default
 export OPERATOR_IMAGE ?= $(IMG)
-export TEST_OPERATOR_NAMESPACE ?= osdk-$(JOB_NAME)-$(PULL_NUMBER)-$(BUILD_ID)
+export TEST_OPERATOR_NAMESPACE ?= m4e-$(JOB_NAME)-$(PULL_NUMBER)-$(BUILD_ID)
 
 # skopeo
 SKOPEO_SRC_TLS ?= True
@@ -215,17 +217,18 @@ promote:
 	# major
 	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
 else
+$(info SKIP_PIPELINE set:)
 ## pr
 pr:
-	$(info skipping...)
+	$(info skipping pr...)
 
 lint:
-	$(info skipping...)
+	$(info skipping lint...)
 
 ## release
 changelog:
-	$(info skipping...)
+	$(info skipping changelog...)
 
 release:
-	$(info skipping...)
+	$(info skipping release...)
 endif

@@ -2,7 +2,7 @@
 # moodle app
 moodle_image: quay.io/krestomatio/moodle_app
 moodle_state: "{{ state }}"
-moodle_appname: "{{ ansible_operator_meta.name }}-moodle"
+moodle_appname: "{{ meta_name }}-moodle"
 moodle_app_container: false
 moodle_app: /var/www/html
 moodle_data: /var/moodledata
@@ -40,6 +40,7 @@ moodle_new_instance_cmd:
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
 moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"
+moodle_status_instance_properties_script: scripts/status-instance-properties.php
 moodle_cron_schedule: "*/1 * * * *"
 moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1

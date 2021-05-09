@@ -14,7 +14,7 @@ template:
 {% endif %}
 {% if moodle_app_container %}
     initContainers:
-    - name: '{{ ansible_operator_meta.name }}-moodle-app'
+    - name: 'moodle-app'
       image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
@@ -22,8 +22,8 @@ template:
         name: moodle-app
 {% endif %}
     containers:
-    - image: '{{ nginx_image }}'
-      name: '{{ nginx_appname }}'
+    - name: '{{ nginx_container }}'
+      image: '{{ nginx_image }}'
       env:
         - name: MOODLE_CHECK_HOST
           value: '{{ nginx_host }}'

@@ -4,4 +4,10 @@
   group: m4e.krestomat.io
   kind: M4e
   playbook: playbooks/m4e.yml
+  reconcilePeriod: 1m
+  vars:
+    cr_version: v1alpha1
+    cr_group: m4e.krestomat.io
+    cr_api_version: "m4e.krestomat.io/v1alpha1"
+    cr_kind: M4e
 # +kubebuilder:scaffold:watch

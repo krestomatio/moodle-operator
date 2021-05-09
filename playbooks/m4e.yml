@@ -1,9 +1,22 @@
----
-- hosts: localhost
-  gather_facts: no
+- name: k8s resources
+  hosts: localhost
+  gather_facts: false
   collections:
     - community.kubernetes
     - operator_sdk.util
   tasks:
     - import_role:
         name: "m4e"
+
+- name: ansible routines
+  hosts: "{{ pods_ready_group }}:&{{ php_fpm_container_group }}"
+  run_once: true
+  gather_facts: false
+  collections:
+    - community.kubernetes
+    - operator_sdk.util
+  tasks:
+    - name: include routines
+      import_role:
+        name: "m4e"
+        tasks_from: routines.yml

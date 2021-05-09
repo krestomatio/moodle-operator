@@ -2,11 +2,13 @@
 # postgres
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
-postgres_appname: "{{ ansible_operator_meta.name }}-postgres"
+postgres_appname: "{{ meta_name }}-postgres"
 postgres_pvc: "{{ postgres_appname }}-pvc"
 postgres_secret: "{{ postgres_appname }}-secret"
 postgres_service: "{{ postgres_appname }}-service"
 postgres_deploy: "{{ postgres_appname }}-deploy"
+postgres_container: "moodle-postgres"
+postgres_container_group: "{{ postgres_container.replace('-', '_') }}"
 postgres_readiness_probe: true
 postgres_readiness_command: "['/usr/libexec/check-container-postgres']"
 postgres_readiness_initial: 5

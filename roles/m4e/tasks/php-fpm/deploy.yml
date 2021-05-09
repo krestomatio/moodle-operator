@@ -1,0 +1,22 @@
+- name: set php-fpm deploy spec
+  when: php_fpm_deploy_spec is not defined
+  set_fact:
+    php_fpm_deploy_spec: "{{ lookup('template', php_fpm_deploy_spec_template) }}"
+
+- name: php-fpm deploy resource definition
+  vars:
+    kind: Deployment
+    k8s_state: "{{ php_fpm_deploy_state | default(php_fpm_state) }}"
+    k8s_wait: "{{ php_fpm_deploy_wait | default(true) }}"
+    k8s_wait_timeout: "{{ php_fpm_deploy_wait_timeout | default(120) }}"
+    template: "{{ deploy_template }}"
+    metadata_name: "{{ php_fpm_deploy }}"
+    annotations: "{{ php_fpm_deploy_annotations | default(false) }}"
+    connects_to: "{{ postgres_appname }}"
+    runtime: php
+    deploy_spec: "{{ php_fpm_deploy_spec }}"
+  import_tasks: k8s/object.yml
+
+- name: save php-fpm deploy resource definition task output
+  set_fact:
+    k8s_php_fpm_deploy: "{{ k8s_object_task }}"

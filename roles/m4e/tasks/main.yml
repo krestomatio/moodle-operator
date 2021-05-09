@@ -1,9 +1,24 @@
 ---
 # tasks file for m4e
-- import_tasks: postgres.yml
+- name: import tasks
+  block:
+    - name: handle initial status
+      import_tasks: init-status.yml
 
-- import_tasks: moodle.yml
+    - name: handle postgres
+      import_tasks: postgres.yml
 
-- import_tasks: php-fpm.yml
+    - name: handle moodle
+      import_tasks: moodle.yml
 
-- import_tasks: nginx.yml
+    - name: handle php-fpm
+      import_tasks: php-fpm.yml
+
+    - name: handle nginx
+      import_tasks: nginx.yml
+
+    - name: include successful status
+      import_tasks: condition/ready/successful.yml
+  rescue:
+    - name: include successful status
+      import_tasks: condition/ready/error.yml

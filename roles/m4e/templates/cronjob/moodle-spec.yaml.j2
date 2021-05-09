@@ -17,7 +17,7 @@ jobTemplate:
 {% endif %}
 {% if moodle_app_container %}
         initContainers:
-        - name: '{{ ansible_operator_meta.name }}-moodle-app'
+        - name: 'moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:
@@ -25,8 +25,8 @@ jobTemplate:
             name: moodle-app
 {% endif %}
         containers:
-        - image: '{{ php_fpm_image }}'
-          name: '{{ php_fpm_appname }}'
+        - name: 'moodle-php-fpm-cron'
+          image: '{{ php_fpm_image }}'
           env:
           - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
             value: any
@@ -37,7 +37,7 @@ jobTemplate:
           - containerPort: 9000
           readinessProbe:
             exec:
-              command: {{ moodle_new_instance_readiness_command }}
+              command: {{ php_fpm_readiness_command }}
 {% if moodle_cron_resource_requests or moodle_cron_resource_limits %}
           resources:
 {% if moodle_cron_resource_requests %}

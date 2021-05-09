@@ -14,7 +14,7 @@ template:
 {% endif %}
 {% if moodle_app_container %}
     initContainers:
-    - name: '{{ ansible_operator_meta.name }}-moodle-app'
+    - name: 'moodle-app'
       image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
@@ -22,8 +22,8 @@ template:
         name: moodle-app
 {% endif %}
     containers:
-    - image: '{{ php_fpm_image }}'
-      name: '{{ php_fpm_appname }}'
+    - name: '{{ php_fpm_container }}'
+      image: '{{ php_fpm_image }}'
       env:
         - name: PHP_FPM_LISTEN_ALLOWED_CLIENTS
           value: any

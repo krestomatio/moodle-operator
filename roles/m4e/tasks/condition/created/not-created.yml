@@ -1,0 +1,18 @@
+- name: set not created status
+  import_tasks: k8s/status.yml
+  vars:
+    lastTransitionTime: "{{ now(utc=False).isoformat(timespec='seconds') + 'Z' }}"
+    k8s_status_status:
+      created: "False"
+      ready: "False"
+    k8s_status_conditions:
+      - type: "Created"
+        status: "False"
+        reason: "NotCreated"
+        message: "The site is being created"
+        lastTransitionTime: "{{ lastTransitionTime }}"
+      - type: "Ready"
+        status: "False"
+        reason: "NotCreated"
+        message: "The site has not been created"
+        lastTransitionTime: "{{ lastTransitionTime }}"
