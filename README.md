@@ -49,6 +49,10 @@ kubectl delete -f config/samples/m4e_v1alpha1_m4e.yaml
 make undeploy
 ```
 
+## Want to contribute?
+* Use github issues to report bugs, send enhancement, new feature requests and questions
+* Join [our telegram group](https://t.me/m4e_operator)
+
 ## Suggested readings when developing operators
 
 [Operator SDK](https://docs.openshift.com/container-platform/4.2/operators/operator_sdk/osdk-ansible.html#osdk-building-ansible-operator_osdk-ansible)
