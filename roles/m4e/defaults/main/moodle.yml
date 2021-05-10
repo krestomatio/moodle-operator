@@ -40,7 +40,10 @@ moodle_new_instance_cmd:
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
 moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"
-moodle_status_instance_properties_script: scripts/status-instance-properties.php
+moodle_status_script: scripts/status.php
+moodle_status_version: true
+moodle_status_usage: true
+moodle_status_checks: critical,error
 moodle_cron_schedule: "*/1 * * * *"
 moodle_cron_success_limit: 3
 moodle_cron_failed_limit: 1

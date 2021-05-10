@@ -8,7 +8,7 @@
     - import_role:
         name: "m4e"
 
-- name: ansible routines
+- name: php routines
   hosts: "{{ pods_ready_group }}:&{{ php_fpm_container_group }}"
   run_once: true
   gather_facts: false
@@ -19,4 +19,4 @@
     - name: include routines
       import_role:
         name: "m4e"
-        tasks_from: routines.yml
+        tasks_from: php-routines.yml
