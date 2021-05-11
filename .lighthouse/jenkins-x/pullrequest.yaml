@@ -27,7 +27,7 @@ spec:
             - image: quay.io/krestomatio/ansible-operator-ci:0.1.10
               name: pr
               args:
-                - 1800
+                - "1800"
               command:
                 - sleep
               securityContext:
