@@ -27,9 +27,9 @@ spec:
             - image: quay.io/krestomatio/ansible-operator-ci:0.1.10
               name: pr
               args:
-                - $(JOB_NAME)
+                - 1800
               command:
-                - make
+                - sleep
               securityContext:
                 privileged: true
               volumeMounts:
