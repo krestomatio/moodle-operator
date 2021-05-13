@@ -72,7 +72,7 @@ nginx_ingress_spec: |
   - host: '{{ nginx_host }}'
     http:
       paths:
-      - path: /*
+      - path: {{ nginx_ingress_path | default('/') }}
         backend:
           serviceName: '{{ nginx_service }}'
           servicePort: {{ nginx_port }}
