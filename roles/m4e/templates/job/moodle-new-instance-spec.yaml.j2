@@ -51,6 +51,7 @@ template:
           fi
       ports:
       - containerPort: 9000
+      imagePullPolicy: IfNotPresent
       readinessProbe:
         exec:
           command: {{ moodle_new_instance_readiness_command }}

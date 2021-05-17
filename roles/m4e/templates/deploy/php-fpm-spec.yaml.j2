@@ -33,6 +33,7 @@ template:
           value: '{{ moodle_config_path }}'
       ports:
       - containerPort: 9000
+      imagePullPolicy: IfNotPresent
       args: {{ php_fpm_args }}
 {% if php_fpm_readiness_probe %}
       readinessProbe:

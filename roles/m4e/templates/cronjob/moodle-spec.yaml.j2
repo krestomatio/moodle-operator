@@ -35,6 +35,7 @@ jobTemplate:
           args: {{ moodle_cron_args }}
           ports:
           - containerPort: 9000
+          imagePullPolicy: IfNotPresent
           readinessProbe:
             exec:
               command: {{ php_fpm_readiness_command }}
