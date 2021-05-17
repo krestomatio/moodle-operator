@@ -26,7 +26,7 @@ php_fpm_liveness_failure: 3
 php_fpm_resource_requests: true
 php_fpm_resource_requests_cpu: 150m
 php_fpm_resource_requests_memory: 256Mi
-php_fpm_resource_limits: true
+php_fpm_resource_limits: false
 php_fpm_resource_limits_cpu: 1
 php_fpm_resource_limits_memory: 1Gi
 php_fpm_term_grace_period: 30
