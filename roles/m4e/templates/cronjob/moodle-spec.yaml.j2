@@ -77,3 +77,7 @@ jobTemplate:
             items:
             - key: config.php
               path: config.php
+{% if moodle_cron_tolerations %}
+        tolerations:
+        {{ moodle_cron_tolerations | to_nice_yaml(indent=2) | indent(8)  }}
+{% endif %}

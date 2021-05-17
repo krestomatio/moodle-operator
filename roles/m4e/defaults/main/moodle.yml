@@ -40,6 +40,7 @@ moodle_new_instance_cmd:
     --adminemail="{{ moodle_new_instance_adminmail }}"
     --agree-license
 moodle_new_instance_readiness_command: "['/usr/libexec/check-container-php', '-t', '-c', '-m']"
+moodle_new_instance_tolerations: false
 moodle_status_script: scripts/status.php
 moodle_status_version: true
 moodle_status_usage: true
@@ -56,6 +57,7 @@ moodle_cron_resource_requests_memory: 128Mi
 moodle_cron_resource_limits: true
 moodle_cron_resource_limits_cpu: 1
 moodle_cron_resource_limits_memory: 1Gi
+moodle_cron_tolerations: false
 moodle_cronjob: "{{ moodle_appname }}-cronjob"
 moodle_data_pvc: "{{ moodle_appname }}-data"
 moodle_data_pvc_size: 1Gi

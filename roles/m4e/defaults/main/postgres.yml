@@ -53,6 +53,6 @@ postgres_pvc_spec: |
   resources:
     requests:
       storage: '1Gi'
-
+postgres_tolerations: false
 # postgres config
 postgres_log_stderr: true

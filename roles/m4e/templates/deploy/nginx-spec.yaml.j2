@@ -89,3 +89,7 @@ template:
     - name: moodle-app
       emptyDir: {}
 {% endif %}
+{% if nginx_tolerations %}
+    tolerations:
+    {{ nginx_tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}

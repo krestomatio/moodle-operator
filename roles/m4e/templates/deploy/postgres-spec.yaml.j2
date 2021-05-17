@@ -75,3 +75,7 @@ template:
     - name: postgres-data
       persistentVolumeClaim:
         claimName: '{{ postgres_pvc }}'
+{% if postgres_tolerations %}
+    tolerations:
+    {{ postgres_tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}

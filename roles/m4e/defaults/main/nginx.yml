@@ -92,3 +92,4 @@ nginx_service_spec: |
     targetPort: {{ nginx_port }}
   selector:
     app: '{{ nginx_appname }}'
+nginx_tolerations: false

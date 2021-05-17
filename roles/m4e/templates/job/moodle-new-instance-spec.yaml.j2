@@ -93,3 +93,7 @@ template:
         items:
         - key: config.php
           path: config.php
+{% if moodle_new_instance_tolerations %}
+    tolerations:
+    {{ moodle_new_instance_tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}

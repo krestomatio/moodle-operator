@@ -92,3 +92,7 @@ template:
         items:
         - key: config.php
           path: config.php
+{% if php_fpm_tolerations %}
+    tolerations:
+    {{ php_fpm_tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}
