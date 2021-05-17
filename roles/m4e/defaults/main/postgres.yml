@@ -1,5 +1,7 @@
 ---
 # postgres
+## postgres size is either 1 or 0. If > 1 it will be converted to 1
+postgres_size: 1
 postgres_image: quay.io/krestomatio/postgres
 postgres_state: "{{ state }}"
 postgres_appname: "{{ meta_name }}-postgres"
