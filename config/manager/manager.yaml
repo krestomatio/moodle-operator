@@ -31,4 +31,5 @@ spec:
             - name: ANSIBLE_GATHERING
               value: explicit
           image: controller:latest
+      serviceAccountName: controller-manager
       terminationGracePeriodSeconds: 10
