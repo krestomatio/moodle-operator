@@ -39,7 +39,7 @@ nginx_route_tls: "{{ expose_tls }}"
 nginx_ingress_tls_secret_name: "{{ expose_tls_secret_name }}"
 nginx_security_context: "{{ security_context }}"
 nginx_security_context_runasuser: 999
-nginx_security_context_fsgroup: "{{ php_fpm_security_context_fsgroup }}"
+nginx_security_context_fsgroup: "{{ php_fpm_security_context_runasuser }}"
 nginx_route_annotations: |
   haproxy.router.openshift.io/rate-limit-connections: 'true'
   haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp: '100'

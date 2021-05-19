@@ -34,7 +34,7 @@ postgres_resource_limits_memory: 1Gi
 postgres_term_grace_period: 30
 postgres_security_context: "{{ security_context }}"
 postgres_security_context_runasuser: 26
-postgres_security_context_fsgroup: 26
+postgres_security_context_fsgroup: "{{ postgres_security_context_runasuser }}"
 postgres_secret_data: |
   database_password: '{{ database_password | b64encode }}'
 postgres_service_spec: |
