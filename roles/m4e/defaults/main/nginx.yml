@@ -10,7 +10,7 @@ nginx_route: "{{ nginx_appname }}-route"
 nginx_ingress: "{{ nginx_appname }}-ingress"
 nginx_port: 8080
 nginx_host: "{{ fqdn }}"
-nginx_args: "['nginx', '-g', 'daemon off;']"
+nginx_args: "['nginx']"
 nginx_container: "moodle-nginx"
 nginx_container_group: "{{ nginx_container.replace('-', '_') }}"
 nginx_readiness_probe: true
