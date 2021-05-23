@@ -1,4 +1,3 @@
-# okd sample
 apiVersion: m4e.krestomat.io/v1alpha1
 kind: M4e
 metadata:
@@ -11,4 +10,3 @@ spec:
   moodle_new_instance_adminpass: secret
   moodle_new_instance_adminmail: admin@example.com
   moodle_new_instance_agree_license: true
-  security_context: false

@@ -1,0 +1,7 @@
+apiVersion: m4e.krestomat.io/v1alpha1
+kind: M4e
+metadata:
+  name: m4e-sample
+spec:
+  nginx_service_type: NodePort
+  nginx_ingress_wait_for_ip: true

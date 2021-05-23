@@ -1,4 +1,7 @@
 ## Append samples you want in your CSV to this file as resources ##
 resources:
 - m4e_v1alpha1_m4e.yaml
+# patches:
+# - path: gke_patch.yaml
+# - path: oc_patch.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples
