@@ -1,8 +1,16 @@
 domain: krestomat.io
-layout: ansible.sdk.operatorframework.io/v1
+layout:
+- ansible.sdk.operatorframework.io/v1
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
 projectName: m4e-operator
 resources:
-- group: m4e
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: krestomat.io
+  group: m4e
   kind: M4e
   version: v1alpha1
-version: 3-alpha
+version: "3"

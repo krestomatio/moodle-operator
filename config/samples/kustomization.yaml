@@ -4,4 +4,4 @@ resources:
 # patches:
 # - path: gke_patch.yaml
 # - path: oc_patch.yaml
-# +kubebuilder:scaffold:manifestskustomizesamples
+#+kubebuilder:scaffold:manifestskustomizesamples

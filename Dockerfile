@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v1.1.0
+FROM quay.io/operator-framework/ansible-operator:v1.7.2
 
 # Install kubectl. It is needed for ansible kubectl inventory.
 COPY --from=lachlanevenson/k8s-kubectl:v1.19.3 /usr/local/bin/kubectl /usr/local/bin/kubectl

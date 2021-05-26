@@ -3,6 +3,7 @@ kind: M4e
 metadata:
   name: m4e-sample
 spec:
+  # Add fields here
   moodle_new_instance_fullname: Demo site
   moodle_new_instance_shortname: demo
   moodle_new_instance_summary: A demo site
