@@ -1,5 +1,8 @@
 - name: set php-fpm deploy spec
   when: php_fpm_deploy_spec is not defined
+  vars:
+    annotations: "{{ php_fpm_deploy_spec_annotations | default(false) }}"
+    extra_labels: "{{ php_fpm_deploy_spec_extra_labels | default(false) }}"
   set_fact:
     php_fpm_deploy_spec: "{{ lookup('template', php_fpm_deploy_spec_template) }}"
 

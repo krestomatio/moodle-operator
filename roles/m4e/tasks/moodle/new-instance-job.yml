@@ -8,6 +8,8 @@
       when: moodle_new_instance_job_spec is not defined
       vars:
         metadata_name: "{{ moodle_new_instance_job }}"
+        annotations: "{{ moodle_new_instance_job_annotations | default(false) }}"
+        extra_labels: "{{ moodle_new_instance_job_extra_labels | default(false) }}"
       set_fact:
         moodle_new_instance_job_spec:
           "{{ lookup('template', moodle_new_instance_job_spec_template) }}"

@@ -1,5 +1,8 @@
 - name: set nginx deploy spec
   when: nginx_deploy_spec is not defined
+  vars:
+    annotations: "{{ nginx_deploy_spec_annotations | default(false) }}"
+    extra_labels: "{{ nginx_deploy_spec_extra_labels | default(false) }}"
   set_fact:
     nginx_deploy_spec: "{{ lookup('template', nginx_deploy_spec_template) }}"
 

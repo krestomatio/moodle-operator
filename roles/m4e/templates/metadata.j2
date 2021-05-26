@@ -17,21 +17,21 @@ metadata:
 {% if runtime | default(false) != false %}
     app.openshift.io/runtime: '{{ runtime }}'
 {% endif %}
-{% if extra_labels | default(false) != false %}
-    {{ extra_labels | indent(width=4) }}
-{% endif %}
 {% if cr_version | default(false) != false %}
     app.kubernetes.io/version: '{{ cr_version }}'
 {% endif %}
+{% if extra_labels | default(false) != false %}
+    {{ extra_labels | indent(width=4) }}
+{% endif %}
 {% if (annotations | default(false) != false) or (connects_to | default(false) != false) or (annotation_inventory_hostvars | default(false) != false)%}
   annotations:
-{% if annotations | default(false) != false %}
-    {{ annotations | indent( width=4) }}
-{% endif %}
 {% if connects_to | default(false) != false %}
     app.openshift.io/connects-to: '{{ connects_to }}'
 {% endif %}
 {% if annotation_inventory_hostvars | default(false) != false %}
     {{ cr_group }}/inventory_hostvars: '{{ annotation_inventory_hostvars | to_json | indent( width=4) }}'
+{% if annotations | default(false) != false %}
+    {{ annotations | indent( width=4) }}
+{% endif %}
 {% endif %}
 {% endif %}

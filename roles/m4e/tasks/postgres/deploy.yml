@@ -1,5 +1,8 @@
 - name: set postgres deploy spec
   when: postgres_deploy_spec is not defined
+  vars:
+    annotations: "{{ postgres_deploy_spec_annotations | default(false) }}"
+    extra_labels: "{{ postgres_deploy_spec_extra_labels | default(false) }}"
   set_fact:
     postgres_deploy_spec: "{{ lookup('template', postgres_deploy_spec_template) }}"
 

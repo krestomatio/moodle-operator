@@ -1,5 +1,8 @@
 - name: set moodle cronjob spec
   when: moodle_cronjob_spec is not defined
+  vars:
+    annotations: "{{ moodle_cronjob_spec_annotations | default(false) }}"
+    extra_labels: "{{ moodle_cronjob_spec_extra_labels | default(false) }}"
   set_fact:
     moodle_cronjob_spec: "{{ lookup('template', moodle_cronjob_spec_template) }}"
 
