@@ -5,7 +5,7 @@
   block:
     - name: nginx ingress resource definition
       vars:
-        kind: Ingress
+        k8s_kind: Ingress
         k8s_state: "{{ nginx_ingress_state | default(nginx_state) }}"
         template: "{{ ingress_template }}"
         metadata_name: "{{ nginx_ingress }}"
@@ -18,7 +18,10 @@
         k8s_nginx_ingress: "{{ k8s_object_task }}"
 
     - name: wait for nginx ingress
-      when: _nginx_ingress_wait_for_ip | default(nginx_ingress_wait_for_ip) | default(false)
+      when:
+        - _nginx_ingress_wait_for_ip | default(nginx_ingress_wait_for_ip) | default(false)
+        - k8s_nginx_ingress is changed
+        - "'absent' not in nginx_ingress_state | default(nginx_state)"
       block:
         - name: wait for nginx ingress ip
           register: nginx_ingress_ip_task

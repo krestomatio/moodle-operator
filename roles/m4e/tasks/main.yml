@@ -1,24 +1,7 @@
 ---
 # tasks file for m4e
-- name: import tasks
-  block:
-    - name: handle initial status
-      import_tasks: init-status.yml
+- name: get k8s distribution
+  import_tasks: "k8s/distribution.yml"
 
-    - name: handle postgres
-      import_tasks: postgres.yml
-
-    - name: handle moodle
-      import_tasks: moodle.yml
-
-    - name: handle php-fpm
-      import_tasks: php-fpm.yml
-
-    - name: handle nginx
-      import_tasks: nginx.yml
-
-    - name: include successful status
-      import_tasks: condition/ready/successful.yml
-  rescue:
-    - name: include successful status
-      import_tasks: condition/ready/error.yml
+- name: import state tasks
+  import_tasks: "state/{{ cr_state }}.yml"

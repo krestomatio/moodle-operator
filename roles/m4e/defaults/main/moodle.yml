@@ -61,9 +61,14 @@ moodle_cron_tolerations: false
 moodle_cronjob: "{{ moodle_appname }}-cronjob"
 moodle_data_pvc: "{{ moodle_appname }}-data"
 moodle_data_pvc_size: 1Gi
+moodle_pvc_storage_access_modes: ReadWriteMany
+moodle_pvc_storage_class_name: false
 moodle_pvc_spec: |
+  {% if moodle_pvc_storage_class_name is defined and moodle_pvc_storage_class_name %}
+  storageClassName: {{ moodle_pvc_storage_class_name }}
+  {% endif %}
   accessModes:
-    - 'ReadWriteOnce'
+    - '{{ moodle_pvc_storage_access_modes }}'
   resources:
     requests:
       storage: '{{ moodle_data_pvc_size }}'

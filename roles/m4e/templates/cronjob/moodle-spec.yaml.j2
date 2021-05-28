@@ -10,18 +10,13 @@ jobTemplate:
       {{ metadata() | indent(width=6) }}
       spec:
         restartPolicy: Never
-{% if php_fpm_security_context %}
-        securityContext:
-          runAsUser: {{ php_fpm_security_context_runasuser }}
-          fsGroup: {{ php_fpm_security_context_fsgroup }}
-{% endif %}
 {% if moodle_app_container %}
         initContainers:
         - name: 'moodle-app'
           image: '{{ moodle_image }}'
           # Shared volume with main container
           volumeMounts:
-          - mountPath: {{ moodle_app }}
+          - mountPath: '{{ moodle_app }}'
             name: moodle-app
 {% endif %}
         containers:
@@ -53,10 +48,10 @@ jobTemplate:
 {% endif %}
 {% endif %}
           volumeMounts:
-          - mountPath: {{ moodle_data }}
+          - mountPath: '{{ moodle_data }}'
             name: moodledata
 {% if moodle_app_container %}
-          - mountPath: {{ moodle_app }}
+          - mountPath: '{{ moodle_app }}'
             name: moodle-app
 {% endif %}
           - mountPath: '{{ moodle_app }}/config.php'

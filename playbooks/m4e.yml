@@ -17,6 +17,7 @@
     - operator_sdk.util
   tasks:
     - name: include routines
+      when: "php_fpm_state == 'present'"
       import_role:
         name: "m4e"
         tasks_from: php-routines.yml

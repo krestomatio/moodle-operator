@@ -11,13 +11,18 @@
     status: "{{ k8s_status_status | default(omit,true) }}"
     conditions: "{{ k8s_status_conditions | default(omit,true) }}"
 
+- name: set uid fact
+  when: k8s_status_task.result.metadata.uid is defined
+  set_fact:
+    cr_uid: "{{ k8s_status_task.result.metadata.uid }}"
+
 - name: set status facts
   vars:
-    _resource_status: "{{ k8s_status_task.result.status | default({},true) }}"
+    _cr_status: "{{ k8s_status_task.result.status | default({},true) }}"
   set_fact:
-    resource_status_conditions: "{{ _resource_status.conditions | default([]) }}"
-    resource_status_properties:
-      "{% set copy=_resource_status.copy() %}{% if copy.conditions is defined %}{% set
+    cr_status_conditions: "{{ _cr_status.conditions | default([]) }}"
+    cr_status_properties:
+      "{% set copy=_cr_status.copy() %}{% if copy.conditions is defined %}{% set
       removed=copy.pop('conditions') %}{% endif %}{{ copy }}"
 
 - name: notify status

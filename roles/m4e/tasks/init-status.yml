@@ -2,5 +2,5 @@
   import_tasks: k8s/status.yml
 
 - name: include not created status
-  when: not (resource_status_properties.created | default('False') | bool)
+  when: not (cr_status_properties.created | default('False') | bool)
   import_tasks: condition/created/not-created.yml

@@ -9,10 +9,21 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     terminationGracePeriodSeconds: {{ postgres_term_grace_period }}
-{% if postgres_security_context %}
-    securityContext:
-      runAsUser: {{ postgres_security_context_runasuser }}
-      fsGroup: {{ postgres_security_context_fsgroup }}
+{% if k8s_distribution == 'k8s' %}
+    initContainers:
+    - name: 'data-dir-permissions'
+      image: '{{ postgres_image }}'
+      securityContext:
+        runAsUser: 0
+      command:
+        - '/bin/bash'
+        - '-c'
+        - |
+          chown ${CTR_USER_ID}:${CTR_USER_ID} '{{ postgres_data }}'
+          chmod 0700 '{{ postgres_data }}'
+      volumeMounts:
+      - mountPath: '{{ postgres_data }}'
+        name: postgres-data
 {% endif %}
     containers:
     - name: '{{ postgres_container }}'
@@ -69,7 +80,7 @@ template:
 {% endif %}
 {% endif %}
       volumeMounts:
-      - mountPath: /var/lib/pgsql/data
+      - mountPath: '{{ postgres_data }}'
         name: postgres-data
     volumes:
     - name: postgres-data

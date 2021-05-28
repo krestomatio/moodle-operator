@@ -1,6 +1,6 @@
 - name: moodledata pvc resource definition
   vars:
-    kind: PersistentVolumeClaim
+    k8s_kind: PersistentVolumeClaim
     k8s_state: "{{ moodle_pvc_state | default(moodle_state) }}"
     template: "{{ pvc_template }}"
     metadata_name: "{{ moodle_data_pvc }}"

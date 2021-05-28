@@ -30,9 +30,6 @@ php_fpm_resource_limits: false
 php_fpm_resource_limits_cpu: 1
 php_fpm_resource_limits_memory: 1Gi
 php_fpm_term_grace_period: 30
-php_fpm_security_context: "{{ security_context }}"
-php_fpm_security_context_runasuser: 48
-php_fpm_security_context_fsgroup: "{{ php_fpm_security_context_runasuser }}"
 php_fpm_service_spec: |
   type: {{ php_fpm_service_type | default('ClusterIP') }}
   sessionAffinity: {{ php_fpm_service_session_affinity | default('ClientIP')  }}

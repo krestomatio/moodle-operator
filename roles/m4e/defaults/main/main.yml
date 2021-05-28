@@ -1,14 +1,10 @@
 ---
 # defaults file for m4e
-cr_version: v1alpha1
 cr_group: m4e.krestomat.io
-cr_api_version: "{{ cr_group }}/{{ cr_version }}"
 cr_kind: M4e
-meta_name: "{{ ansible_operator_meta.name }}"
-meta_namespace: "{{ ansible_operator_meta.namespace }}"
-pods_group: "{{ cr_kind }}__{{ meta_namespace.replace('-', '_') }}__{{ meta_name.replace('-', '_') }}__pods"
-pods_ready_group: "{{ pods_group }}_ready"
-state: present
+
+# custom resource state: present, absent, suspended, inmaintenance
+cr_state: present
 
 # expose
 expose_type: "ingress"  # only route
@@ -20,34 +16,15 @@ host: "m4e"
 domain: "krestomat.io"
 fqdn: "{{ host }}.{{ domain }}"
 
-# security context to run and mount as user
-security_context: true
-
 # credentials. MUST CHANGED
 database_name: moodle
 database_user: user
 database_password: secret
 
 # templates
-deploy_template: deploy.yaml.j2
-job_template: job.yaml.j2
-cronjob_template: cronjob.yaml.j2
-config_template: config.yaml.j2
-pvc_template: pvc.yaml.j2
-secret_template: secret.yaml.j2
-service_template: service.yaml.j2
-route_template: route.yaml.j2
-ingress_template: ingress.yaml.j2
 moodle_config_template: config.php.j2
-
 postgres_deploy_spec_template: deploy/postgres-spec.yaml.j2
 php_fpm_deploy_spec_template: deploy/php-fpm-spec.yaml.j2
 nginx_deploy_spec_template: deploy/nginx-spec.yaml.j2
 moodle_new_instance_job_spec_template: job/moodle-new-instance-spec.yaml.j2
 moodle_cronjob_spec_template: cronjob/moodle-spec.yaml.j2
-
-# inventory
-inventory_uuid: '{{ (cr_group + cr_version + cr_kind + meta_namespace + meta_name) | to_uuid }}'
-annotation_inventory_hostvars:
-  ansible_remote_tmp: /var/tmp/.ansible
-  ansible_python_interpreter: /usr/libexec/platform-python

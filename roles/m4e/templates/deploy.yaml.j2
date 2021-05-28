@@ -1,9 +1,0 @@
-# {{ name }} deployment
----
-kind: Deployment
-apiVersion: apps/v1
-{% include 'metadata.j2' ignore missing %}
-{% if deploy_spec != false %}
-spec:
-  {{ deploy_spec | indent(width=2) }}
-{% endif %}

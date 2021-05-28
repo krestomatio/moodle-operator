@@ -1,0 +1,25 @@
+- name: set state absent
+  set_fact:
+    state: absent
+    k8s_wait: true
+
+- name: import tasks
+  block:
+    - name: handle initial status
+      import_tasks: init-status.yml
+
+    - name: handle nginx removal
+      import_tasks: nginx.yml
+
+    - name: handle php-fpm removal
+      import_tasks: php-fpm.yml
+
+    - name: handle moodle removal
+      import_tasks: moodle.yml
+
+    - name: handle postgres removal
+      import_tasks: postgres.yml
+
+  rescue:
+    - name: include rescue tasks
+      import_tasks: rescue.yml

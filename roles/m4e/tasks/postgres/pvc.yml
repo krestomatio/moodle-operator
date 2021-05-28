@@ -1,6 +1,6 @@
 - name: postgres pvc resource definition
   vars:
-    kind: PersistentVolumeClaim
+    k8s_kind: PersistentVolumeClaim
     k8s_state: "{{ postgres_pvc_state | default(postgres_state) }}"
     template: "{{ pvc_template }}"
     metadata_name: "{{ postgres_pvc }}"

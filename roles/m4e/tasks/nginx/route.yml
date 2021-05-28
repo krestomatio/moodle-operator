@@ -3,7 +3,7 @@
     - expose_type is defined and expose_type
     - "(expose_type | lower) == 'route'"
   vars:
-    kind: Route
+    k8s_kind: Route
     k8s_state: "{{ nginx_route_state | default(nginx_state) }}"
     template: "{{ route_template }}"
     metadata_name: "{{ nginx_route }}"

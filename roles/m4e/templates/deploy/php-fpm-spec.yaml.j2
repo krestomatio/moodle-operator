@@ -7,19 +7,31 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     terminationGracePeriodSeconds: {{ php_fpm_term_grace_period }}
-{% if php_fpm_security_context %}
-    securityContext:
-      runAsUser: {{ php_fpm_security_context_runasuser }}
-      fsGroup: {{ php_fpm_security_context_fsgroup }}
-{% endif %}
-{% if moodle_app_container %}
+{% if moodle_app_container or k8s_distribution %}
     initContainers:
+{% if moodle_app_container %}
     - name: 'moodle-app'
       image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
-      - mountPath: {{ moodle_app }}
+      - mountPath: '{{ moodle_app }}'
         name: moodle-app
+{% endif %}
+{% if k8s_distribution == 'k8s' %}
+    - name: 'data-dir-permissions'
+      image: '{{ php_fpm_image }}'
+      securityContext:
+        runAsUser: 0
+      command:
+        - '/bin/bash'
+        - '-c'
+        - |
+          chown ${CTR_USER_ID}:${CTR_USER_ID} '{{ moodle_data }}'
+          chmod 0740 '{{ moodle_data }}'
+      volumeMounts:
+      - mountPath: '{{ moodle_data }}'
+        name: moodledata
+{% endif %}
 {% endif %}
     containers:
     - name: '{{ php_fpm_container }}'
@@ -69,13 +81,13 @@ template:
 {% endif %}
 {% endif %}
       volumeMounts:
-      - mountPath: {{ moodle_data }}
+      - mountPath: '{{ moodle_data }}'
         name: moodledata
       - mountPath: {{ moodle_config_path }}
         name: config-php
         readOnly: true
 {% if moodle_app_container %}
-      - mountPath: {{ moodle_app }}
+      - mountPath: '{{ moodle_app }}'
         name: moodle-app
 {% endif %}
     volumes:

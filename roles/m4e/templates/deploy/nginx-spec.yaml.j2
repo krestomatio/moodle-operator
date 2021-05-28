@@ -7,18 +7,13 @@ template:
   {{ metadata() | indent(width=2) }}
   spec:
     terminationGracePeriodSeconds: {{ nginx_term_grace_period }}
-{% if nginx_security_context %}
-    securityContext:
-      runAsUser: {{ nginx_security_context_runasuser }}
-      fsGroup: {{ nginx_security_context_fsgroup }}
-{% endif %}
 {% if moodle_app_container %}
     initContainers:
     - name: 'moodle-app'
       image: '{{ moodle_image }}'
       # Shared volume with main container
       volumeMounts:
-      - mountPath: {{ moodle_app }}
+      - mountPath: '{{ moodle_app }}'
         name: moodle-app
 {% endif %}
     containers:
@@ -74,11 +69,15 @@ template:
           memory: '{{ nginx_resource_limits_memory }}'
 {% endif %}
 {% endif %}
+{% if k8s_distribution == 'k8s' %}
+      securityContext:
+        runAsUser: {{ nginx_run_as_user }}
+{% endif %}
       volumeMounts:
-      - mountPath: {{ moodle_data }}
+      - mountPath: '{{ moodle_data }}'
         name: moodledata
 {% if moodle_app_container %}
-      - mountPath: {{ moodle_app }}
+      - mountPath: '{{ moodle_app }}'
         name: moodle-app
 {% endif %}
     volumes:

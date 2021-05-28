@@ -1,5 +1,7 @@
 - name: moodle new instance
-  when: not (resource_status_properties.instantiated | default('False') | bool)
+  when: not (cr_status_properties.instantiated | default('False') | bool)
+  vars:
+    moodle_component: "job"
   block:
     - name: include not instantiated status
       import_tasks: condition/instantiated/not-instantiated.yml
@@ -16,7 +18,7 @@
 
     - name: moodle new instance job resource definition
       vars:
-        kind: Job
+        k8s_kind: Job
         k8s_state: "{{ moodle_new_instance_job_state | default(moodle_state) }}"
         k8s_wait: true
         k8s_wait_timeout: "{{ moodle_new_instance_wait_timeout }}"

@@ -1,6 +1,6 @@
 - name: postgres service resource definition
   vars:
-    kind: Service
+    k8s_kind: Service
     k8s_state: "{{ postgres_service_state | default(postgres_state) }}"
     template: "{{ service_template }}"
     metadata_name: "{{ postgres_service }}"

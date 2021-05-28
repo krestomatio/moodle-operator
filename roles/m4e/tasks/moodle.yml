@@ -2,13 +2,22 @@
   vars:
     name: moodle
     k8s_state: "{{ moodle_state }}"
-    component: moodle
-    metadata_app: "{{ moodle_appname }}"
+    component: "{{ moodle_component | default('moodle') }}"
+    metadata_app: "{{ moodle_metadata_app | default(moodle_appname) }}"
   block:
     - import_tasks: moodle/moodledata-pvc.yml
+      when: "moodle_pvc_state | default(moodle_state) != 'absent'"
 
     - import_tasks: moodle/config-secret.yml
 
     - import_tasks: moodle/new-instance-job.yml
 
     - import_tasks: moodle/cronjob.yml
+
+    - name: other moodle removal tasks
+      when: "moodle_pvc_state | default(moodle_state) == 'absent'"
+      block:
+        - import_tasks: moodle/cleanup-jobs.yml
+
+        # change order when deleting pvc
+        - import_tasks: moodle/moodledata-pvc.yml

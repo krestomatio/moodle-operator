@@ -1,10 +1,10 @@
 ---
 # tasks file for m4e
-- name: "Resource definitions for {{ name }} in state: {{ state }},
-    kind: {{ kind }}"
+- name: "Resource definitions for {{ name }} in state: {{ k8s_state }},
+    kind: {{ k8s_kind }}"
   k8s:
     state: "{{ k8s_state }}"
-    definition: "{{ lookup('template', template) | from_yaml_all | list }}"
+    definition: "{{ lookup('template', template) | from_yaml if template is defined else k8s_definition }}"
     namespace: "{{ meta_namespace }}"
     wait: "{{ k8s_wait | default(omit,true) }}"
     wait_condition: "{{ k8s_wait_condition | default(omit,true) }}"

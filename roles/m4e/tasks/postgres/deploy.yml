@@ -8,7 +8,7 @@
 
 - name: postgres deploy resource definition
   vars:
-    kind: Deployment
+    k8s_kind: Deployment
     k8s_state: "{{ postgres_deploy_state | default(postgres_state) }}"
     k8s_wait: "{{ postgres_deploy_wait | default(true) }}"
     k8s_wait_timeout: "{{ postgres_deploy_wait_timeout | default(120) }}"
