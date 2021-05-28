@@ -12,6 +12,13 @@ COPY requirements.yml ${HOME}/requirements.yml
 RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
  && chmod -R ug+rwx ${HOME}/.ansible
 
+# Install krestomatio collection
+RUN mkdir -p ${HOME}/.ansible/collections/ansible_collections/krestomatio && \
+    pushd /tmp && \
+    curl -L https://github.com/krestomatio/ansible-collection-k8s/archive/master.tar.gz | tar xz && \
+    mv ansible-collection-k8s-master/ ${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s && \
+    popd
+
 COPY watches.yaml ${HOME}/watches.yaml
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/playbooks/

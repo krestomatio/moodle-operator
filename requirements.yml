@@ -4,6 +4,7 @@ collections:
     version: "1.2.1"
   - name: operator_sdk.util
     version: "0.2.0"
-  - name: https://github.com/krestomatio/ansible-collection-k8s
-    type: git
-    version: master
+  # Git is available until ansible >= 2.10
+  # - name: https://github.com/krestomatio/ansible-collection-k8s
+  #   type: git
+  #   version: master
