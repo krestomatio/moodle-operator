@@ -1,6 +1,0 @@
-- name: check k8s distribution
-  when: k8s_distribution is not defined
-  set_fact:
-    cacheable: true
-    k8s_distribution:
-      "{{ 'okd' if 'config.openshift.io' in lookup('pipe','kubectl api-resources') else 'k8s' }}"

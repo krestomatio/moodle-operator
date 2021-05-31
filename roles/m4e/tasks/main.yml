@@ -1,7 +1,0 @@
----
-# tasks file for m4e
-- name: get k8s distribution
-  import_tasks: "k8s/distribution.yml"
-
-- name: import state tasks
-  import_tasks: "state/{{ cr_state }}.yml"

@@ -1,6 +1,0 @@
-- name: include error status
-  import_tasks: condition/ready/error.yml
-
-- name: failed msg
-  fail:
-    msg: "There was an error before completing all tasks"
