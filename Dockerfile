@@ -10,7 +10,11 @@ USER 1001
 
 COPY requirements.yml ${HOME}/requirements.yml
 RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
- && chmod -R ug+rwx ${HOME}/.ansible
+    && chmod -R ug+rwx ${HOME}/.ansible
+
+# workaround for https://github.com/operator-framework/operator-sdk-ansible-util/issues/19
+Run curl -s https://raw.githubusercontent.com/jobcespedes/operator-sdk-ansible-util/cb7f8b19a926caf2d1b087f937c02282f007c24b/plugins/modules/k8s_status.py \
+    -o ${HOME}/.ansible/collections/ansible_collections/operator_sdk/util/plugins/modules/k8s_status.py
 
 COPY watches.yaml ${HOME}/watches.yaml
 COPY playbooks/ ${HOME}/playbooks/
