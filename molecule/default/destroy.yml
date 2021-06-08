@@ -13,13 +13,6 @@
       vars:
         state: absent
 
-    - name: Destroy Namespace
-      k8s:
-        api_version: v1
-        kind: Namespace
-        name: '{{ namespace }}'
-        state: absent
-
     - name: Unset pull policy
       command: '{{ kustomize }} edit remove patch pull_policy/{{ operator_pull_policy }}.yaml'
       args:

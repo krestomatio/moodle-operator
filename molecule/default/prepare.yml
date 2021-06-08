@@ -6,9 +6,3 @@
 
   tasks:
     - import_tasks: kustomize-prepare.yml
-
-    - name: Create Namespace
-      k8s:
-        api_version: v1
-        kind: Namespace
-        name: '{{ namespace }}'
