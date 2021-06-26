@@ -46,11 +46,6 @@ CHANGELOG_FROM ?= HEAD~1
 else
 CHANGELOG_FROM ?= $(PULL_BASE_SHA)
 endif
-ifeq ($(origin PULL_PULL_SHA),undefined)
-COMMITLINT_TO ?= HEAD
-else
-COMMITLINT_TO ?= $(PULL_PULL_SHA)
-endif
 
 # molecule
 MOLECULE_SEQUENCE ?= test
