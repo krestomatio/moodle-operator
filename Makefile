@@ -63,6 +63,9 @@ GIT_BRANCH ?= master
 GIT_ADD_FILES ?= Makefile
 CHANGELOG_FILE ?= CHANGELOG.md
 
+# krestomatio ansible collection
+COLLECTION_BRANCH ?= master
+
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "preview,fast,stable")
 # To re-generate a bundle for other specific channels without changing the standard setup, you can:
@@ -93,7 +96,7 @@ IMAGE_TAG_BASE ?= $(IMG_NAME)
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 
-all: image-build
+all: collection-build image-build
 
 ##@ General
 
@@ -117,10 +120,35 @@ run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kub
 	$(ANSIBLE_OPERATOR) run
 
 image-build: ## Build container image with the manager.
-	$(CONTAINER_BUILDER) build . -t $(IMG)
+	$(CONTAINER_BUILDER) build . -t $(IMG) \
+		--build-arg COLLECTION_FILE=krestomatio-k8s-$(COLLECTION_BRANCH).tar.gz
 
 image-push: ## Push container image with the manager.
 	$(CONTAINER_BUILDER) push $(IMG)
+
+collection-build: ## Build krestomatio collection from path or git to file
+	rm -rf *.tar.gz /tmp/ansible-collection-k8s*
+ifeq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
+	cp -rp ~/.ansible/collections/ansible_collections/krestomatio/k8s /tmp/ansible-collection-k8s-$(COLLECTION_BRANCH)
+else
+	curl -L https://github.com/krestomatio/ansible-collection-k8s/archive/$(COLLECTION_BRANCH).tar.gz | tar xzf - -C /tmp/
+endif
+	ansible-galaxy collection build --force /tmp/ansible-collection-k8s-$(COLLECTION_BRANCH)
+	mv krestomatio-k8s-*.tar.gz krestomatio-k8s-$(COLLECTION_BRANCH).tar.gz
+ifneq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
+	mkdir -p $${HOME}/.ansible/collections/ansible_collections/krestomatio/
+	cp -rp /tmp/ansible-collection-k8s-$(COLLECTION_BRANCH) ~/.ansible/collections/ansible_collections/krestomatio/k8s
+endif
+
+ifneq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
+collection-install: collection-build
+collection-install:
+	mkdir -p $${HOME}/.ansible/collections/ansible_collections/krestomatio/
+	cp -rp /tmp/ansible-collection-k8s-$(COLLECTION_BRANCH) ~/.ansible/collections/ansible_collections/krestomatio/k8s
+else
+collection-install: ## Install krestomatio collection from git
+	$(info krestomatio collection already installed...)
+endif
 
 ##@ Deployment
 
@@ -232,7 +260,7 @@ ifeq ($(origin SKIP_PIPELINE),undefined)
 ## Pullrequest pipeline
 .PHONY: pr
 pr: IMG = $(BUILD_IMG_NAME):$(BUILD_VERSION)
-pr: image-build image-push molecule
+pr: collection-build image-build image-push molecule
 
 ### lint
 .PHONY: lint
