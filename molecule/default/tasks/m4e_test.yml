@@ -19,6 +19,7 @@
     state: absent
     namespace: '{{ namespace }}'
     definition: "{{ lookup('template', '/'.join([samples_dir, cr_file])) | from_yaml }}"
+    wait: true
   vars:
     cr_file: 'm4e_v1alpha1_m4e.yaml'
 

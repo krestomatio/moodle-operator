@@ -13,4 +13,6 @@
     definition: '{{ item }}'
     state: '{{ state }}'
     wait: yes
-  loop: '{{ resources.stdout | from_yaml_all | list }}'
+  loop: "{{ resources.stdout | from_yaml_all | reverse |
+    list if state == 'absent' else resources.stdout |
+    from_yaml_all | list }}"
