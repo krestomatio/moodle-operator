@@ -13,5 +13,10 @@ bin
 *~
 
 # ansible
-__pycache__
+*.retry
+*.log
+__pycache__/
 .cache
+
+# Galaxy artifacts.
+*.tar.gz

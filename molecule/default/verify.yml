@@ -8,7 +8,7 @@
 
   vars:
     ctrl_label: control-plane=controller-manager
-    cr_removal: false
+    cr_removal: true
 
   tasks:
     - block:

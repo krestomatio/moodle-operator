@@ -3,4 +3,4 @@
 # It should be run by config/default
 resources:
 - bases/m4e.krestomat.io_m4es.yaml
-# +kubebuilder:scaffold:crdkustomizeresource
+#+kubebuilder:scaffold:crdkustomizeresource

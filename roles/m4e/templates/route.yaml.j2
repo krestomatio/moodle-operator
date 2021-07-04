@@ -1,9 +1,0 @@
-# {{ name }} route
----
-kind: Route
-apiVersion: v1
-{% include 'metadata.j2' ignore missing %}
-{% if route_spec != false %}
-spec:
-  {{ route_spec | indent(width=2) }}
-{% endif %}

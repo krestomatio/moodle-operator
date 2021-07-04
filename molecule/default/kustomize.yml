@@ -1,7 +1,7 @@
 ---
 - name: Build kustomize testing overlay
-  # load_restrictor must be set to none so we can load patch files from the default overlay
-  command: '{{ kustomize }} build  --load_restrictor none .'
+  # load-restrictor must be set to none so we can load patch files from the default overlay
+  command: '{{ kustomize }} build  --load-restrictor LoadRestrictionsNone .'
   check_mode: false
   args:
     chdir: '{{ config_dir }}/testing'
@@ -13,4 +13,6 @@
     definition: '{{ item }}'
     state: '{{ state }}'
     wait: yes
-  loop: '{{ resources.stdout | from_yaml_all | list }}'
+  loop: "{{ resources.stdout | from_yaml_all | reverse |
+    list if state == 'absent' else resources.stdout |
+    from_yaml_all | list }}"
