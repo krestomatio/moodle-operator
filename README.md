@@ -1,4 +1,4 @@
-This is a Moodle Operator for Kubernetes or Openshift. It is based on Ansible operator sdk.
+This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Operator SDK.
 
 ## TODO
 The operator is in alpha stage. There is work in progress for:
@@ -21,15 +21,16 @@ The operator is in alpha stage. There is work in progress for:
   - [ ] Tests
     - [ ] Operator platforms
       - [X] Minikube
-      - [ ] GKE
+      - [X] GKE
       - [ ] AWS
-      - [ ] OKD
+      - [X] OKD
     - [ ] Moodle unit test
     - [ ] Deployment
     - [ ] Performance
 - [ ] Operator life cycle manager
 
 ## Install
+Check out the [sample CR](config/samples/m4e_v1alpha1_m4e.yaml). Follow the next steps to first install the M4e Operator:
 ```bash
 # install the operator
 make deploy
@@ -37,9 +38,9 @@ make deploy
 # add a M4e object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
 kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml
 ```
-More instructions could be found in the [Ansible Operator Tutorial](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/)
 
 ## Uninstall
+Follow the next steps to uninstall it.
 ```bash
 # delete the M4e object
 # CAUTION with data loss

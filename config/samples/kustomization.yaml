@@ -2,6 +2,5 @@
 resources:
 - m4e_v1alpha1_m4e.yaml
 # patches:
-# - path: gke_patch.yaml
-# - path: oc_patch.yaml
+# - path: patch/gke/https_lb.yaml # patch to use GKE Ingress for HTTP(S) Load Balancing
 #+kubebuilder:scaffold:manifestskustomizesamples
