@@ -37,6 +37,12 @@ make deploy
 
 # add a M4e object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
 kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml
+
+# follow/check M4e operator logs
+kubectl logs -l control-plane=controller-manager -c manager  -f
+
+# follow sample CR status
+kubectl get M4e m4e-sample -o yaml -w
 ```
 
 ## Uninstall
