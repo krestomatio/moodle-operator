@@ -1,3 +1,4 @@
+# Patch to use GKE Ingress for HTTP(S) Load Balancing
 apiVersion: m4e.krestomat.io/v1alpha1
 kind: M4e
 metadata:
