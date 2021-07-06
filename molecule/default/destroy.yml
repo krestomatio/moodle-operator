@@ -9,6 +9,14 @@
   tasks:
     - import_tasks: kustomize-prepare.yml
 
+    - name: Remove the m4e.krestomat.io/v1alpha1.M4e
+      when: lookup('k8s', api_version='apiextensions.k8s.io/v1', kind='CustomResourceDefinition', resource_name='m4es.m4e.krestomat.io')
+      k8s:
+        state: absent
+        namespace: '{{ namespace }}'
+        definition: "{{ lookup('template', '/'.join([samples_dir, cr_file])) | from_yaml }}"
+        wait: true
+
     - import_tasks: kustomize.yml
       vars:
         state: absent

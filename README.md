@@ -39,7 +39,7 @@ make deploy
 kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml
 
 # follow/check M4e operator logs
-kubectl logs -l control-plane=controller-manager -c manager  -f
+kubectl -n m4e-operator-system logs -l control-plane=controller-manager -c manager  -f
 
 # follow sample CR status
 kubectl get M4e m4e-sample -o yaml -w
