@@ -64,7 +64,7 @@ GIT_ADD_FILES ?= Makefile
 CHANGELOG_FILE ?= CHANGELOG.md
 
 # krestomatio ansible collection
-COLLECTION_VERSION ?= v0.0.11
+COLLECTION_VERSION ?= 0.0.11
 
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "preview,fast,stable")
@@ -166,10 +166,10 @@ collection-build: ## Build krestomatio collection from path or git to file
 ifeq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
 	cp -rp ~/.ansible/collections/ansible_collections/krestomatio/k8s /tmp/ansible-collection-k8s-$(COLLECTION_VERSION)
 else
-	curl -L https://github.com/krestomatio/ansible-collection-k8s/archive/$(COLLECTION_VERSION).tar.gz | tar xzf - -C /tmp/
+	curl -L https://github.com/krestomatio/ansible-collection-k8s/archive/v$(COLLECTION_VERSION).tar.gz | tar xzf - -C /tmp/
 endif
 	ansible-galaxy collection build --force /tmp/ansible-collection-k8s-$(COLLECTION_VERSION)
-	mv krestomatio-k8s-*.tar.gz krestomatio-k8s-$(COLLECTION_VERSION).tar.gz
+	test -f krestomatio-k8s-$(COLLECTION_VERSION).tar.gz || mv krestomatio-k8s-*.tar.gz krestomatio-k8s-$(COLLECTION_VERSION).tar.gz
 ifneq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
 	mkdir -p $${HOME}/.ansible/collections/ansible_collections/krestomatio/
 	cp -rp /tmp/ansible-collection-k8s-$(COLLECTION_VERSION) ~/.ansible/collections/ansible_collections/krestomatio/k8s
