@@ -6,11 +6,15 @@ spec:
     context: "k8s"
     always_run: false
     optional: false
+    trigger: (?m)^/test( all| k8s),?(s+|$)
+    rerun_command: /test k8s
     source: "pullrequest.yaml"
   - name: lint
     context: "lint"
     always_run: true
     optional: false
+    trigger: (?m)^/test( all| lint),?(s+|$)
+    rerun_command: /test lint
     source: "pullrequest.yaml"
   postsubmits:
   - name: release
