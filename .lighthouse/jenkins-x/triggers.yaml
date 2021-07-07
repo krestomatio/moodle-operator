@@ -4,7 +4,7 @@ spec:
   presubmits:
   - name: k8s
     context: "k8s"
-    always_run: false
+    always_run: true
     optional: false
     trigger: (?m)^/test( all| k8s),?(s+|$)
     rerun_command: /test k8s
