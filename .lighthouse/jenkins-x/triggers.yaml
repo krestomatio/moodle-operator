@@ -6,7 +6,7 @@ spec:
     context: "k8s"
     always_run: false
     require_run: true
-    trigger: (?m)^/test( all| k8s),?(s+|$)
+    trigger: (?m)^/test( all| group| k8s),?(s+|$)
     rerun_command: /test k8s
     source: "pullrequest.yaml"
   - name: lint
