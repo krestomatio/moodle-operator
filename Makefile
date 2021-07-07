@@ -293,6 +293,7 @@ catalog-push: ## Push a catalog image.
 # CI tasks
 ## start if not SKIP_PIPELINE
 ifeq ($(origin SKIP_PIPELINE),undefined)
+
 ##@ Pullrequest
 
 .PHONY: lint
