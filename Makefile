@@ -64,7 +64,7 @@ GIT_ADD_FILES ?= Makefile
 CHANGELOG_FILE ?= CHANGELOG.md
 
 # krestomatio ansible collection
-COLLECTION_BRANCH ?= 0.0.10
+COLLECTION_BRANCH ?= 0.0.11
 
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "preview,fast,stable")
