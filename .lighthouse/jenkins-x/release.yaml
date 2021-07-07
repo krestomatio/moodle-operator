@@ -36,6 +36,12 @@ spec:
               - release
               command:
               - make
+            - image: quay.io/krestomatio/ansible-operator-ci
+              name: promote
+              args:
+              - promote
+              command:
+              - make
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s

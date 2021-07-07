@@ -114,6 +114,41 @@ all: collection-build image-build
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
+.PHONY: git
+git: ## Git add, commit, tag and push
+	git add $(GIT_ADD_FILES)
+	git commit -m "chore(release): $(VERSION)" -m "[$(SKIP_MSG)]"
+	git tag v$(VERSION)
+	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
+
+.PHONY: molecule
+molecule: ## Test with molecule
+	molecule $(MOLECULE_SEQUENCE) -s $(MOLECULE_SCENARIO)
+
+.PHONY: skopeo-copy
+skopeo-copy: ## Copy images using skopeo
+	# full version
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(VERSION)
+	# major + minor
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
+	# major
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
+
+##@ JX
+
+.PHONY: jx-changelog
+jx-changelog: ## Generate changelog file using jx
+ifeq (0, $(shell test -d  "charts/$(REPO_NAME)"; echo $$?))
+	sed -i "s/^version:.*/version: $(VERSION)/" charts/$(REPO_NAME)/Chart.yaml
+	sed -i "s/tag:.*/tag: $(VERSION)/" charts/$(REPO_NAME)/values.yaml
+	sed -i "s@repository:.*@repository: $(IMG_NAME)@" charts/$(REPO_NAME)/values.yaml
+	git add charts/
+else
+	echo no charts
+endif
+	jx changelog create --verbose --version=$(VERSION) --rev=$(CHANGELOG_FROM) --output-markdown=$(CHANGELOG_FILE) --update-release=false
+	git add $(CHANGELOG_FILE)
+
 ##@ Build
 
 run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kube/config
@@ -255,80 +290,55 @@ catalog-build: opm ## Build a catalog image.
 catalog-push: ## Push a catalog image.
 	$(MAKE) image-push IMG=$(CATALOG_IMG)
 
-# CI
+# CI tasks
+## start if not SKIP_PIPELINE
 ifeq ($(origin SKIP_PIPELINE),undefined)
-## Pullrequest pipeline
-.PHONY: pr
-pr: IMG = $(BUILD_IMG_NAME):$(BUILD_VERSION)
-pr: collection-build image-build image-push molecule
+##@ Pullrequest
 
-### lint
 .PHONY: lint
 lint: MOLECULE_SEQUENCE = lint
-lint: molecule
+lint: molecule ## Run lint tasks
 
-### check
-.PHONY: check
-check: MOLECULE_SEQUENCE = check
-check: pr
-
-### test k8s
 .PHONY: k8s
-k8s: pr
+k8s: pr ## Run k8s tasks
 
-### Test with molecule
-.PHONY: molecule
-molecule:
-	molecule $(MOLECULE_SEQUENCE) -s $(MOLECULE_SCENARIO)
+.PHONY: pr
+pr: IMG = $(BUILD_IMG_NAME):$(BUILD_VERSION)
+pr: collection-build image-build image-push molecule ## Run pr tasks
 
-## Release pipeline
-.PHONY: release
-release: promote git
+##@ Release
 
-### Changelog using jx
 .PHONY: changelog
-changelog:
-ifeq (0, $(shell test -d  "charts/$(REPO_NAME)"; echo $$?))
-	sed -i "s/^version:.*/version: $(VERSION)/" charts/$(REPO_NAME)/Chart.yaml
-	sed -i "s/tag:.*/tag: $(VERSION)/" charts/$(REPO_NAME)/values.yaml
-	sed -i "s@repository:.*@repository: $(IMG_NAME)@" charts/$(REPO_NAME)/values.yaml
-	git add charts/
-else
-	echo no charts
-endif
-	jx changelog create --verbose --version=$(VERSION) --rev=$(CHANGELOG_FROM) --output-markdown=$(CHANGELOG_FILE) --update-release=false
-	git add $(CHANGELOG_FILE)
+changelog: jx-changelog ## Generate changelog
 
-### Release pipeline
-.PHONY: git
-git:
-	git add $(GIT_ADD_FILES)
-	git commit -m "chore(release): $(VERSION)" -m "[$(SKIP_MSG)]"
-	git tag v$(VERSION)
-	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
+.PHONY: release
+release: skopeo-copy ## Run release tasks
 
-### copy image using skopeo
 .PHONY: promote
-promote:
-	# full version
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(VERSION)
-	# major + minor
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
-	# major
-	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
+promote: git ## Promote release
+
+## else if not SKIP_PIPELINE
 else
 $(info SKIP_PIPELINE set:)
-## pr
+## Pull request
 pr:
 	$(info skipping pr...)
 
 lint:
 	$(info skipping lint...)
 
-## release
+k8s:
+	$(info skipping k8s...)
+
+## Release
 changelog:
 	$(info skipping changelog...)
 
 release:
 	$(info skipping release...)
+
+promote:
+	$(info skipping promote...)
+
+## end if not SKIP_PIPELINE
 endif
