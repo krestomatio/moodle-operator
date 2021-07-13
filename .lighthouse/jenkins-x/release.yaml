@@ -13,6 +13,8 @@ spec:
           stepTemplate:
             name: ''
             env:
+              - name: HOME
+                value: /tekton/home
               - name: VERSION_MAKEFILE
                 value: "true"
               - name: PROJECT_TIMESTAMP
@@ -23,7 +25,7 @@ spec:
                 memory: 512Mi
             workingDir: /workspace/source
           steps:
-            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@1a6580e62be0986d18dbb1c42327231ccc378e7c
+            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@25de7882a54f869732075eb46b04203ada8926c5
             - image: gcr.io/jenkinsxio/jx-changelog:0.0.33
               name: changelog
               args:
