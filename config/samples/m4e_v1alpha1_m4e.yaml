@@ -3,10 +3,52 @@ kind: M4e
 metadata:
   name: m4e-sample
 spec:
+  ## Moodle new instance
+  # moodle_new_instance: true
   moodle_new_instance_fullname: Demo site
   moodle_new_instance_shortname: demo
   moodle_new_instance_summary: A demo site
   moodle_new_instance_adminuser: admin
+  ## Admin credentials. MUST CHANGED
   moodle_new_instance_adminpass: secret
   moodle_new_instance_adminmail: admin@example.com
   moodle_new_instance_agree_license: true
+
+  ## Moodle config.php
+  # moodle_config_additional_cfg:
+  #   property_name_one: "one"
+  #   property_name_two: 2
+  # moodle_config_additional_block: |
+  #   $CFG->property_name_one = 'value';
+  #   $CFG->property_name_two = 2;
+
+  ## Whether updates are handle by the operator or manually. Default is manual
+  # moodle_update: false
+
+  ## Moodle host and protocol. Default is not tls (http)
+  # fqdn: "m4e.krestomat.io"
+  # expose_tls: false
+
+  ## Moodledata storage
+  # moodle_pvc_moodledata_size: 1Gi
+  # moodle_pvc_moodledata_storage_access_modes: ReadWriteMany
+  # moodle_pvc_moodledata_storage_class_name: false
+
+  ## Number of replicas
+  # moodle_size: 1
+  # nginx_size: 1
+
+  ## Container images
+  # moodle_image: quay.io/krestomatio/moodle_web
+  # nginx_image: quay.io/krestomatio/moodle_web
+  # postgres_image: quay.io/krestomatio/postgres
+
+  ## Database storage
+  # postgres_pvc_data_size: 1Gi
+  # postgres_pvc_data_storage_access_modes: ReadWriteOnce
+  # postgres_pvc_data_storage_class_name: false
+
+  ## Database credentials. MUST CHANGED
+  # database_name: moodle
+  database_user: user
+  database_password: secret
