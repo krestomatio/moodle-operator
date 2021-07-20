@@ -10,4 +10,7 @@
 
 ### Chores
 
+* update: bump collection krestomatio.k8s 0.0.23 (krestomatio-cibot)
+* update sample (Job Céspedes Ortiz)
+* release: 0.3.0 (krestomatio-cibot)
 * update: bump collection krestomatio.k8s 0.0.22 (krestomatio-cibot)
