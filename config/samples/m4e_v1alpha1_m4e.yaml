@@ -22,8 +22,11 @@ spec:
   #   $CFG->property_name_one = 'value';
   #   $CFG->property_name_two = 2;
 
-  ## Whether updates are handle by the operator or manually. Default is manual
-  # moodle_update: false
+  ## Whether the operator do minor and major updates as soon as version code in images changes
+  ## Default is:
+  # moodle_update_minor: true
+  # moodle_update_major: false
+
 
   ## Moodle host and protocol. Default is not tls (http)
   # fqdn: "m4e.krestomat.io"
