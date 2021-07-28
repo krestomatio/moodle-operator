@@ -1,6 +1,7 @@
 apiVersion: m4e.krestomat.io/v1alpha1
 kind: M4e
 metadata:
+  # name should be less than 26 characters
   name: m4e-sample
 spec:
   ## Moodle new instance
@@ -34,7 +35,7 @@ spec:
 
   ## Moodledata storage
   # moodle_pvc_moodledata_size: 1Gi
-  # moodle_pvc_moodledata_storage_access_modes: ReadWriteMany
+  # moodle_pvc_moodledata_storage_access_mode: ReadWriteMany
   # moodle_pvc_moodledata_storage_class_name: false
 
   ## Number of replicas
@@ -48,7 +49,7 @@ spec:
 
   ## Database storage
   # postgres_pvc_data_size: 1Gi
-  # postgres_pvc_data_storage_access_modes: ReadWriteOnce
+  # postgres_pvc_data_storage_access_mode: ReadWriteOnce
   # postgres_pvc_data_storage_class_name: false
 
   ## Database credentials. MUST CHANGED
