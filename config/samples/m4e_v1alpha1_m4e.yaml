@@ -6,14 +6,16 @@ metadata:
 spec:
   ## Moodle new instance
   # moodle_new_instance: true
+  moodle_new_instance_agree_license: true
   moodle_new_instance_fullname: Demo site
   moodle_new_instance_shortname: demo
   moodle_new_instance_summary: A demo site
-  moodle_new_instance_adminuser: admin
   ## Admin credentials. MUST CHANGED
-  moodle_new_instance_adminpass: secret
+  moodle_new_instance_adminuser: admin
   moodle_new_instance_adminmail: admin@example.com
-  moodle_new_instance_agree_license: true
+
+  ## Set a new admin password with a BCrypt compatible hash. Example for 'changeme' hash as password:
+  moodle_new_adminpass_hash: $2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim
 
   ## Moodle config.php
   # moodle_config_additional_cfg:
