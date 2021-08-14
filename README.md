@@ -56,6 +56,14 @@ kubectl delete -f config/samples/m4e_v1alpha1_m4e.yaml
 make undeploy
 ```
 
+## Admin password
+To renew an admin's password, you can set a new value to `moodle_new_adminpass_hash` in M4e CR. Its value has to be a BCrypt compatible hash. You can generate one in the command line using python. For example, to generate a hash for the password 'changeme':
+```bash
+admin_pass=changeme
+python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rounds=10)).decode('ascii'))"
+```
+
+
 ## Want to contribute?
 * Use github issues to report bugs, send enhancement, new feature requests and questions
 * Join [our telegram group](https://t.me/m4e_operator)
