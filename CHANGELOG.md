@@ -7,5 +7,5 @@
 
 ### Chores
 
-* release: 0.3.6 (krestomatio-cibot)
-* update: bump collection krestomatio.k8s 0.0.28 (krestomatio-cibot)
+* update: bump collection krestomatio.k8s 0.0.29 (krestomatio-cibot)
+* release: 0.3.7 (krestomatio-cibot)
