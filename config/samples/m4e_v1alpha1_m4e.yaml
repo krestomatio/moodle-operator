@@ -53,8 +53,3 @@ spec:
   # postgres_pvc_data_size: 1Gi
   # postgres_pvc_data_storage_access_mode: ReadWriteOnce
   # postgres_pvc_data_storage_class_name: false
-
-  ## Database credentials. MUST CHANGED
-  # database_name: moodle
-  database_user: user
-  database_password: secret
