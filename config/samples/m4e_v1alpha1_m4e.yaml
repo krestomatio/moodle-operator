@@ -31,9 +31,9 @@ spec:
   # moodle_update_major: false
 
 
-  ## Moodle host and protocol. Default is not tls (http)
-  # fqdn: "m4e.krestomat.io"
-  # expose_tls: false
+  ## Moodle host and protocol. Default is 'http'
+  # moodle_host: "m4e.krestomat.io"
+  # moodle_protocol: http
 
   ## Moodledata storage
   # moodle_pvc_moodledata_size: 1Gi
