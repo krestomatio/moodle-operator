@@ -11,7 +11,7 @@ IMG_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
 IMG ?= $(IMG_NAME):$(VERSION)
 
 # requirements
-OPERATOR_VERSION ?= 1.7.2
+OPERATOR_VERSION ?= 1.11.0
 KUSTOMIZE_VERSION ?= 4.1.3
 OPM_VERSION ?= 1.15.1
 
@@ -67,10 +67,10 @@ CHANGELOG_FILE ?= CHANGELOG.md
 COLLECTION_VERSION ?= 0.0.38
 
 # CHANNELS define the bundle channels used in the bundle.
-# Add a new line here if you would like to change its default config. (E.g CHANNELS = "preview,fast,stable")
+# Add a new line here if you would like to change its default config. (E.g CHANNELS = "candidate,fast,stable")
 # To re-generate a bundle for other specific channels without changing the standard setup, you can:
-# - use the CHANNELS as arg of the bundle target (e.g make bundle CHANNELS=preview,fast,stable)
-# - use environment variables to overwrite this value (e.g export CHANNELS="preview,fast,stable")
+# - use the CHANNELS as arg of the bundle target (e.g make bundle CHANNELS=candidate,fast,stable)
+# - use environment variables to overwrite this value (e.g export CHANNELS="candidate,fast,stable")
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
 endif
@@ -152,7 +152,7 @@ endif
 ##@ Build
 
 run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kube/config
-	$(ANSIBLE_OPERATOR) run
+	ANSIBLE_ROLES_PATH="$(ANSIBLE_ROLES_PATH):$(shell pwd)/roles" $(ANSIBLE_OPERATOR) run
 
 image-build: ## Build container image with the manager.
 	$(CONTAINER_BUILDER) build . -t $(IMG) \
