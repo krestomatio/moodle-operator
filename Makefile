@@ -2,7 +2,7 @@ CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= m4e-operator
 REPO_NAME ?= m4e-operator
 REPO_OWNER ?= krestomatio
-VERSION ?= 0.3.13
+VERSION ?= 0.3.14
 
 # Image
 REGISTRY ?= quay.io
