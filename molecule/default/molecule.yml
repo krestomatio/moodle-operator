@@ -22,6 +22,7 @@ provisioner:
       all:
         namespace: "{{ lookup('env', 'TEST_OPERATOR_NAMESPACE') | default('m4e-test',true) }}"
         nameprefix: "{{ lookup('env', 'TEST_OPERATOR_NAMEPREFIX') | default('m4e-',true) }}"
+        omit_crds_deletion: "{{ lookup('env', 'TEST_OPERATOR_OMIT_CRDS_DELETION') | default(false,true) | bool }}"
     host_vars:
       localhost:
         ansible_python_interpreter: '{{ ansible_playbook_python }}'

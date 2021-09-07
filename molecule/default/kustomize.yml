@@ -9,6 +9,7 @@
   changed_when: false
 
 - name: Set resources to {{ state }}
+  when: "not (omit_crds_deletion and state == 'absent' and item.kind == 'CustomResourceDefinition')"
   k8s:
     definition: '{{ item }}'
     state: '{{ state }}'
