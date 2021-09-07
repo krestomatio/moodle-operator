@@ -20,3 +20,8 @@
   command: '{{ kustomize }} edit set namespace {{ namespace }}'
   args:
     chdir: '{{ config_dir }}/testing'
+
+- name: Set testing nameprefix
+  command: '{{ kustomize }} edit set nameprefix {{ nameprefix }}'
+  args:
+    chdir: '{{ config_dir }}/testing'

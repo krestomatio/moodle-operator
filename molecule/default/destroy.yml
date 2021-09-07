@@ -35,3 +35,8 @@
       command: '{{ kustomize }} edit set namespace m4e-test'
       args:
         chdir: '{{ config_dir }}/testing'
+
+    - name: Unset testing nameprefix
+      command: '{{ kustomize }} edit set nameprefix m4e-'
+      args:
+        chdir: '{{ config_dir }}/testing'
