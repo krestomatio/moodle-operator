@@ -26,7 +26,7 @@ spec:
             workingDir: /workspace/source
           steps:
             - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@25de7882a54f869732075eb46b04203ada8926c5
-            - image: gcr.io/jenkinsxio/jx-changelog:0.0.33
+            - image: ghcr.io/jenkins-x/jx-changelog:0.0.47
               name: changelog
               args:
               - changelog
