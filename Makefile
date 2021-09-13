@@ -55,6 +55,7 @@ export OPERATOR_IMAGE ?= $(IMG)
 export TEST_OPERATOR_NAMEPREFIX ?= $(OPERATOR_SHORTNAME)-$(JOB_NAME)-$(PULL_NUMBER)-$(BUILD_ID)-
 export TEST_OPERATOR_NAMESPACE ?= $(OPERATOR_SHORTNAME)-$(JOB_NAME)-$(PULL_NUMBER)-$(BUILD_ID)-ns
 export TEST_OPERATOR_OMIT_CRDS_DELETION ?= true
+export TEST_OPERATOR_SHORTNAME ?= $(OPERATOR_SHORTNAME)
 
 # skopeo
 SKOPEO_SRC_TLS ?= True
@@ -67,7 +68,8 @@ GIT_ADD_FILES ?= Makefile
 CHANGELOG_FILE ?= CHANGELOG.md
 
 # krestomatio ansible collection
-COLLECTION_VERSION ?= 0.0.38
+COLLECTION_VERSION ?= 0.0.39
+export COLLECTION_FILE ?= krestomatio-k8s-$(COLLECTION_VERSION).tar.gz
 
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "candidate,fast,stable")
@@ -159,7 +161,7 @@ run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kub
 
 image-build: ## Build container image with the manager.
 	$(CONTAINER_BUILDER) build . -t $(IMG) \
-		--build-arg COLLECTION_FILE=krestomatio-k8s-$(COLLECTION_VERSION).tar.gz
+		--build-arg COLLECTION_FILE=$(COLLECTION_FILE)
 
 image-push: ## Push container image with the manager.
 	$(CONTAINER_BUILDER) push $(IMG)
@@ -172,7 +174,7 @@ else
 	curl -L https://github.com/krestomatio/ansible-collection-k8s/archive/v$(COLLECTION_VERSION).tar.gz | tar xzf - -C /tmp/
 endif
 	ansible-galaxy collection build --force /tmp/ansible-collection-k8s-$(COLLECTION_VERSION)
-	test -f krestomatio-k8s-$(COLLECTION_VERSION).tar.gz || mv krestomatio-k8s-*.tar.gz krestomatio-k8s-$(COLLECTION_VERSION).tar.gz
+	test -f $(COLLECTION_FILE) || mv krestomatio-k8s-*.tar.gz $(COLLECTION_FILE)
 ifneq (0, $(shell test -d  "$${HOME}/.ansible/collections/ansible_collections/krestomatio/k8s"; echo $$?))
 	mkdir -p $${HOME}/.ansible/collections/ansible_collections/krestomatio/
 	cp -rp /tmp/ansible-collection-k8s-$(COLLECTION_VERSION) ~/.ansible/collections/ansible_collections/krestomatio/k8s

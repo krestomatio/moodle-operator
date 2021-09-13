@@ -1,0 +1,3 @@
+[submodule "molecule"]
+	path = molecule
+	url = https://github.com/krestomatio/operator-sdk-molecule.git
