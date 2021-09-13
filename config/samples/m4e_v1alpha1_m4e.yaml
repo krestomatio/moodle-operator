@@ -37,7 +37,7 @@ spec:
 
   ## Moodledata storage
   # moodle_pvc_moodledata_size: 1Gi
-  # moodle_pvc_moodledata_storage_access_mode: ReadWriteMany
+  # moodle_pvc_moodledata_storage_access_mode: ReadWriteOnce
   # moodle_pvc_moodledata_storage_class_name: false
 
   ## Number of replicas
