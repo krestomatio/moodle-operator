@@ -13,4 +13,4 @@ configMapGenerator:
 images:
 - name: controller
   newName: quay.io/krestomatio/m4e-operator
-  newTag: 0.3.17
+  newTag: 0.3.18
