@@ -1,6 +1,7 @@
 ## Append samples you want in your CSV to this file as resources ##
-resources:
-- m4e_v1alpha1_m4e.yaml
 # patches:
 # - path: patch/gke/https_lb.yaml # patch to use GKE Ingress for HTTP(S) Load Balancing
+resources:
+- m4e_v1alpha1_m4e.yaml
+- m4e_v1alpha1_routine.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
