@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: false
   collections:
-    - community.kubernetes
+    - kubernetes.core
     - operator_sdk.util
   tasks:
     - name: import moodle status
@@ -14,7 +14,7 @@
   hosts: "{{ pods_ready_group }}:&{{ moodle_container_group }}"
   gather_facts: false
   collections:
-    - community.kubernetes
+    - kubernetes.core
     - operator_sdk.util
   tasks:
     - name: import moodle routine
