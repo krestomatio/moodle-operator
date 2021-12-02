@@ -3,7 +3,18 @@
 - version: v1alpha1
   group: m4e.krestomat.io
   kind: M4e
-  watchDependentResources: false
+  blacklist:
+    # issue seing other secrets as dependant resources and triggering reconciliation
+    - group: ""
+      version: v1
+      kind: Secret
+    # issue detecting cronjob update and triggering reconciliation
+    - group: batch
+      version: v1beta1
+      kind: CronJob
+    - group: batch
+      version: v1
+      kind: CronJob
   finalizer:
     name: m4e.krestomat.io/finalizer
     vars:
