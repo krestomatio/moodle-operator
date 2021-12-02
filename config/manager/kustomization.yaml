@@ -13,6 +13,7 @@ configMapGenerator:
 
 patchesStrategicMerge:
 - enable_turbo_patch.yaml
+# - profile_tasks_patch.yaml
 
 images:
 - name: controller
