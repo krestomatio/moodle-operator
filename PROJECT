@@ -13,4 +13,11 @@ resources:
   group: m4e
   kind: M4e
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: krestomat.io
+  group: m4e
+  kind: Routine
+  version: v1alpha1
 version: "3"

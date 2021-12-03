@@ -103,4 +103,21 @@ rules:
       - patch
       - update
       - watch
+  ##
+  ## Rules for m4e.krestomat.io/v1alpha1, Kind: Routine
+  ##
+  - apiGroups:
+      - m4e.krestomat.io
+    resources:
+      - routines
+      - routines/status
+      - routines/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
 #+kubebuilder:scaffold:rules
