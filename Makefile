@@ -1,6 +1,6 @@
 OPERATOR_SHORTNAME ?= m4e
 VERSION ?= 0.3.46
-COLLECTION_VERSION ?= 0.0.75
+COLLECTION_VERSION ?= 0.0.76
 OPERATOR_TYPE ?= ansible
 
 include hack/mk/main.mk
