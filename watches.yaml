@@ -27,6 +27,13 @@
 
 - version: v1alpha1
   group: m4e.krestomat.io
+  kind: Nginx
+  playbook: playbooks/nginx.yml
+  vars:
+    cr_kind: Nginx
+
+- version: v1alpha1
+  group: m4e.krestomat.io
   kind: Routine
   watchDependentResources: false
   reconcilePeriod: 1m

@@ -1,0 +1,9 @@
+- name: nginx for moodle resources
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - kubernetes.core
+    - operator_sdk.util
+  tasks:
+    - import_role:
+        name: krestomatio.k8s.v1alpha1.m4e.nginx

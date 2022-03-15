@@ -4,4 +4,5 @@
 resources:
 - bases/m4e.krestomat.io_m4es.yaml
 - bases/m4e.krestomat.io_routines.yaml
+- bases/m4e.krestomat.io_nginxes.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
