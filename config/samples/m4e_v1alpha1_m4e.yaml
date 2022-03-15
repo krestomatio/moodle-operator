@@ -17,6 +17,17 @@ spec:
   ## Set a new admin password with a BCrypt compatible hash. Example for 'changeme' hash as password:
   moodle_new_adminpass_hash: $2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim
 
+  ## Database connection and credentials
+  ### Either use postgres-operator or set respective variables here.
+  ### If using Krestomatio postgres-operator, just set 'moodle_postgres_meta_name'
+  ### to  a Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample':
+  # moodle_postgres_meta_name: postgres-sample
+  ### Otherwise, set the following variables for db connection:
+  # moodle_config_dbhost: db_host
+  # moodle_config_dbname: db_name
+  # moodle_config_dbuser: db_user
+  # moodle_config_dbpass: db_pass
+
   ## Moodle config.php
   # moodle_config_additional_cfg:
   #   property_name_one: "one"

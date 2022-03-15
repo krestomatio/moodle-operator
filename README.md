@@ -29,11 +29,23 @@ The operator is in alpha stage. There is work in progress for:
     - [ ] Performance
 - [ ] Operator life cycle manager
 
+## Prerequisites
+- A **database instance and its credentials**. One can be created using [Postgres-operator](https://github.com/krestomatio/postgres-operator). If so, just set `moodle_postgres_meta_name` to the Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample': `moodle_postgres_meta_name: postgres-sample`. Otherwise, you need to get a db instance and provide the following variables for a db connection:
+  - `moodle_config_dbhost`
+  - `moodle_config_dbname`
+  - `moodle_config_dbuser`
+  - `moodle_config_dbpass`
+
 ## Install
 Check out the [sample CR](config/samples/m4e_v1alpha1_m4e.yaml). Follow the next steps to first install the M4e Operator:
 ```bash
+# meet the prerequisites
+
 # install the operator
 make deploy
+
+# modify config/samples/m4e_v1alpha1_m4e.yaml to include db connection and credentials
+nano config/samples/m4e_v1alpha1_m4e.yaml
 
 # add a M4e object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
 kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml

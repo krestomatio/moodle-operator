@@ -1,0 +1,7 @@
+# Install postgres operator
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: m4e-test
+namePrefix: m4e-
+resources:
+- github.com/krestomatio/postgres-operator/config/default?ref=main

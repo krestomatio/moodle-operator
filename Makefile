@@ -1,6 +1,7 @@
-OPERATOR_SHORTNAME ?= m4e
+PROJECT_SHORTNAME ?= m4e
 VERSION ?= 0.3.48
 COLLECTION_VERSION ?= 0.0.77
 OPERATOR_TYPE ?= ansible
+PROJECT_TYPE ?= $(OPERATOR_TYPE)-operator
 
 include hack/mk/main.mk
