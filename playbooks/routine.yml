@@ -19,5 +19,4 @@
   tasks:
     - name: import moodle routine
       import_role:
-        name: krestomatio.k8s.v1alpha1.m4e.m4e
-        tasks_from: routine.yml
+        name: krestomatio.k8s.v1alpha1.m4e.routine
