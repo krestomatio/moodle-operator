@@ -1,4 +1,4 @@
-- name: nginx for moodle resources
+- name: nginx resources for m4e
   hosts: localhost
   gather_facts: false
   collections:

@@ -1,17 +1,17 @@
-- name: moodle status
+- name: moodle routine status
   hosts: localhost
   gather_facts: false
   collections:
     - kubernetes.core
     - operator_sdk.util
   tasks:
-    - name: import moodle status
+    - name: import moodle routine status
       import_role:
-        name: krestomatio.k8s.v1alpha1.m4e.m4e
+        name: krestomatio.k8s.v1alpha1.m4e.routine
         tasks_from: status.yml
 
 - name: moodle routine
-  hosts: "{{ pods_ready_group }}:&{{ moodle_container_group }}"
+  hosts: "{{ routine_pods_ready_group }}:&{{ routine_moodle_container_group }}"
   gather_facts: false
   collections:
     - kubernetes.core

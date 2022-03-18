@@ -1,4 +1,4 @@
-- name: k8s resources
+- name: m4e resources
   hosts: localhost
   gather_facts: false
   collections:
