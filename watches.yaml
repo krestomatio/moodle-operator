@@ -34,6 +34,13 @@
 
 - version: v1alpha1
   group: m4e.krestomat.io
+  kind: Phpfpm
+  playbook: playbooks/php_fpm.yml
+  vars:
+    cr_kind: Phpfpm
+
+- version: v1alpha1
+  group: m4e.krestomat.io
   kind: Routine
   watchDependentResources: false
   reconcilePeriod: 1m
