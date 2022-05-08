@@ -38,6 +38,20 @@ spec:
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object
+    additionalPrinterColumns:
+    - description: Age of the resource
+      jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    - description: Site status such as Unknown/SettingUp/Ready/Failed/Terminating
+        etc
+      jsonPath: .status.state
+      name: STATUS
+      type: string
+    - description: Time of latest transition
+      jsonPath: .status.conditions[?(@.type=="Failure")].lastTransitionTime
+      name: SINCE
+      type: date
     served: true
     storage: true
     subresources:
