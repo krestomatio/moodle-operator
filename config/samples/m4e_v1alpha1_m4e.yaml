@@ -18,11 +18,8 @@ spec:
   moodle_new_adminpass_hash: $2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim
 
   ## Database connection and credentials
-  ### Either use postgres-operator or set respective variables here.
-  ### If using Krestomatio postgres-operator, just set 'moodle_postgres_meta_name'
-  ### to  a Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample':
-  # moodle_postgres_meta_name: postgres-sample
-  ### Otherwise, set the following variables for db connection:
+  ### You could use postgres-operator (see below for section "Other integrations" about how to do so).
+  ### Otherwise, set the following variables for a connection to a running db instance:
   # moodle_config_dbhost: db_host
   # moodle_config_dbname: db_name
   # moodle_config_dbuser: db_user
@@ -40,7 +37,6 @@ spec:
   ## Default is:
   # moodle_update_minor: true
   # moodle_update_major: false
-
 
   ## Moodle host and protocol. Default is 'http'
   # moodle_host: "m4e.krestomat.io"
@@ -64,3 +60,19 @@ spec:
   # postgres_pvc_data_size: 1Gi
   # postgres_pvc_data_storage_access_mode: ReadWriteOnce
   # postgres_pvc_data_storage_class_name: false
+
+  ## Other integrations
+  ### postgres-operator:
+  ### If using Krestomatio postgres-operator, just set 'moodle_postgres_meta_name'
+  ### to  a Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample':
+  # moodle_postgres_meta_name: postgres-sample
+
+  ### keydb-operator:
+  ### If using Krestomatio keydb-operator for redis cache, just set 'moodle_keydb_meta_name'
+  ### to a Keydb CR name created in the same namespace. Credentials and respective moodle config will be done using that variable. Ex, for a Keydb CR named 'keydb-sample':
+  # moodle_keydb_meta_name: 'keydb-sample'
+
+  ### nfs-operator:
+  ### If using Krestomatio nfs-operator for moodledata shared storage, just set 'moodle_nfs_meta_name'
+  ### to a Server CR name created in the same namespace. An inline csi nfs volume source will be use from that variable, instead of creating a PVC:
+  # moodle_nfs_meta_name: 'server-sample'
