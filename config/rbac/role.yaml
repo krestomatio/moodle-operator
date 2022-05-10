@@ -29,9 +29,6 @@ rules:
       - apps
     resources:
       - deployments
-      - daemonsets
-      - replicasets
-      - statefulsets
     verbs:
       - create
       - delete
