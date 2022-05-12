@@ -44,11 +44,11 @@ spec:
       name: AGE
       type: date
     - description: Routine failure status
-      jsonPath: .status.conditions[?(@.type=="Failure")].status
+      jsonPath: .status.conditions[?(@.type=='Failure')].status
       name: FAILURE
       type: string
     - description: Time of latest transition
-      jsonPath: .status.conditions[?(@.type=="Failure")].lastTransitionTime
+      jsonPath: .status.conditions[?(@.type=='Failure')].lastTransitionTime
       name: SINCE
       type: date
     served: true
