@@ -1,3 +1,5 @@
+### camelCase
+---
 apiVersion: m4e.krestomat.io/v1alpha1
 kind: M4e
 metadata:
@@ -5,74 +7,91 @@ metadata:
   name: m4e-sample
 spec:
   ## Moodle new instance
-  # moodle_new_instance: true
-  moodle_new_instance_agree_license: true
-  moodle_new_instance_fullname: Demo site
-  moodle_new_instance_shortname: demo
-  moodle_new_instance_summary: A demo site
+  # moodleNewInstance: true
+  moodleNewInstanceAgreeLicense: true
+  moodleNewInstanceFullname: Demo site
+  moodleNewInstanceShortname: demo
+  moodleNewInstanceSummary: A demo site
   ## Admin credentials. MUST CHANGED
-  moodle_new_instance_adminuser: admin
-  moodle_new_instance_adminmail: admin@example.com
+  moodleNewInstanceAdminuser: admin
+  moodleNewInstanceAdminmail: admin@example.com
 
   ## Set a new admin password with a BCrypt compatible hash. Example for 'changeme' hash as password:
-  moodle_new_adminpass_hash: $2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim
+  moodleNewAdminpassHash: $2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim
 
   ## Database connection and credentials
   ### You could use postgres-operator (see below for section "Other integrations" about how to do so).
   ### Otherwise, set the following variables for a connection to a running db instance:
-  # moodle_config_dbhost: db_host
-  # moodle_config_dbname: db_name
-  # moodle_config_dbuser: db_user
-  # moodle_config_dbpass: db_pass
+  # moodleConfigDbhost: dbHost
+  # moodleConfigDbname: dbName
+  # moodleConfigDbuser: dbUser
+  # moodleConfigDbpass: dbPass
 
   ## Moodle config.php
-  # moodle_config_additional_cfg:
+  # moodleConfigAdditionalCfg:
   #   property_name_one: "one"
   #   property_name_two: 2
-  # moodle_config_additional_block: |
+  # moodleConfigAdditionalBlock: |
   #   $CFG->property_name_one = 'value';
   #   $CFG->property_name_two = 2;
 
   ## Whether the operator do minor and major updates as soon as version code in images changes
   ## Default is:
-  # moodle_update_minor: true
-  # moodle_update_major: false
+  # moodleUpdateMinor: true
+  # moodleUpdateMajor: false
 
   ## Moodle host and protocol. Default is 'http'
-  # moodle_host: "m4e.krestomat.io"
-  # moodle_protocol: http
+  # moodleHost: "m4e.krestomat.io"
+  # moodleProtocol: http
 
   ## Moodledata storage
-  # moodle_pvc_moodledata_size: 1Gi
-  # moodle_pvc_moodledata_storage_access_mode: ReadWriteOnce
-  # moodle_pvc_moodledata_storage_class_name: false
+  # moodlePvcMoodledataSize: 1Gi
+  # moodlePvcMoodledataStorageAccessMode: ReadWriteOnce
+  # moodlePvcMoodledataStorageClassName: false
 
   ## Number of replicas
-  # moodle_size: 1
-  # nginx_size: 1
+  # moodleSize: 1
+  # nginxSize: 1
+
+  ## php conf
+  ### php.ini extra config
+  phpFpmPhpExtraIni: |-
+    upload_max_filesize = 10M
+    post_max_size = 10M
+  ### php-fpm extra conf
+  phpFpmExtraConfig: |-
+    [global]
+    log_level = debug
+    emergency_restart_threshold = 10
+    emergency_restart_interval = 1m
+    [www]
+    pm = static
+    pm.max_children = 20
+    security.limit_extensions = .php
+
+  ## nginx conf
+  ### nginx extra conf
+  nginxExtraConfig: |-
+    # This passes 404 pages to Moodle so they can be themed
+    error_page 404 /error/index.php;    error_page 403 =404 /error/index.php;
 
   ## Container images
-  # moodle_image: quay.io/krestomatio/moodle_web
-  # nginx_image: quay.io/krestomatio/moodle_web
-  # postgres_image: quay.io/krestomatio/postgres
-
-  ## Database storage
-  # postgres_pvc_data_size: 1Gi
-  # postgres_pvc_data_storage_access_mode: ReadWriteOnce
-  # postgres_pvc_data_storage_class_name: false
+  # moodleImage: quay.io/krestomatio/moodle_web
+  # nginxImage: quay.io/krestomatio/moodle_web
+  # phpFpmImage: quay.io/krestomatio/moodle_web
 
   ## Other integrations
   ### postgres-operator:
-  ### If using Krestomatio postgres-operator, just set 'moodle_postgres_meta_name'
+  ### If using Krestomatio postgres-operator, just set 'moodlePostgresMetaName'
   ### to  a Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample':
-  # moodle_postgres_meta_name: postgres-sample
+  # moodlePostgresMetaName: postgres-sample
 
   ### keydb-operator:
-  ### If using Krestomatio keydb-operator for redis cache, just set 'moodle_keydb_meta_name'
+  ### If using Krestomatio keydb-operator for redis cache, just set 'moodleKeydbMetaName'
   ### to a Keydb CR name created in the same namespace. Credentials and respective moodle config will be done using that variable. Ex, for a Keydb CR named 'keydb-sample':
-  # moodle_keydb_meta_name: 'keydb-sample'
+  # moodleKeydbMetaName: 'keydb-sample'
 
   ### nfs-operator:
-  ### If using Krestomatio nfs-operator for moodledata shared storage, just set 'moodle_nfs_meta_name'
+  ### If using Krestomatio nfs-operator for moodledata shared storage, just set 'moodleNfsMetaName'
   ### to a Server CR name created in the same namespace. An inline csi nfs volume source will be use from that variable, instead of creating a PVC:
-  # moodle_nfs_meta_name: 'server-sample'
+  # moodleNfsMetaName: 'server-sample'
