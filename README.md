@@ -2,8 +2,6 @@ This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Ope
 
 ## TODO
 The operator is in alpha stage. There is work in progress for:
-- [X] Publish container images
-- [X] Centos replacement: Centos Stream or waiting for Rocky Linux? Centos Stream was chosen
 - [ ] Publish operator
 - [ ] Documentation
   - [ ] Code of conduct
@@ -14,10 +12,6 @@ The operator is in alpha stage. There is work in progress for:
   - [ ] Installation
   - [ ] Operation
 - [ ] CI
-  - [X] Templates
-    - [X] Issues
-    - [X] Pullrequest
-  - [X] Pipelines
   - [ ] Tests
     - [ ] Operator platforms
       - [X] Minikube
