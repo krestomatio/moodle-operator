@@ -76,9 +76,9 @@ spec:
     error_page 404 /error/index.php;    error_page 403 =404 /error/index.php;
 
   ## Container images
-  # moodleImage: quay.io/krestomatio/moodle_web
-  # nginxImage: quay.io/krestomatio/moodle_web
-  # phpFpmImage: quay.io/krestomatio/moodle_web
+  # moodleImage: quay.io/krestomatio/moodle
+  # nginxImage: quay.io/krestomatio/moodle
+  # phpFpmImage: quay.io/krestomatio/moodle
 
   ## Other integrations
   ### postgres-operator:
