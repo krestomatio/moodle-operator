@@ -7,7 +7,7 @@ collections:
   - name: cloud.common
     version: "2.1.1"
   - name: operator_sdk.util
-    version: "0.2.0"
+    version: "0.4.0"
   # Git is available until ansible >= 2.10
   # - name: https://github.com/krestomatio/ansible-collection-k8s
   #   type: git
