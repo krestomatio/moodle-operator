@@ -2,14 +2,13 @@ This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Ope
 
 ## TODO
 The operator is in alpha stage. There is work in progress for:
-- [ ] Publish operator
 - [ ] Documentation
   - [ ] Code of conduct
   - [ ] Conventions
   - [ ] Architecture
   - [ ] Containers
   - [ ] Features
-  - [ ] Installation
+  - [x] Installation
   - [ ] Operation
 - [ ] CI
   - [ ] Tests
@@ -21,7 +20,8 @@ The operator is in alpha stage. There is work in progress for:
     - [ ] Moodle unit test
     - [ ] Deployment
     - [ ] Performance
-- [ ] Operator life cycle manager
+- [ ] Publish operator
+  - [ ] Operator life cycle manager
 
 ## Prerequisites
 - A **database instance and its credentials**. One can be created using [Postgres-operator](https://github.com/krestomatio/postgres-operator). If so, just set `moodle_postgres_meta_name` to the Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample': `moodle_postgres_meta_name: postgres-sample`. Otherwise, you need to get a db instance and provide the following variables for a db connection:
@@ -69,6 +69,8 @@ admin_pass=changeme
 python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rounds=10)).decode('ascii'))"
 ```
 
+## Custom image
+An immutable image approach is followed. See [how the image is built and how to customize it](https://github.com/krestomatio/container_builder/tree/master/moodle#custom-builds), when needed.
 
 ## Want to contribute?
 * Use github issues to report bugs, send enhancement, new feature requests and questions
