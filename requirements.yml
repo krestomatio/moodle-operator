@@ -5,7 +5,7 @@ collections:
   - name: kubernetes.core
     version: "2.2.0"
   - name: cloud.common
-    version: "2.0.4"
+    version: "2.1.1"
   - name: operator_sdk.util
     version: "0.2.0"
   # Git is available until ansible >= 2.10
