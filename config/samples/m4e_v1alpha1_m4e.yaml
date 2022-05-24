@@ -45,9 +45,22 @@ spec:
   # moodleProtocol: http
 
   ## Moodledata storage
-  # moodlePvcMoodledataSize: 1Gi
-  # moodlePvcMoodledataStorageAccessMode: ReadWriteOnce
-  # moodlePvcMoodledataStorageClassName: false
+  # moodlePvcDataStorageAccessMode: ReadWriteOnce
+  # moodlePvcDataStorageClassName: standard
+
+  ### Autoexpansion: if storage available is less than 20% or 'moodlePvcAutoexpansionIncrementGib', adjust PVC storage size according to 'moodlePvcAutoexpansionIncrementGib' and 'moodlePvcAutoexpansionCapGib':
+  # * Kubernetes cluster and PVC must support expansion of volumes
+  # * In older cluster versions, pods require restart when autoexpanding if Kubernetes feature gate
+  #   'ExpandInUsePersistentVolumes' is false. See:
+  #   https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+  ### Enable autoexpansion
+  # moodlePvcAutoexpansion: true
+  ### Every time autoexpansion is required, increment 5 GiB
+  # moodlePvcAutoexpansionIncrementGib: 5
+  ### But no more than 25 GiB
+  # moodlePvcAutoexpansionCapGib: 25
+  ## Fixed size, overwrites autoexpansion
+  # moodlePvcDataSize: 1Gi
 
   ## Number of replicas
   # moodleSize: 1
