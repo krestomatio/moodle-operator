@@ -20,9 +20,12 @@ spec:
               - name: PROJECT_TIMESTAMP
                 value: midnight
             resources:
-              requests:
+              limits:
                 cpu: 400m
                 memory: 512Mi
+              requests:
+                cpu: 50m
+                memory: 32Mi
             workingDir: /workspace/source
           steps:
             - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@11f0934b9c616f56580f9fc6b71ce48ffc2ffe29
@@ -38,6 +41,10 @@ spec:
               - release
               command:
               - make
+              resources:
+                requests:
+                  cpu: 0.1
+                  memory: 128Mi
             - image: quay.io/krestomatio/ansible-operator-ci
               name: promote
               args:
