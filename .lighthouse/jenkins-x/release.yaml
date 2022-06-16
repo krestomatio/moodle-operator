@@ -28,7 +28,7 @@ spec:
                 memory: 32Mi
             workingDir: /workspace/source
           steps:
-            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@11f0934b9c616f56580f9fc6b71ce48ffc2ffe29
+            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@7280afe8d12539b956237d6351059eda3e2118a7
             - image: ghcr.io/jenkins-x/jx-changelog:0.0.47
               name: changelog
               resources: {}
