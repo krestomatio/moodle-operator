@@ -28,31 +28,14 @@ spec:
                 memory: 32Mi
             workingDir: /workspace/source
           steps:
-            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@11f0934b9c616f56580f9fc6b71ce48ffc2ffe29
+            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@e3ba7ae6c62bc3ee26c073920d5662556a21f51f
             - image: quay.io/krestomatio/ansible-operator-ci
-              name: pr
+              name: lint
               args:
-                - $(JOB_NAME)
+                - lint
               command:
                 - make
-              securityContext:
-                privileged: true
-              resources:
-                requests:
-                  cpu: 0.1
-                  memory: 128Mi
-              volumeMounts:
-                - name: libcontainers
-                  mountPath: /var/lib/containers
-                - name: shared
-                  mountPath: /shared
-          volumes:
-            - name: libcontainers
-              persistentVolumeClaim:
-                claimName: libcontainers-0sd6j3-pvc
-            - name: shared
-              persistentVolumeClaim:
-                claimName: shared-0sd6j3-pvc
+              resources: {}
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
