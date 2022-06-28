@@ -42,34 +42,12 @@ spec:
                 - multiarch-image
               command:
                 - make
-              securityContext:
-                privileged: true
-              resources:
-                requests:
-                  cpu: 0.1
-                  memory: 128Mi
-              volumeMounts:
-                - name: libdocker
-                  mountPath: /var/lib/docker
-                - name: shared
-                  mountPath: /shared
             - image: quay.io/krestomatio/ansible-operator-ci
               name: molecule
               args:
                 - molecule
               command:
                 - make
-              resources:
-                requests:
-                  cpu: 0.1
-                  memory: 128Mi
-          volumes:
-            - name: libdocker
-              persistentVolumeClaim:
-                claimName: libdocker-0sd6j3-pvc
-            - name: shared
-              persistentVolumeClaim:
-                claimName: shared-0sd6j3-pvc
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
