@@ -5,3 +5,20 @@ namespace: m4e-test
 namePrefix: m4e-
 resources:
 - github.com/krestomatio/postgres-operator/config/default?ref=main
+patchesStrategicMerge:
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: controller-manager
+    namespace: system
+  spec:
+    template:
+      spec:
+        containers:
+          - name: manager
+            env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
