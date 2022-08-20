@@ -5,6 +5,14 @@ namespace: m4e-test
 namePrefix: m4e-
 resources:
 - github.com/krestomatio/postgres-operator/config/default?ref=main
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/name
+      value: postgres-operator-controller-manager-metrics
+  target:
+    kind: Service
+    name: postgres-operator-controller-manager-metrics-service
 patchesStrategicMerge:
 - |-
   apiVersion: apps/v1
