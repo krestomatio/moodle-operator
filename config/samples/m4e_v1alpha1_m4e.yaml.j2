@@ -1,6 +1,0 @@
-# {{ ansible_managed  }}
-{% include 'm4e_v1alpha1_m4e.yaml' %}
-
-{% if m4e_sample_extra_spec is defined and m4e_sample_extra_spec %}
-  {{ m4e_sample_extra_spec | indent(width=2) }}
-{% endif %}

@@ -31,32 +31,32 @@ The operator is in alpha stage. There is work in progress for:
   - `moodle_config_dbpass`
 
 ## Install
-Check out the [sample CR](config/samples/m4e_v1alpha1_m4e.yaml). Follow the next steps to first install the M4e Operator:
+Check out the [sample CR](config/samples/m4e_v1alpha1_moodle.yaml). Follow the next steps to first install the Moodle Operator:
 ```bash
 # meet the prerequisites
 
 # install the operator
 make deploy
 
-# modify config/samples/m4e_v1alpha1_m4e.yaml to include db connection and credentials
-nano config/samples/m4e_v1alpha1_m4e.yaml
+# modify config/samples/m4e_v1alpha1_moodle.yaml to include db connection and credentials
+nano config/samples/m4e_v1alpha1_moodle.yaml
 
-# add a M4e object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
-kubectl apply -f config/samples/m4e_v1alpha1_m4e.yaml
+# add a Moodle object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
+kubectl apply -f config/samples/m4e_v1alpha1_moodle.yaml
 
-# follow/check M4e operator logs
-kubectl -n m4e-operator-system logs -l control-plane=controller-manager -c manager  -f
+# follow/check Moodle operator logs
+kubectl -n moodle-operator-system logs -l control-plane=controller-manager -c manager  -f
 
 # follow sample CR status
-kubectl get M4e m4e-sample -o yaml -w
+kubectl get Moodle moodle-sample -o yaml -w
 ```
 
 ## Uninstall
 Follow the next steps to uninstall it.
 ```bash
-# delete the M4e object
+# delete the Moodle object
 # CAUTION with data loss
-kubectl delete -f config/samples/m4e_v1alpha1_m4e.yaml
+kubectl delete -f config/samples/m4e_v1alpha1_moodle.yaml
 
 # uninstall the operator
 make undeploy
@@ -67,10 +67,10 @@ An immutable image approach is followed. See [how the image is built and how to 
 
 ## Want to contribute?
 * Use github issues to report bugs, send enhancement, new feature requests and questions
-* Join [our telegram group](https://t.me/m4e_operator)
+* Join [our telegram group](https://t.me/moodle_operator)
 
 ## Admin password
-To renew an admin's password, you can set a new value to `moodle_new_adminpass_hash` in M4e CR. Its value has to be a BCrypt compatible hash. You can generate one in the command line using python. For example, to generate a hash for the password 'changeme':
+To renew an admin's password, you can set a new value to `moodle_new_adminpass_hash` in Moodle CR. Its value has to be a BCrypt compatible hash. You can generate one in the command line using python. For example, to generate a hash for the password 'changeme':
 ```bash
 admin_pass=changeme
 python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rounds=10)).decode('ascii'))"

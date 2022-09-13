@@ -17,5 +17,5 @@ patchesStrategicMerge:
 
 images:
 - name: controller
-  newName: quay.io/krestomatio/m4e-operator
+  newName: quay.io/krestomatio/moodle-operator
   newTag: 0.4.18

@@ -1,20 +1,24 @@
-# permissions for end users to view m4es.
+# permissions for end users to edit moodles.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: m4e-viewer-role
+  name: moodle-editor-role
 rules:
 - apiGroups:
   - m4e.krestomat.io
   resources:
-  - m4es
+  - moodles
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
   - watch
 - apiGroups:
   - m4e.krestomat.io
   resources:
-  - m4es/status
+  - moodles/status
   verbs:
   - get

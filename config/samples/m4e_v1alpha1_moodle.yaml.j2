@@ -1,0 +1,6 @@
+# {{ ansible_managed  }}
+{% include 'm4e_v1alpha1_moodle.yaml' %}
+
+{% if moodle_sample_extra_spec is defined and moodle_sample_extra_spec %}
+  {{ moodle_sample_extra_spec | indent(width=2) }}
+{% endif %}

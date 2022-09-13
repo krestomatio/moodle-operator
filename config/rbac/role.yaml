@@ -38,14 +38,14 @@ rules:
       - update
       - watch
   ##
-  ## Rules for m4e.krestomat.io/v1alpha1, Kind: M4e
+  ## Rules for m4e.krestomat.io/v1alpha1, Kind: Moodle
   ##
   - apiGroups:
       - m4e.krestomat.io
     resources:
-      - m4es
-      - m4es/status
-      - m4es/finalizers
+      - moodles
+      - moodles/status
+      - moodles/finalizers
     verbs:
       - create
       - delete

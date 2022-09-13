@@ -27,7 +27,7 @@ spec:
       containers:
       - args:
         - --leader-elect
-        - --leader-election-id=m4e-operator
+        - --leader-election-id=moodle-operator
         image: controller:latest
         name: manager
         env:

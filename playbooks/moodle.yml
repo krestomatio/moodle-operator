@@ -1,4 +1,4 @@
-- name: m4e resources
+- name: moodle resources
   hosts: localhost
   gather_facts: false
   collections:
@@ -6,4 +6,4 @@
     - operator_sdk.util
   tasks:
     - import_role:
-        name: krestomatio.k8s.v1alpha1.m4e.m4e
+        name: krestomatio.k8s.v1alpha1.m4e.moodle

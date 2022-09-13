@@ -2,7 +2,7 @@
 # Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
   group: m4e.krestomat.io
-  kind: M4e
+  kind: Moodle
   blacklist:
     # issue seing other secrets as dependant resources and triggering reconciliation (at least in logs)
     - group: ""
@@ -23,7 +23,7 @@
     name: m4e.krestomat.io/finalizer
     vars:
       cr_state: absent
-  playbook: playbooks/m4e.yml
+  playbook: playbooks/moodle.yml
 
 - version: v1alpha1
   group: m4e.krestomat.io

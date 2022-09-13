@@ -2,7 +2,7 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/m4e.krestomat.io_m4es.yaml
+- bases/m4e.krestomat.io_moodles.yaml
 - bases/m4e.krestomat.io_routines.yaml
 - bases/m4e.krestomat.io_nginxes.yaml
 - bases/m4e.krestomat.io_phpfpms.yaml

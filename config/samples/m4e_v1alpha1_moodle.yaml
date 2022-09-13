@@ -1,10 +1,10 @@
 ### camelCase
 ---
 apiVersion: m4e.krestomat.io/v1alpha1
-kind: M4e
+kind: Moodle
 metadata:
   # name should be less than 26 characters
-  name: m4e-sample
+  name: moodle-sample
 spec:
   ## Moodle new instance
   # moodleNewInstance: true

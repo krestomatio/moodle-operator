@@ -1,8 +1,8 @@
 # Patch to use GKE Ingress for HTTP(S) Load Balancing
 apiVersion: m4e.krestomat.io/v1alpha1
-kind: M4e
+kind: Moodle
 metadata:
-  name: m4e-sample
+  name: moodle-sample
 spec:
   nginx_service_type: NodePort
   nginx_ingress_wait_for_ip: true
