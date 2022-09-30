@@ -1,28 +1,5 @@
 This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Operator SDK.
 
-## TODO
-The operator is in alpha stage. There is work in progress for:
-- [ ] Documentation
-  - [ ] Code of conduct
-  - [ ] Conventions
-  - [ ] Architecture
-  - [ ] Containers
-  - [ ] Features
-  - [x] Installation
-  - [ ] Operation
-- [ ] CI
-  - [ ] Tests
-    - [ ] Operator platforms
-      - [X] Minikube
-      - [X] GKE
-      - [ ] AWS
-      - [X] OKD
-    - [ ] Moodle unit test
-    - [ ] Deployment
-    - [ ] Performance
-- [ ] Publish operator
-  - [ ] Operator life cycle manager
-
 ## Prerequisites
 - A **database instance and its credentials**. One can be created using [Postgres-operator](https://github.com/krestomatio/postgres-operator). If so, just set `moodle_postgres_meta_name` to the Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample': `moodle_postgres_meta_name: postgres-sample`. Otherwise, you need to get a db instance and provide the following variables for a db connection:
   - `moodle_config_dbhost`
@@ -31,6 +8,8 @@ The operator is in alpha stage. There is work in progress for:
   - `moodle_config_dbpass`
 
 ## Install
+> The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
+
 Check out the [sample CR](config/samples/m4e_v1alpha1_moodle.yaml). Follow the next steps to first install the Moodle Operator:
 ```bash
 # meet the prerequisites
