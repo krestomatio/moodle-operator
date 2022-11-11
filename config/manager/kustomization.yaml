@@ -11,11 +11,10 @@ configMapGenerator:
   - controller_manager_config.yaml
   name: manager-config
 
-patchesStrategicMerge:
 # - enable_turbo_patch.yaml
 # - profile_tasks_patch.yaml
 
 images:
 - name: controller
   newName: quay.io/krestomatio/moodle-operator
-  newTag: 0.5.4
+  newTag: 0.5.5
