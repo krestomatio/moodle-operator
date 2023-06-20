@@ -2,5 +2,4 @@
 
 ### Chores
 
-* update: bump collection krestomatio.k8s 0.3.14 (krestomatio-cibot)
-* update makefiles submodule (Job Céspedes Ortiz)
+* update: bump collection krestomatio.k8s 0.3.15 (krestomatio-cibot)
