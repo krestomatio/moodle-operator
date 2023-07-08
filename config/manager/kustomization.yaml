@@ -17,4 +17,4 @@ configMapGenerator:
 images:
 - name: controller
   newName: quay.io/krestomatio/moodle-operator
-  newTag: 0.5.12
+  newTag: 0.5.13
