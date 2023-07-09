@@ -38,6 +38,23 @@ rules:
       - update
       - watch
   ##
+  ## Rules for pod autoscalers
+  ##
+  - apiGroups:
+      - autoscaling
+      - autoscaling.k8s.io
+    resources:
+      - HorizontalPodAutoscaler
+      - VerticalPodAutoscaler
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
   ## Rules for m4e.krestomat.io/v1alpha1, Kind: Moodle
   ##
   - apiGroups:
