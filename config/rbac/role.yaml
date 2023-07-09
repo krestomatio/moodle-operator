@@ -44,8 +44,8 @@ rules:
       - autoscaling
       - autoscaling.k8s.io
     resources:
-      - HorizontalPodAutoscaler
-      - VerticalPodAutoscaler
+      - horizontalpodautoscalers
+      - verticalpodautoscalers
     verbs:
       - create
       - delete
