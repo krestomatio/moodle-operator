@@ -19,6 +19,12 @@
     - group: batch
       version: v1
       kind: CronJob
+    - group: "autoscaling"
+      version: v2
+      kind: HorizontalPodAutoscaler
+    - group: "autoscaling.k8s.io"
+      version: v1
+      kind: VerticalPodAutoscaler
   finalizer:
     name: m4e.krestomat.io/finalizer
     vars:
