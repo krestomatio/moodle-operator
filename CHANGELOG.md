@@ -1,5 +1,5 @@
 ## Changes
 
-### Chores
+### Bug Fixes
 
-* update: bump collection krestomatio.k8s 0.3.50 (krestomatio-cibot)
+* omit vpa and hpa from triggering reconciles (Job Céspedes Ortiz)
