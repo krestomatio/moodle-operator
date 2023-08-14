@@ -37,6 +37,14 @@
   kind: Nginx
   playbook: playbooks/nginx.yml
   blacklist:
+    # issue seing other secrets as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: Secret
+    # issue seing other config maps as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: ConfigMap
     # omit vpa and hpa triggering reconcile
     - group: "autoscaling"
       version: v2
@@ -52,6 +60,14 @@
   kind: Phpfpm
   playbook: playbooks/php_fpm.yml
   blacklist:
+    # issue seing other secrets as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: Secret
+    # issue seing other config maps as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: ConfigMap
     # omit vpa and hpa triggering reconcile
     - group: "autoscaling"
       version: v2
