@@ -19,6 +19,7 @@
     - group: batch
       version: v1
       kind: CronJob
+    # omit vpa and hpa triggering reconcile
     - group: "autoscaling"
       version: v2
       kind: HorizontalPodAutoscaler
@@ -35,6 +36,14 @@
   group: m4e.krestomat.io
   kind: Nginx
   playbook: playbooks/nginx.yml
+  blacklist:
+    # omit vpa and hpa triggering reconcile
+    - group: "autoscaling"
+      version: v2
+      kind: HorizontalPodAutoscaler
+    - group: "autoscaling.k8s.io"
+      version: v1
+      kind: VerticalPodAutoscaler
   vars:
     cr_kind: Nginx
 
@@ -42,6 +51,14 @@
   group: m4e.krestomat.io
   kind: Phpfpm
   playbook: playbooks/php_fpm.yml
+  blacklist:
+    # omit vpa and hpa triggering reconcile
+    - group: "autoscaling"
+      version: v2
+      kind: HorizontalPodAutoscaler
+    - group: "autoscaling.k8s.io"
+      version: v1
+      kind: VerticalPodAutoscaler
   vars:
     cr_kind: Phpfpm
 
