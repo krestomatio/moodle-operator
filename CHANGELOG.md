@@ -1,5 +1,5 @@
 ## Changes
 
-### Bug Fixes
+### Chores
 
-* omit configmaps and secrets from triggering reconciles (Job Céspedes Ortiz)
+* update: bump collection krestomatio.k8s 0.3.53 (krestomatio-cibot)
