@@ -8,7 +8,7 @@ This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Ope
   - `moodle_config_dbpass`
 
 ## Install
-> The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
+> The Kubernetes Operator in this project is a **Beta** version. **Use at your own risk**
 
 Check out the [sample CR](config/samples/m4e_v1alpha1_moodle.yaml). Follow the next steps to first install the Moodle Operator:
 ```bash
@@ -55,10 +55,5 @@ admin_pass=changeme
 python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rounds=10)).decode('ascii'))"
 ```
 
-## Suggested readings when developing operators
-
-[Operator SDK](https://docs.openshift.com/container-platform/4.2/operators/operator_sdk/osdk-ansible.html#osdk-building-ansible-operator_osdk-ansible)
-
-[O’Reilly: Kubernetes Operators ebook](https://www.redhat.com/es/resources/oreilly-kubernetes-operators-automation-ebook)
-
-[O’Reilly: Kubernetes Patterns ebook](https://www.redhat.com/es/resources/oreilly-kubernetes-patterns-cloud-native-apps)
+## [About Krestomatio](https://krestomatio.com/about)
+[Krestomatio is a managed service for Moodle™ e-learning platforms](https://krestomatio.com/). It allows you to have open-source instances managed by a service optimized for Moodle™, complete with an additional plugin pack and customization options.
