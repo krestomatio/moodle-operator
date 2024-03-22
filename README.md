@@ -1,59 +1,9 @@
-This is a Moodle Operator for Kubernetes or OKD (Openshift). It uses Ansible Operator SDK.
+# Moodle Operator
 
-## Prerequisites
-- A **database instance and its credentials**. One can be created using [Postgres-operator](https://github.com/krestomatio/postgres-operator). If so, just set `moodle_postgres_meta_name` to the Postgres CR name created in the same namespace. Credentials will be fetch with that variable. Ex, for a Postgres CR named 'postgres-sample': `moodle_postgres_meta_name: postgres-sample`. Otherwise, you need to get a db instance and provide the following variables for a db connection:
-  - `moodle_config_dbhost`
-  - `moodle_config_dbname`
-  - `moodle_config_dbuser`
-  - `moodle_config_dbpass`
+This operator simplifies Moodle deployments in Kubernetes by leveraging the Ansible Operator SDK for automation.
 
-## Install
-> The Kubernetes Operator in this project is a **Beta** version. **Use at your own risk**
+**Documentation:** [Moodle Operator Docs](https://krestomatio.com/docs/moodle-operator) provides guidance and further installation instructions.
 
-Check out the [sample CR](config/samples/m4e_v1alpha1_moodle.yaml). Follow the next steps to first install the Moodle Operator:
-```bash
-# meet the prerequisites
+**Krestomatio Managed Service:**
 
-# install the operator
-make deploy
-
-# modify config/samples/m4e_v1alpha1_moodle.yaml to include db connection and credentials
-nano config/samples/m4e_v1alpha1_moodle.yaml
-
-# add a Moodle object to instance a default moodle. The default image is inmutable. Extra plugins will be lost after pod replacement.
-kubectl apply -f config/samples/m4e_v1alpha1_moodle.yaml
-
-# follow/check Moodle operator logs
-kubectl -n moodle-operator-system logs -l control-plane=controller-manager -c manager  -f
-
-# follow sample CR status
-kubectl get Moodle moodle-sample -o yaml -w
-```
-
-## Uninstall
-Follow the next steps to uninstall it.
-```bash
-# delete the Moodle object
-# CAUTION with data loss
-kubectl delete -f config/samples/m4e_v1alpha1_moodle.yaml
-
-# uninstall the operator
-make undeploy
-```
-
-## Custom image
-An immutable image approach is followed. See [how the image is built and how to customize it](https://github.com/krestomatio/container_builder/tree/master/moodle#custom-builds), when needed.
-
-## Want to contribute?
-* Use github issues to report bugs, send enhancement, new feature requests and questions
-* Join [our telegram group](https://t.me/moodle_operator)
-
-## Admin password
-To renew an admin's password, you can set a new value to `moodle_new_adminpass_hash` in Moodle CR. Its value has to be a BCrypt compatible hash. You can generate one in the command line using python. For example, to generate a hash for the password 'changeme':
-```bash
-admin_pass=changeme
-python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rounds=10)).decode('ascii'))"
-```
-
-## [About Krestomatio](https://krestomatio.com/about)
-[Krestomatio is a managed service for Moodle™ e-learning platforms](https://krestomatio.com/). It allows you to have open-source instances managed by a service optimized for Moodle™, complete with an additional plugin pack and customization options.
+This project is used by Krestomatio, a service offering managed Moodle™ e-learning platform. Visit the [Krestomatio: Managed E-learning Platforms](https://krestomatio.com) to learn more.
