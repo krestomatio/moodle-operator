@@ -6,6 +6,12 @@
     docs_path: "{{ playbook_dir }}/../docs/"
     readme_path: "{{ docs_path }}/README.md"
   tasks:
+    - name: create docs folder
+      file:
+        path: "{{ docs_path }}"
+        state: directory
+        mode: '0755'
+
     - name: generate docs main readme
       template:
         src: README.md.j2
