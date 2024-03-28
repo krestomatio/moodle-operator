@@ -2,4 +2,4 @@
 
 ### Documentation
 
-* update README (Job Céspedes Ortiz)
+* fix readme (Job Céspedes Ortiz)
