@@ -22,24 +22,26 @@ For deploying and managing Moodle instances on Kubernetes. The operator leverage
 
 **Important Note:** This Moodle Operator is currently in **Beta** stage. Proceed with caution in production deployments.
 
-1. **Review Sample Configuration:** Examine the sample Moodle CR configuration file located at `config/samples/m4e_v1alpha1_moodle.yaml`. This file defines the desired state for your Moodle instance.
-
-2. **Install Operator:**
+1. **Install Operator:**
 ```bash
 # Ensure prerequisites are met
 kubectl apply -k https://github.com/krestomatio/moodle-operator/config/default?ref=v{{ operator_version }}
 ```
 
-3. **Configure Moodle Instance:**
-- Modify the `config/samples/m4e_v1alpha1_moodle.yaml` file to reflect your specific database connection details and any additional configuration options.
-
-4. **Deploy Moodle:**
-- Deploy a Moodle instance using the modified configuration:
+2. **Configure Moodle Instance:**
+- Download and modify [this sample](https://raw.githubusercontent.com/krestomatio/moodle-operator/v{{ operator_version }}/config/samples/m4e_v1alpha1_moodle.yaml) file to reflect your specific database connection details and any additional configuration options. This file defines the desired state for your Moodle instance.
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v{{ operator_version }}/config/samples/m4e_v1alpha1_moodle.yaml
+curl -sSL 'https://raw.githubusercontent.com/krestomatio/moodle-operator/v{{ operator_version }}/config/samples/m4e_v1alpha1_moodle.yaml' -o m4e_v1alpha1_moodle.yaml
+# modify m4e_v1alpha1_moodle.yaml
 ```
 
-5. **Monitor Logs:**
+3. **Deploy Moodle:**
+- Deploy a Moodle instance using the modified configuration:
+```bash
+kubectl apply -f m4e_v1alpha1_moodle.yaml
+```
+
+4. **Monitor Logs:**
 - Track the Moodle Operator logs for insights into the deployment process:
 ```bash
 kubectl -n moodle-operator-system logs -l control-plane=controller-manager -c manager -f
@@ -47,7 +49,7 @@ kubectl -n moodle-operator-system logs -l control-plane=controller-manager -c ma
 
 - Monitor the status of your deployed Moodle instance:
 ```bash
-kubectl get moodle moodle-sample -o yaml -w
+kubectl get -f m4e_v1alpha1_moodle.yaml -w
 ```
 
 **Moodle Admin Password Reset:**
@@ -63,7 +65,7 @@ python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rou
 1. **Delete Moodle Instance:**
 ```bash
 # Caution: This step leads to data loss. Proceed with caution.
-kubectl delete -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v{{ operator_version }}/config/samples/m4e_v1alpha1_moodle.yaml
+kubectl delete -f m4e_v1alpha1_moodle.yaml
 ```
 
 2. **Uninstall Operator:**
