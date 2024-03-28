@@ -27,7 +27,7 @@ For deploying and managing Moodle instances on Kubernetes. The operator leverage
 2. **Install Operator:**
 ```bash
 # Ensure prerequisites are met
-kubectl apply -k https://github.com/krestomatio/moodle-operator/config/default?ref=v0.6.0
+kubectl apply -k https://github.com/krestomatio/moodle-operator/config/default?ref=v0.6.1
 ```
 
 3. **Configure Moodle Instance:**
@@ -36,7 +36,7 @@ kubectl apply -k https://github.com/krestomatio/moodle-operator/config/default?r
 4. **Deploy Moodle:**
 - Deploy a Moodle instance using the modified configuration:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v0.6.0/config/samples/m4e_v1alpha1_moodle.yaml
+kubectl apply -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v0.6.1/config/samples/m4e_v1alpha1_moodle.yaml
 ```
 
 5. **Monitor Logs:**
@@ -63,12 +63,12 @@ python -c "import bcrypt; print(bcrypt.hashpw(b'$admin_pass', bcrypt.gensalt(rou
 1. **Delete Moodle Instance:**
 ```bash
 # Caution: This step leads to data loss. Proceed with caution.
-kubectl delete -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v0.6.0/config/samples/m4e_v1alpha1_moodle.yaml
+kubectl delete -f https://raw.githubusercontent.com/krestomatio/moodle-operator/v0.6.1/config/samples/m4e_v1alpha1_moodle.yaml
 ```
 
 2. **Uninstall Operator:**
 ```bash
-kubectl delete -k https://github.com/krestomatio/moodle-operator/config/default?ref=v0.6.0
+kubectl delete -k https://github.com/krestomatio/moodle-operator/config/default?ref=v0.6.1
 ```
 
 ## Configuration
