@@ -1,8 +1,8 @@
 # Install postgres operator
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: moodle-test
-namePrefix: moodle-
+namespace: moodle-pr-0-0-ns
+namePrefix: moodle-pr-0-0-
 resources:
 - github.com/krestomatio/postgres-operator/config/default?ref=main
 patches:
@@ -14,6 +14,14 @@ patches:
     kind: Service
     name: postgres-operator-controller-manager-metrics-service
 patchesStrategicMerge:
+- |-
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: system
+    labels:
+      app.kubernetes.io/created-by: moodle-operator
+      app.kubernetes.io/part-of: moodle-operator
 - |-
   apiVersion: apps/v1
   kind: Deployment

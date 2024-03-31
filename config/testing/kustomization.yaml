@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: moodle-test
-namePrefix: moodle-
+namespace: moodle-pr-0-0-ns
+namePrefix: moodle-pr-0-0-
 resources:
 - ../crd
 - ../rbac
@@ -14,7 +14,8 @@ patchesStrategicMerge:
 - ../manager/profile_tasks_patch.yaml
 images:
 - name: testing
-  newName: testing-operator
+  newName: harbor.krestomat.io/kio-builds/moodle-operator
+  newTag: 66cf5e1668e0851a76466792af9e334cad0e3166
 patches:
 - patch: |-
     - op: add
@@ -31,3 +32,4 @@ patches:
       value: --ansible-args='-D'
   target:
     kind: Deployment
+- path: pull_policy/Always.yaml
