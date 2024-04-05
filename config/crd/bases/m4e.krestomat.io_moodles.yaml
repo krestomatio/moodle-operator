@@ -10,6 +10,9 @@ spec:
     listKind: MoodleList
     plural: moodles
     singular: moodle
+    categories:
+    - lms
+    - m4e
   scope: Namespaced
   versions:
   - name: v1alpha1
