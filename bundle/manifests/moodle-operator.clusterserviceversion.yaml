@@ -1,0 +1,419 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "m4e.krestomat.io/v1alpha1",
+          "kind": "Moodle",
+          "metadata": {
+            "name": "moodle-sample"
+          },
+          "spec": {
+            "moodleNewAdminpassHash": "$2b$10$zbRuwPil1wNWQUkvlkchwe3/rOljJvoheydndKH1X0bdIIigy0xim",
+            "moodleNewInstanceAdminmail": "admin@example.com",
+            "moodleNewInstanceAdminuser": "admin",
+            "moodleNewInstanceAgreeLicense": true,
+            "moodleNewInstanceFullname": "Demo site",
+            "moodleNewInstanceShortname": "demo",
+            "moodleNewInstanceSummary": "A demo site",
+            "nginxExtraConfig": "# This passes 404 pages to Moodle so they can be themed\nerror_page 404 /error/index.php;    error_page 403 =404 /error/index.php;",
+            "phpFpmExtraConfig": "[global]\nlog_level = debug\nemergency_restart_threshold = 10\nemergency_restart_interval = 1m\n[www]\npm = static\npm.max_children = 20\nsecurity.limit_extensions = .php",
+            "phpFpmPhpExtraIni": "upload_max_filesize = 10M\npost_max_size = 10M"
+          }
+        }
+      ]
+    capabilities: Seamless Upgrades
+    categories: Application Runtime
+    createdAt: "2024-04-07T03:56:13Z"
+    description: |-
+      This operator simplifies Moodle deployments in Kubernetes by leveraging
+      the Ansible Operator SDK for automation
+    operators.operatorframework.io/builder: operator-sdk-v1.33.0
+    operators.operatorframework.io/project_layout: ansible.sdk.operatorframework.io/v1
+    repository: https://github.com/krestomatio/moodle-operator
+  labels:
+    operatorframework.io/arch.amd64: supported
+    operatorframework.io/arch.arm64: supported
+    operatorframework.io/os.linux: supported
+  name: moodle-operator.v0.6.4
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Moodle
+      name: moodles.m4e.krestomat.io
+      version: v1alpha1
+    - kind: Nginx
+      name: nginxes.m4e.krestomat.io
+      version: v1alpha1
+    - kind: Phpfpm
+      name: phpfpms.m4e.krestomat.io
+      version: v1alpha1
+    - kind: Routine
+      name: routines.m4e.krestomat.io
+      version: v1alpha1
+  description: |-
+    This operator simplifies Moodle deployments in Kubernetes by leveraging
+    the Ansible Operator SDK for automation
+  displayName: Moodle Operator
+  icon:
+  - base64data: |-
+      PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0g
+      R2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyNC4zLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNW
+      RyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4KCjxzdmcKICAgdmVyc2lvbj0iMS4xIgogICBpZD0i
+      TGF5ZXJfMSIKICAgeD0iMHB4IgogICB5PSIwcHgiCiAgIHZpZXdCb3g9IjAgMCA2MDAuMDAwMDEgMzAw
+      IgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICBzb2RpcG9kaTpkb2NuYW1lPSJsb2dvX2tyZXN0b21h
+      dGlvLTA2X3R3by1vbmUuc3ZnIgogICB3aWR0aD0iNjAwIgogICBoZWlnaHQ9IjMwMCIKICAgaW5rc2Nh
+      cGU6dmVyc2lvbj0iMS4zLjIgKDA5MWUyMGVmMGYsIDIwMjMtMTEtMjUpIgogICB4bWxuczppbmtzY2Fw
+      ZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29k
+      aXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgog
+      ICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3
+      dy53My5vcmcvMjAwMC9zdmciPjxkZWZzCiAgIGlkPSJkZWZzNiIgLz48c29kaXBvZGk6bmFtZWR2aWV3
+      CiAgIGlkPSJuYW1lZHZpZXc2IgogICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgIGJvcmRlcmNvbG9yPSIj
+      MDAwMDAwIgogICBib3JkZXJvcGFjaXR5PSIwLjI1IgogICBpbmtzY2FwZTpzaG93cGFnZXNoYWRvdz0i
+      MiIKICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2Fy
+      ZD0iMCIKICAgaW5rc2NhcGU6ZGVza2NvbG9yPSIjZDFkMWQxIgogICBpbmtzY2FwZTp6b29tPSIwLjgw
+      MTUwNTQ4IgogICBpbmtzY2FwZTpjeD0iMTAyLjMwNzQ3IgogICBpbmtzY2FwZTpjeT0iMzUxLjIxNDA3
+      IgogICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9
+      IjExMTUiCiAgIGlua3NjYXBlOndpbmRvdy14PSIwIgogICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAg
+      aW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIKICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0iTGF5
+      ZXJfMSIgLz4KPHN0eWxlCiAgIHR5cGU9InRleHQvY3NzIgogICBpZD0ic3R5bGUxIj4KCS5zdDB7Zmls
+      bDojMzczNjRFO30KCS5zdDF7Zm9udC1mYW1pbHk6J1RydWVub0JkJzt9Cgkuc3Qye2ZvbnQtc2l6ZToz
+      MC40MTEzcHg7fQoJLnN0M3tmaWxsOiNGMjY3MkM7fQoJLnN0NHtmb250LWZhbWlseTonVHJ1ZW5vUmcn
+      O30KCS5zdDV7Zm9udC1zaXplOjguOTQxM3B4O30KPC9zdHlsZT4KCjxnCiAgIGlkPSJnNyIKICAgdHJh
+      bnNmb3JtPSJtYXRyaXgoMi4xOTk5NzA0LDAsMCwyLjE5OTk3MDQsLTQzLjIxNDc5NiwtNjIuMTMwNTQ2
+      KSI+PHRleHQKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOS40NTc1LDEzNC4zOTE4KSIKICAgICBj
+      bGFzcz0ic3QwIHN0MSBzdDIiCiAgICAgaWQ9InRleHQxIj48dHNwYW4KICAgICAgIHN0eWxlPSJmb250
+      LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OjYwMDtmb250LXN0cmV0
+      Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5Ok1vbnRzZXJyYXQ7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlv
+      bjonTW9udHNlcnJhdCBTZW1pLUJvbGQnIgogICAgICAgaWQ9InRzcGFuNiI+S1JFU1RPTUFUSU88L3Rz
+      cGFuPjwvdGV4dD48ZwogICAgIGlkPSJnNiI+Cgk8ZwogICBpZD0iZzEiPgoJCTxwYXRoCiAgIGNsYXNz
+      PSJzdDMiCiAgIGQ9Im0gMTY5LjYyLDgxLjIzIDE3LjU5LDE4Ljc2IGMgMC42OCwwLjcyIDAuMTcsMS45
+      MSAtMC44MywxLjkxIGggLTEwLjg0IGMgLTAuMzEsMCAtMC42MSwtMC4xMyAtMC44MiwtMC4zNiBMIDE1
+      OS41Niw4NS40NyIKICAgaWQ9InBhdGgxIiAvPgoJPC9nPgoJPHBhdGgKICAgY2xhc3M9InN0MyIKICAg
+      ZD0ibSAxNjIuOTcsNTguNDcgLTcuMDUsNi43OSBjIC0wLjIyLDAuMjEgLTAuMzUsMC41MSAtMC4zNSww
+      LjgxIHYgMTQuNTkgYyAwLDAuOTkgMS4xNywxLjUgMS45LDAuODMgbCA3LjA1LC02LjQ4IGMgMC4yMywt
+      MC4yMSAwLjM3LC0wLjUyIDAuMzcsLTAuODMgdiAtMTQuOSBjIC0wLjAxLC0wLjk5IC0xLjIsLTEuNSAt
+      MS45MiwtMC44MSB6IgogICBpZD0icGF0aDIiIC8+Cgk8cGF0aAogICBjbGFzcz0ic3QzIgogICBkPSJt
+      IDE4Ni44LDczLjkyIC0yOS4zMywyNi4zNiBjIC0wLjczLDAuNjUgLTEuODksMC4xNCAtMS44OSwtMC44
+      NCB2IC05LjgyIGMgMCwtMC4zMiAwLjEzLC0wLjYyIDAuMzcsLTAuODQgbCAxOC4wOSwtMTYuNTQgYyAw
+      LjIxLC0wLjE5IDAuNDgsLTAuMyAwLjc2LC0wLjMgaCAxMS4yNCBjIDEuMDQsMC4wMSAxLjUzLDEuMjkg
+      MC43NiwxLjk4IHoiCiAgIGlkPSJwYXRoMyIgLz4KCTxnCiAgIGlkPSJnNCI+CgkJPHBhdGgKICAgY2xh
+      c3M9InN0MyIKICAgZD0ibSAxNDcuNjcsODUuNDcgLTE1LjE2LDE2LjA3IGMgLTAuMjEsMC4yMyAtMC41
+      MSwwLjM2IC0wLjgyLDAuMzYgaCAtMTAuODQgYyAtMC45OSwwIC0xLjUsLTEuMTggLTAuODMsLTEuOTEg
+      bCAxNy41OSwtMTguNzYiCiAgIGlkPSJwYXRoNCIgLz4KCTwvZz4KCTxwYXRoCiAgIGNsYXNzPSJzdDMi
+      CiAgIGQ9Im0gMTQ0LjI3LDU4LjQ3IDcuMDUsNi43OSBjIDAuMjIsMC4yMSAwLjM1LDAuNTEgMC4zNSww
+      LjgxIHYgMTQuNTkgYyAwLDAuOTkgLTEuMTcsMS41IC0xLjksMC44MyBsIC03LjA1LC02LjQ4IGMgLTAu
+      MjMsLTAuMjEgLTAuMzcsLTAuNTIgLTAuMzcsLTAuODMgdiAtMTQuOSBjIDAuMDEsLTAuOTkgMS4yMSwt
+      MS41IDEuOTIsLTAuODEgeiIKICAgaWQ9InBhdGg1IiAvPgoJPHBhdGgKICAgY2xhc3M9InN0MyIKICAg
+      ZD0ibSAxMjAuNDUsNzMuOTIgMjkuMzMsMjYuMzYgYyAwLjczLDAuNjUgMS44OSwwLjE0IDEuODksLTAu
+      ODQgdiAtOS44MiBjIDAsLTAuMzIgLTAuMTMsLTAuNjIgLTAuMzcsLTAuODQgTCAxMzMuMjEsNzIuMjQg
+      YyAtMC4yMSwtMC4xOSAtMC40OCwtMC4zIC0wLjc2LC0wLjMgSCAxMjEuMiBjIC0xLjA0LDAuMDEgLTEu
+      NTMsMS4yOSAtMC43NSwxLjk4IHoiCiAgIGlkPSJwYXRoNiIgLz4KPC9nPjwvZz4KPHRleHQKICAgY2xh
+      c3M9InN0MCBzdDQgc3Q1IgogICBpZD0idGV4dDYiCiAgIHg9IjcwLjU4MjAwMSIKICAgeT0iMTQ5LjYy
+      MzUiIC8+Cjwvc3ZnPgo=
+    mediatype: image/svg+xml
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          - pods
+          - pods/exec
+          - pods/log
+          - persistentvolumeclaims
+          - services
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - autoscaling
+          - autoscaling.k8s.io
+          resources:
+          - horizontalpodautoscalers
+          - verticalpodautoscalers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - m4e.krestomat.io
+          resources:
+          - moodles
+          - moodles/status
+          - moodles/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes
+          - routes/custom-host
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - ingresses
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - batch
+          resources:
+          - jobs
+          - cronjobs
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - m4e.krestomat.io
+          resources:
+          - routines
+          - routines/status
+          - routines/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - m4e.krestomat.io
+          resources:
+          - nginxes
+          - nginxes/status
+          - nginxes/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - m4e.krestomat.io
+          resources:
+          - phpfpms
+          - phpfpms/status
+          - phpfpms/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: moodle-operator-controller-manager
+      deployments:
+      - label:
+          app.kubernetes.io/component: manager
+          app.kubernetes.io/created-by: moodle-operator
+          app.kubernetes.io/instance: controller-manager
+          app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: deployment
+          app.kubernetes.io/part-of: moodle-operator
+          control-plane: controller-manager
+        name: moodle-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=0
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.1
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 5m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              - args:
+                - --health-probe-bind-address=:6789
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                - --leader-election-id=moodle-operator
+                env:
+                - name: ANSIBLE_GATHERING
+                  value: explicit
+                image: quay.io/krestomatio/moodle-operator:0.6.4
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 6789
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 6789
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: "2"
+                    memory: 4Gi
+                  requests:
+                    cpu: 25m
+                    memory: 50Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: moodle-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: moodle-operator-controller-manager
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - moodle
+  - nginx
+  - php-fpm
+  - ansible
+  links:
+  - name: Moodle Operator
+    url: https://krestomatio.com/docs/moodle-operator
+  maintainers:
+  - email: jobcespedes@krestomatio.com
+    name: Job Cespedes Ortiz
+  maturity: alpha
+  minKubeVersion: 1.26.0
+  provider:
+    name: Krestomatio
+    url: https://krestomatio.com
+  version: 0.6.4
