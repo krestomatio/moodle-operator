@@ -11,7 +11,7 @@
         tasks_from: status.yml
 
 - name: moodle routine
-  hosts: "{{ routine_pods_ready_group }}:&{{ routine_moodle_container_group }}"
+  hosts: "{{ routine_pods_ready_group | default('') }}:&{{ routine_moodle_container_group | default('') }}"
   gather_facts: false
   collections:
     - kubernetes.core

@@ -1,3 +1,5 @@
 warn_list:
-  - load-failure
-  - no-handler
+  - fqcn[keyword]
+  - fqcn[action-core]
+  - name[casing]
+  - syntax-check[specific]
