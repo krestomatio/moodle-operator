@@ -75,6 +75,16 @@ spec:
               cpu: 0.1
               memory: 128Mi
         - image: quay.io/krestomatio/ansible-operator-ci
+          name: bundling
+          args:
+          - bundling
+          command:
+          - make
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 128Mi
+        - image: quay.io/krestomatio/ansible-operator-ci
           name: promote
           resources: {}
           args:

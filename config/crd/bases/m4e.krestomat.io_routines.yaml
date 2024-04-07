@@ -10,6 +10,9 @@ spec:
     listKind: RoutineList
     plural: routines
     singular: routine
+    categories:
+    - lms
+    - m4e
   scope: Namespaced
   versions:
   - name: v1alpha1
