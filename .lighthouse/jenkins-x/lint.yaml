@@ -57,6 +57,13 @@ spec:
           workingDir: /workspace/source
         steps:
         - image: quay.io/krestomatio/ansible-operator-ci
+          name: collection
+          args:
+          - collection-build
+          command:
+          - make
+          resources: {}
+        - image: quay.io/krestomatio/ansible-operator-ci
           name: lint
           args:
           - lint
