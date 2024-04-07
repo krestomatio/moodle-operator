@@ -26,7 +26,7 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Application Runtime
-    createdAt: "2024-04-07T22:22:00Z"
+    createdAt: "2024-04-07T22:43:34Z"
     description: |-
       This operator simplifies Moodle deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
@@ -406,6 +406,12 @@ spec:
   links:
   - name: Moodle Operator
     url: https://krestomatio.com/docs/moodle-operator
+  - name: Moodle Image
+    url: https://krestomatio.com/docs/container-builder/moodle
+  - name: Moodle Repo
+    url: https://github.com/moodle/moodle
+  - name: Moodle Docs
+    url: https://docs.moodle.org/
   maintainers:
   - email: jobcespedes@krestomatio.com
     name: Job Cespedes Ortiz
