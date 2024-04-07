@@ -68,6 +68,7 @@ spec:
           name: release
           args:
           - release
+          - bundle
           command:
           - make
           resources:
@@ -75,9 +76,10 @@ spec:
               cpu: 0.1
               memory: 128Mi
         - image: quay.io/krestomatio/ansible-operator-ci
-          name: bundling
+          name: container-bundle
           args:
-          - bundling
+          - bundle-build
+          - bundle-push
           command:
           - make
           resources:
