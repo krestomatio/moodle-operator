@@ -7,8 +7,8 @@ spec:
     context: "image"
     always_run: false
     require_run: false
-    trigger: (?m)^/test( all| group| image),?(s+|$)
-    rerun_command: /test image
+    trigger: (?m)^/build image,?(s+|$)
+    rerun_command: /build image
     source: "image.yaml"
   - name: k8s
     max_concurrency: 1
