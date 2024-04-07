@@ -77,7 +77,6 @@ spec:
           name: release
           args:
           - release
-          - bundle
           command:
           - make
           resources:
@@ -87,10 +86,7 @@ spec:
         - image: quay.io/krestomatio/ansible-docker-ci
           name: bundle-catalog
           args:
-          - bundle-build
-          - bundle-push
-          - catalog-build
-          - catalog-push
+          - bundle-catalog
           command:
           - make
           resources:
