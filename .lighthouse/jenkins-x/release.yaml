@@ -75,7 +75,7 @@ spec:
             requests:
               cpu: 0.1
               memory: 128Mi
-        - image: quay.io/krestomatio/ansible-operator-ci
+        - image: quay.io/krestomatio/ansible-docker-ci
           name: container-bundle
           args:
           - bundle-build
