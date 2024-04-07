@@ -85,10 +85,12 @@ spec:
               cpu: 0.1
               memory: 128Mi
         - image: quay.io/krestomatio/ansible-docker-ci
-          name: container-bundle
+          name: bundle-catalog
           args:
           - bundle-build
           - bundle-push
+          - catalog-build
+          - catalog-push
           command:
           - make
           resources:
