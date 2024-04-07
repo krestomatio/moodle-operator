@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   creationTimestamp: null
-  name: release
+  name: image
 spec:
   workspaces:
   - name: shared-workspace
@@ -19,12 +19,12 @@ spec:
     workspaces:
     - name: shared-workspace
     tasks:
-    - name: git-clone
+    - name: git-clone-pr
       workspaces:
       - name: output
         workspace: shared-workspace
       taskRef:
-        name: git-clone
+        name: git-clone-pr
       params:
       - name: VERSION_MAKEFILE
         value: "true"
@@ -36,11 +36,10 @@ spec:
         workspace: shared-workspace
       taskRef:
         name: multiarch-builder-config
-    - name: release
+    - name: image
       resources: {}
-      timeout: "2h0m0s"
       runAfter:
-      - git-clone
+      - git-clone-pr
       - multiarch-builder-config
       workspaces:
       - name: source
@@ -50,6 +49,10 @@ spec:
         workspaces:
         - name: source
           mountPath: /workspace
+        volumes:
+        - name: shared
+          persistentVolumeClaim:
+            claimName: shared-0sd6j3-pvc
         stepTemplate:
           name: ''
           env:
@@ -65,46 +68,33 @@ spec:
               cpu: 50m
               memory: 32Mi
           workingDir: /workspace/source
+          volumeMounts:
+          - name: shared
+            mountPath: /shared
         steps:
-        - image: ghcr.io/jenkins-x/jx-changelog:0.0.47
-          name: changelog
-          resources: {}
-          args:
-          - changelog
-          command:
-          - make
         - image: quay.io/krestomatio/ansible-operator-ci
-          name: release
+          name: collection
           args:
-          - release
-          - bundle
+          - collection-build
           command:
           - make
-          resources:
-            requests:
-              cpu: 0.1
-              memory: 128Mi
+          resources: {}
         - image: quay.io/krestomatio/ansible-docker-ci
-          name: bundle-catalog
+          name: image
           args:
-          - bundle-build
-          - bundle-push
-          - catalog-build
-          - catalog-push
+          - multiarch-image
           command:
           - make
           resources:
+            limits:
+              cpu: 750m
+              memory: 2048Mi
             requests:
               cpu: 0.1
               memory: 128Mi
-        - image: quay.io/krestomatio/ansible-operator-ci
-          name: promote
-          resources: {}
-          args:
-          - promote
-          command:
-          - make
-  podTemplate: {}
+  podTemplate:
+    nodeSelector:
+      beta.kubernetes.io/arch: amd64
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
 status: {}
