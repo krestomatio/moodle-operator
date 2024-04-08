@@ -26,7 +26,8 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Application Runtime
-    createdAt: "2024-04-07T22:57:03Z"
+    containerImage: quay.io/krestomatio/moodle-operator:0.6.11
+    createdAt: "2024-04-08T02:51:20Z"
     description: |-
       This operator simplifies Moodle deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
