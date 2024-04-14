@@ -74,7 +74,7 @@ kubectl delete -k https://github.com/krestomatio/moodle-operator/config/default?
 ```
 
 ## Configuration
-Moodle custom resource (CR) can be configure via its spec field. Moodle CR spec supports all the the variables in [v1alpha1.m4e.moodle ansible role](https://krestomatio.com/docs/krestomatio.k8s/roles/v1alpha1.m4e.moodle/defaults/main/moodle) as fields. These variables can be specified directly in the Moodle CR YAML manifest file, allowing for customization of the Moodle instance during deployment. Refer to the official [v1alpha1.m4e.moodle ansible role documentation](https://krestomatio.com/docs/krestomatio.k8s/roles/v1alpha1.m4e.moodle/) for a comprehensive list of supported fields.
+Moodle custom resource (CR) can be configure via its spec field. Moodle CR spec supports all the the variables in [v1alpha1.m4e.moodle ansible role](https://krestomatio.com/docs/ansible-collection-k8s/roles/v1alpha1.m4e.moodle/defaults/main/moodle) as fields. These variables can be specified directly in the Moodle CR YAML manifest file, allowing for customization of the Moodle instance during deployment. Refer to the official [v1alpha1.m4e.moodle ansible role documentation](https://krestomatio.com/docs/ansible-collection-k8s/roles/v1alpha1.m4e.moodle/) for a comprehensive list of supported fields.
 
 ## Customizing the Moodle Image
 
