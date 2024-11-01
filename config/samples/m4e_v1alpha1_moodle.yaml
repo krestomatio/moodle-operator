@@ -66,6 +66,9 @@ spec:
   # moodleSize: 1
   # nginxSize: 1
 
+  # Default NetworkPolicies
+  # moodleNetpolOmit: false
+
   ## php conf
   ### php.ini extra config
   phpFpmPhpExtraIni: |-
