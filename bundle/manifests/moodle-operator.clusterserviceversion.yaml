@@ -284,12 +284,8 @@ spec:
         serviceAccountName: moodle-operator-controller-manager
       deployments:
       - label:
-          app.kubernetes.io/component: manager
-          app.kubernetes.io/created-by: moodle-operator
-          app.kubernetes.io/instance: controller-manager
+          app.kubernetes.io/name: moodle-operator
           app.kubernetes.io/managed-by: kustomize
-          app.kubernetes.io/name: deployment
-          app.kubernetes.io/part-of: moodle-operator
           control-plane: controller-manager
         name: moodle-operator-controller-manager
         spec:
