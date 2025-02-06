@@ -26,8 +26,8 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Application Runtime
-    containerImage: quay.io/krestomatio/moodle-operator:0.6.22
-    createdAt: "2025-02-06T14:27:56Z"
+    containerImage: quay.io/krestomatio/moodle-operator:0.6.23
+    createdAt: "2025-02-06T22:14:55Z"
     description: |-
       This operator simplifies Moodle deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
@@ -38,7 +38,7 @@ metadata:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.arm64: supported
     operatorframework.io/os.linux: supported
-  name: moodle-operator.v0.6.22
+  name: moodle-operator.v0.6.23
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -284,8 +284,8 @@ spec:
         serviceAccountName: moodle-operator-controller-manager
       deployments:
       - label:
-          app.kubernetes.io/name: moodle-operator
           app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: moodle-operator
           control-plane: controller-manager
         name: moodle-operator-controller-manager
         spec:
@@ -303,37 +303,16 @@ spec:
             spec:
               containers:
               - args:
-                - --secure-listen-address=0.0.0.0:8443
-                - --upstream=http://127.0.0.1:8080/
-                - --logtostderr=true
-                - --v=0
-                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.1
-                name: kube-rbac-proxy
-                ports:
-                - containerPort: 8443
-                  name: https
-                  protocol: TCP
-                resources:
-                  limits:
-                    cpu: 500m
-                    memory: 128Mi
-                  requests:
-                    cpu: 5m
-                    memory: 64Mi
-                securityContext:
-                  allowPrivilegeEscalation: false
-                  capabilities:
-                    drop:
-                    - ALL
-              - args:
-                - --health-probe-bind-address=:6789
-                - --metrics-bind-address=127.0.0.1:8080
+                - --metrics-require-rbac
+                - --metrics-secure
+                - --metrics-bind-address=:8443
                 - --leader-elect
                 - --leader-election-id=moodle-operator
+                - --health-probe-bind-address=:6789
                 env:
                 - name: ANSIBLE_GATHERING
                   value: explicit
-                image: quay.io/krestomatio/moodle-operator:0.6.22
+                image: quay.io/krestomatio/moodle-operator:0.6.23
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -429,4 +408,4 @@ spec:
   provider:
     name: Krestomatio
     url: https://krestomatio.com
-  version: 0.6.22
+  version: 0.6.23
