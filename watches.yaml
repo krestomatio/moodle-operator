@@ -86,4 +86,4 @@
   vars:
     cr_kind: Routine
 
-#+kubebuilder:scaffold:watch
+# +kubebuilder:scaffold:watch
