@@ -2,4 +2,5 @@
 
 ### Chores
 
-* update: bump collection krestomatio.k8s 0.4.26 (krestomatio-cibot)
+* update: bump collection krestomatio.k8s 0.4.31 (krestomatio-cibot)
+* update molecule (Job Céspedes Ortiz)
