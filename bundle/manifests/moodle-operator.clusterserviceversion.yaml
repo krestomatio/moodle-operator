@@ -26,8 +26,8 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Application Runtime
-    containerImage: quay.io/krestomatio/moodle-operator:0.6.33
-    createdAt: "2025-09-09T07:13:56Z"
+    containerImage: quay.io/krestomatio/moodle-operator:0.6.35
+    createdAt: "2025-09-09T08:39:07Z"
     description: |-
       This operator simplifies Moodle deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
@@ -38,7 +38,7 @@ metadata:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.arm64: supported
     operatorframework.io/os.linux: supported
-  name: moodle-operator.v0.6.33
+  name: moodle-operator.v0.6.35
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -312,7 +312,7 @@ spec:
                 env:
                 - name: ANSIBLE_GATHERING
                   value: explicit
-                image: quay.io/krestomatio/moodle-operator:0.6.33
+                image: quay.io/krestomatio/moodle-operator:0.6.35
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -408,4 +408,4 @@ spec:
   provider:
     name: Krestomatio
     url: https://krestomatio.com
-  version: 0.6.33
+  version: 0.6.35
